@@ -4,8 +4,8 @@
     <string name="app_author">Yalin</string>
     <string name="app_description">@string/app_name</string>
 
-    <string name="advance_empty_load">Load advance wallpaper</string>
-    <string name="advance_empty_description">There has no advance wallpaper loaded.\nYou can load the wallpapers from server.</string>
+    <string name="advance_empty_load">Load wallpapers</string>
+    <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the wallpapers from server.</string>
 
     <string name="advance_retry">Retry</string>
     <string name="advance_retry_description">There has some problem.\nYou can reload the wallpaper,\nOr you can contact the developer.</string>
@@ -27,14 +27,13 @@
     <string name="exception_message_remote_service">Remote service not available</string>
     <string name="exception_message_download">Download error</string>
 
-    <!--todo -->
-    <string name="app_context_description">A living wallpaper for your home screen</string>
+    <string name="app_context_description">A album with a lot of living wallpapers.</string>
     <string name="app_context_uri">http://www.kinglloy.com/</string>
 
     <string name="advance_hint"><![CDATA[
-        Advance wallpaper is developed by different developers.<br><br>
+        The wallpapers are developed by different developers.<br><br>
         Use them may give you the equipment to bring different power consumption, performance consumption, even crash.<br><br>
-        If you find such a problem, you can switch to other advance wallpaper, or contact Style developers.
+        If you find such a problem, you can switch to other wallpaper, or contact App developers.
 
         <br><br><b><a href="mailto:jinkg@live.cn">jinkg@live.cn</a></b><br>
 
@@ -42,7 +41,7 @@
     ]]></string>
 
     <string name="advance_download_hint"><![CDATA[
-        This advance wallpaper component is a bit big, and you must take a minute to download it(several hundred KB or several MB).<br><br>
+        You must take a minute to download this wallpaper(several hundred KB or several MB).<br><br>
         Press download button if you are ready to download.
     ]]></string>
 </resources>

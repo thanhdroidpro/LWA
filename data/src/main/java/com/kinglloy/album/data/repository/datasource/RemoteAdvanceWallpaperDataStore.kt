@@ -9,6 +9,7 @@ import android.os.RemoteException
 import com.google.gson.JsonParser
 import com.kinglloy.album.data.R
 import com.kinglloy.album.data.entity.AdvanceWallpaperEntity
+import com.kinglloy.album.data.exception.NetworkConnectionException
 import com.kinglloy.album.data.exception.NoContentException
 import com.kinglloy.album.data.exception.RemoteServerException
 import com.kinglloy.album.data.log.LogUtil
@@ -17,6 +18,7 @@ import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.repository.datasource.sync.account.Account
 import com.kinglloy.album.domain.interactor.DefaultObserver
 import com.kinglloy.album.data.repository.datasource.io.AdvanceWallpaperHandler
+import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
 import io.reactivex.Observable
 
 /**
@@ -38,6 +40,10 @@ class RemoteAdvanceWallpaperDataStore(val context: Context,
 
     override fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaperEntity>> {
         return Observable.create { emitter ->
+            if (!SyncHelper.isOnline(context)) {
+                emitter.onError(NetworkConnectionException())
+                return@create
+            }
             val account = Account.getAccount()
             val authority = context.getString(R.string.authority)
             ContentResolver.cancelSync(account, authority)

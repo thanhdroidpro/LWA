@@ -1,6 +1,8 @@
 package com.kinglloy.album
 
 import android.service.wallpaper.WallpaperService
+import com.kinglloy.album.analytics.Analytics
+import com.kinglloy.album.analytics.Event
 import com.kinglloy.album.domain.interactor.DefaultObserver
 import com.kinglloy.album.domain.interactor.SelectPreviewingAdvanceWallpaper
 import com.kinglloy.album.engine.ProxyProvider
@@ -41,14 +43,12 @@ open class AlbumWallpaperService :
     override fun onWallpaperActivate() {
         setActiveState(this, getActiveState())
         selectAdvanceWallpaper.execute(object : DefaultObserver<Boolean>() {}, null)
-//        Analytics.logEvent(this, Event.WALLPAPER_CREATED)
-//        EventBus.getDefault().postSticky(WallpaperActivateEvent(true))
+        Analytics.logEvent(this, Event.WALLPAPER_CREATED)
     }
 
     override fun onWallpaperDeactivate() {
         setActiveState(this, ACTIVE_NONE)
-//        Analytics.logEvent(this, Event.WALLPAPER_DESTROYED)
-//        EventBus.getDefault().postSticky(WallpaperActivateEvent(false))
+        Analytics.logEvent(this, Event.WALLPAPER_DESTROYED)
     }
 
     open fun getActiveState(): Int {

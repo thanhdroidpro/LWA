@@ -15,10 +15,10 @@ public class AlbumContract {
 
     public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
 
-    private static final String PATH_SOURCE = "source";
-    private static final String PATH_WALLPAPER = "wallpaper";
-    private static final String PATH_GALLERY = "gallery";
     private static final String PATH_ADVANCE_WALLPAPER = "advance_wallpaper";
+    public static final String[] TOP_LEVEL_PATHS = {
+            PATH_ADVANCE_WALLPAPER
+    };
 
     interface AdvanceWallpaperColumns {
         /**

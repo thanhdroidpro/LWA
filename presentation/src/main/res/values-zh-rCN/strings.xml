@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">动态壁纸专辑</string>
+
+    <string name="app_author">Yalin</string>
+    <string name="app_description">@string/app_name</string>
+
+    <string name="advance_empty_load">获取壁纸</string>
+    <string name="advance_empty_description">这里还没有壁纸，你可以点击按钮从服务器获取。</string>
+
+    <string name="advance_retry">重试获取</string>
+    <string name="advance_retry_description">获取壁纸出现了一些问题，你可以重试获取，也可以联系开发者。</string>
+
+    <string name="advance_action_msg">提示</string>
+
+    <string name="advance_download_msg">下载</string>
+    <string name="advance_ad_download_msg">观看广告并下载</string>
+
+    <string name="done">完成</string>
+    <string name="confirm">确定</string>
+    <string name="hint">提示</string>
+    <string name="downloading">下载中，请稍后</string>
+
+    <string name="exception_message_device_unsupported">您的设备不支持动态壁纸。</string>
+    <string name="exception_message_generic">操作出现了一个错误。</string>
+    <string name="exception_message_no_connection">网络不可用，请检查网络连接。</string>
+    <string name="exception_message_resync">正在同步…</string>
+    <string name="exception_message_remote_service">远程服务不可用，请联系开发者。</string>
+    <string name="exception_message_download">下载失败</string>
+
+
+    <string name="app_context_description">富含多种动态特效的壁纸专辑</string>
+
+    <string name="app_context_uri">http://www.kinglloy.com/</string>
+
+    <string name="advance_hint"><![CDATA[
+        这些壁纸是不同的开发者开发的。<br><br>
+        使用他们可能会给你的设备带来不同的电量消耗、性能消耗、甚至此应用崩溃。<br><br>
+        如果你发现了这样的问题，你可以切换其他的壁纸，或者联系应用开发者。
+
+        <br><br><b><a href="mailto:jinkg@live.cn">jinkg@live.cn</a></b><br>
+
+        <b><a href="http://www.kinglloy.com/">访问官方网站</a></b>
+    ]]></string>
+
+    <string name="advance_download_hint"><![CDATA[
+        使用这款壁纸之前需要先下载（几百KB或几MB）<br><br>
+        如果你已经链接上WI-FI，准备好下载，请点击下面的下载按钮
+    ]]></string>
+
+</resources>

@@ -1,6 +1,7 @@
 package com.kinglloy.album
 
 import android.app.Application
+import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.extensions.DelegatesExt
 import com.kinglloy.album.injection.component.ApplicationComponent
@@ -29,7 +30,7 @@ class AlbumApplication : Application() {
 
         resetExceptionHandler()
 
-//        Analytics.init(this)
+        Analytics.init(this)
 
 //        if (BuildConfig.DEMO_MODE) {
 //            Stetho.initialize(

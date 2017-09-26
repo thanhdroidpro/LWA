@@ -7,6 +7,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
+import com.kinglloy.album.analytics.Analytics
+import com.kinglloy.album.analytics.Event
 import org.jetbrains.anko.toast
 
 /**
@@ -43,7 +45,7 @@ class WallpaperSwitchService : Service() {
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 } catch (e2: ActivityNotFoundException) {
                     context.toast(R.string.exception_message_device_unsupported)
-//                Analytics.logEvent(this, Event.DEVICE_UNSUPPORTED)
+                    Analytics.logEvent(context, Event.DEVICE_UNSUPPORTED)
                 }
             }
         }

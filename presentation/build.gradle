@@ -3,6 +3,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+def alias = properties.get('alias')
+def _keyPassword = properties.get('keyPassword')
+def _storePassword = properties.get('storePassword')
+def keystorePath = properties.get('keystorePath')
+
+def CHANNEL = System.getProperty("channel", "default")
+
 android {
     compileSdkVersion COMPILE_SDK_VERSION as int
     buildToolsVersion BUILD_TOOLS_VERSION as String
@@ -19,10 +29,25 @@ android {
             abiFilters 'x86', 'armeabi', 'armeabi-v7a'
         }
     }
-    buildTypes {
+    signingConfigs {
         release {
+            keyAlias alias
+            keyPassword _keyPassword
+            storeFile file(keystorePath)
+            storePassword _storePassword
+        }
+    }
+    buildTypes {
+        debug {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro', 'component-proguard.pro'
+
+            signingConfig signingConfigs.release
         }
     }
 
@@ -49,6 +74,9 @@ dependencies {
     compile "io.reactivex.rxjava2:rxandroid:${RXANDROID_VERSION}"
     compile "com.github.bumptech.glide:glide:${GLIDE_VERSION}"
 
+    compile "com.google.firebase:firebase-core:${FIRE_BASE_VERSION}"
+    compile "com.google.firebase:firebase-crash:${FIRE_BASE_VERSION}"
+
     compile 'com.afollestad.material-dialogs:core:0.9.4.7'
 
     kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
@@ -63,3 +91,24 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
 }
+
+project.afterEvaluate {
+    android.applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def oldFile = output.outputFile
+
+            output.outputFile = new File(oldFile.parent,
+                    "LWA-${CHANNEL}.apk")
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-android-extensions:${KOTLIN_VERSION}"
+    }
+}
+apply plugin: 'com.google.gms.google-services'

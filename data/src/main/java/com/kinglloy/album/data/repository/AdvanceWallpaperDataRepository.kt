@@ -3,6 +3,8 @@ package com.kinglloy.album.data.repository
 import android.content.Context
 import com.kinglloy.album.data.entity.mapper.AdvanceWallpaperEntityMapper
 import com.kinglloy.album.data.repository.datasource.AdvanceWallpaperDataStoreFactory
+import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
+import com.kinglloy.album.data.repository.datasource.sync.account.Account
 import com.kinglloy.album.domain.AdvanceWallpaper
 import com.kinglloy.album.domain.repository.WallpaperRepository
 import io.reactivex.Observable
@@ -19,6 +21,11 @@ class AdvanceWallpaperDataRepository
                     val factory: AdvanceWallpaperDataStoreFactory,
                     val wallpaperMapper: AdvanceWallpaperEntityMapper)
     : WallpaperRepository {
+    init {
+        Account.createSyncAccount(context)
+        SyncHelper.updateSyncInterval(context)
+    }
+
     override fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaper>> {
         return factory.create().getAdvanceWallpapers().map(wallpaperMapper::transformList)
     }

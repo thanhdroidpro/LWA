@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide
 import com.kinglloy.album.AlbumApplication
 
 import com.kinglloy.album.R
+import com.kinglloy.album.analytics.Analytics
+import com.kinglloy.album.analytics.Event
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.exception.ErrorMessageFactory
@@ -94,11 +96,11 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
 
         btnLoadAdvanceWallpaper.setOnClickListener {
             presenter.loadAdvanceWallpaper()
-//            Analytics.logEvent(this@WallpaperListActivity, Event.LOAD_ADVANCES)
+            Analytics.logEvent(this@WallpaperListActivity, Event.LOAD_ADVANCES)
         }
         btnRetry.setOnClickListener {
             presenter.loadAdvanceWallpaper()
-//            Analytics.logEvent(this@WallpaperListActivity, Event.LOAD_ADVANCES)
+            Analytics.logEvent(this@WallpaperListActivity, Event.RETRY_LOAD_ADVANCES)
         }
 
         wallpaperList.viewTreeObserver
@@ -282,8 +284,8 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         val downloadCallback =
                 MaterialDialog.SingleButtonCallback { _, _ ->
                     presenter.requestDownload(item)
-//                    Analytics.logEvent(this@WallpaperListActivity,
-//                            Event.DOWNLOAD_COMPONENT, item.name)
+                    Analytics.logEvent(this@WallpaperListActivity,
+                            Event.DOWNLOAD_COMPONENT, item.name)
                 }
         val dialogBuilder = MaterialDialog.Builder(this)
                 .iconRes(R.drawable.advance_wallpaper_msg)
