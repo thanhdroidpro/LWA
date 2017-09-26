@@ -20,7 +20,7 @@ import java.util.Locale;
 
 public class LogUtil {
 
-    private static final String FILE_NAME = "Style/stat_log.txt";
+    private static final String FILE_NAME = "LWA/stat_log.txt";
 
     public static final boolean LOG_ENABLE = BuildConfig.DEMO_MODE || BuildConfig.LOG_ENABLE;
 

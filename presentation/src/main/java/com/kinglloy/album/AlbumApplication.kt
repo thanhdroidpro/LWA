@@ -1,6 +1,8 @@
 package com.kinglloy.album
 
-import android.app.Application
+import android.content.Context
+import android.support.multidex.MultiDex
+import android.support.multidex.MultiDexApplication
 import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.extensions.DelegatesExt
@@ -12,7 +14,7 @@ import com.kinglloy.album.injection.modules.ApplicationModule
  * @author jinyalin
  * @since 2017/9/26.
  */
-class AlbumApplication : Application() {
+class AlbumApplication : MultiDexApplication() {
 
     companion object {
         private val TAG = "StyleApplication"
@@ -21,6 +23,11 @@ class AlbumApplication : Application() {
     }
 
     val applicationComponent: ApplicationComponent by lazy { initializeInjector() }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
+    }
 
     override fun onCreate() {
         super.onCreate()
