@@ -1,0 +1,65 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION as int
+    buildToolsVersion BUILD_TOOLS_VERSION as String
+    defaultConfig {
+        applicationId "com.kinglloy.album"
+        minSdkVersion MIN_SDK_VERSION as int
+        targetSdkVersion TARGET_SDK_VERSION as int
+        versionCode APP_VERSION_CODE as int
+        versionName APP_VERSION_NAME as String
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            abiFilters 'x86', 'armeabi', 'armeabi-v7a'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        demo {
+            buildConfigField("boolean", "DEMO_MODE", "true")
+        }
+        production {
+            buildConfigField("boolean", "DEMO_MODE", "false")
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+    compile "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
+
+    compile "com.google.code.gson:gson:${GSON_VERSION}"
+    compile "com.squareup.okhttp3:okhttp:${OK_HTTP_VERSION}"
+    compile "com.google.dagger:dagger:${DAGGER_VERSION}"
+    compile "io.reactivex.rxjava2:rxjava:${RXJAVA_VERSION}"
+    compile "io.reactivex.rxjava2:rxandroid:${RXANDROID_VERSION}"
+    compile "com.github.bumptech.glide:glide:${GLIDE_VERSION}"
+
+    compile 'com.afollestad.material-dialogs:core:0.9.4.7'
+
+    kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
+
+    compile project(':engine')
+    demoCompile project(path: ':data', configuration: 'demoDebug')
+    productionCompile project(path: ':data', configuration: 'productionRelease')
+
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile 'junit:junit:4.12'
+
+}
