@@ -1,17 +1,11 @@
 package com.kinglloy.album.presenter
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.database.ContentObserver
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.os.IBinder
 import android.text.TextUtils
-import com.kinglloy.album.IWallpaperSwitch
-import com.kinglloy.album.WallpaperSwitchService
+import com.kinglloy.album.WallpaperSwitcher
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.utils.WallpaperFileHelper
@@ -32,7 +26,8 @@ class WallpaperListPresenter
                     val loadAdvanceWallpaper: LoadAdvanceWallpaper,
                     val previewAdvanceWallpaper: PreviewAdvanceWallpaper,
                     val advanceWallpaperItemMapper: AdvanceWallpaperItemMapper,
-                    val downloadAdvanceWallpaper: DownloadAdvanceWallpaper)
+                    val downloadAdvanceWallpaper: DownloadAdvanceWallpaper,
+                    val wallpaperSwitcher: WallpaperSwitcher)
     : Presenter {
 
     companion object {
@@ -54,17 +49,6 @@ class WallpaperListPresenter
 
     private var currentPreviewing: AdvanceWallpaperItem? = null
 
-    private var mIWallpaperSwitch: IWallpaperSwitch? = null
-    private val switchServiceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(p0: ComponentName?) {
-            mIWallpaperSwitch = null
-        }
-
-        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-            mIWallpaperSwitch = IWallpaperSwitch.Stub.asInterface(p1)
-        }
-    }
-
     private val mContentObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean, uri: Uri) {
             LogUtil.D(TAG, "Uri change." + uri)
@@ -76,9 +60,6 @@ class WallpaperListPresenter
 
     fun setView(view: WallpaperListView) {
         this.view = view
-
-        val bindIntent = Intent(view.context(), WallpaperSwitchService::class.java)
-        view.context().bindService(bindIntent, switchServiceConnection, Context.BIND_AUTO_CREATE)
 
         view.context().contentResolver.registerContentObserver(
                 AlbumContract.AdvanceWallpaper.CONTENT_SELECT_PREVIEWING_URI,
@@ -118,7 +99,7 @@ class WallpaperListPresenter
             previewAdvanceWallpaper.execute(object : DefaultObserver<Boolean>() {
                 override fun onNext(success: Boolean) {
                     currentPreviewing = item
-                    mIWallpaperSwitch?.switchWallpaper()
+                    wallpaperSwitcher.switchService(view!!.context())
                 }
             }, PreviewAdvanceWallpaper.Params.previewWallpaper(item.wallpaperId))
         }
@@ -168,9 +149,7 @@ class WallpaperListPresenter
         }
     }
 
-    fun getDownloadingItem(): AdvanceWallpaperItem? {
-        return downloadingWallpaper
-    }
+    fun getDownloadingItem(): AdvanceWallpaperItem? = downloadingWallpaper
 
     override fun resume() {
     }
@@ -180,7 +159,6 @@ class WallpaperListPresenter
     }
 
     override fun destroy() {
-        view!!.context().unbindService(switchServiceConnection)
         view!!.context().contentResolver.unregisterContentObserver(mContentObserver)
         getAdvanceWallpapers.dispose()
         loadAdvanceWallpaper.dispose()

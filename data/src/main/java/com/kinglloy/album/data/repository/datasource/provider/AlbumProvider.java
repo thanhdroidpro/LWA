@@ -82,7 +82,8 @@ public class AlbumProvider extends ContentProvider {
             case ADVANCE_WALLPAPER:
             case ADVANCE_WALLPAPER_ID:
             case ADVANCE_WALLPAPER_SELECTED:
-            case ADVANCE_WALLPAPER_PREVIEWING: {
+            case ADVANCE_WALLPAPER_PREVIEWING:
+            case ACTIVE_SERVICE: {
                 final SelectionBuilder builder = buildSimpleSelection(uri);
                 return builder.query(db, projection, BaseColumns._ID + " DESC");
             }
@@ -158,7 +159,8 @@ public class AlbumProvider extends ContentProvider {
         AlbumUriEnum uriEnum = mUriMatcher.matchUri(uri);
 
         switch (uriEnum) {
-            case ADVANCE_WALLPAPER: {
+            case ADVANCE_WALLPAPER:
+            case ACTIVE_SERVICE: {
                 return builder.table(uriEnum.table);
             }
             case ADVANCE_WALLPAPER_ID: {

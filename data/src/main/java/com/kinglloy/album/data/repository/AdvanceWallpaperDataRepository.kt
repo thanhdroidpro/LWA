@@ -26,29 +26,28 @@ class AdvanceWallpaperDataRepository
         SyncHelper.updateSyncInterval(context)
     }
 
-    override fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaper>> {
-        return factory.create().getAdvanceWallpapers().map(wallpaperMapper::transformList)
-    }
+    override fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaper>> =
+            factory.create().getAdvanceWallpapers().map(wallpaperMapper::transformList)
 
     override fun loadAdvanceWallpapers(): Observable<List<AdvanceWallpaper>> {
         return factory.createRemoteDataStore().getAdvanceWallpapers()
                 .map(wallpaperMapper::transformList)
     }
 
-    override fun downloadAdvanceWallpaper(wallpaperId: String): Observable<Long> {
-        return factory.createRemoteDataStore().downloadWallpaper(wallpaperId)
-    }
+    override fun downloadAdvanceWallpaper(wallpaperId: String): Observable<Long> =
+            factory.createRemoteDataStore().downloadWallpaper(wallpaperId)
 
     override fun selectPreviewingAdvanceWallpaper():
-            Observable<Boolean> {
-        return factory.create().selectPreviewingWallpaper()
-    }
+            Observable<Boolean> = factory.create().selectPreviewingWallpaper()
 
-    override fun previewAdvanceWallpaper(wallpaperId: String): Observable<Boolean> {
-        return factory.create().previewWallpaper(wallpaperId)
-    }
+    override fun previewAdvanceWallpaper(wallpaperId: String): Observable<Boolean> =
+            factory.create().previewWallpaper(wallpaperId)
 
-    override fun getPreviewAdvanceWallpaper(): AdvanceWallpaper {
-        return wallpaperMapper.transform(factory.create().getPreviewWallpaperEntity())
-    }
+    override fun getPreviewAdvanceWallpaper(): AdvanceWallpaper =
+            wallpaperMapper.transform(factory.create().getPreviewWallpaperEntity())
+
+    override fun activeService(serviceType: Int): Observable<Boolean>
+            = factory.create().activeService(serviceType)
+
+    override fun getActiveService(): Observable<Int> = factory.create().getActiveService()
 }

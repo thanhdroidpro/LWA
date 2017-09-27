@@ -1,6 +1,7 @@
 package com.kinglloy.album.data.repository.datasource.provider;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -8,6 +9,7 @@ import android.provider.BaseColumns;
 
 import com.kinglloy.album.data.R;
 import com.kinglloy.album.data.log.LogUtil;
+import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.ActiveService;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.AdvanceWallpaper;
 import com.kinglloy.album.data.repository.datasource.sync.account.Account;
 
@@ -22,12 +24,14 @@ public class AlbumDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "album.db";
 
     private static final int VERSION_2017_9_26 = 1;
-    private static final int CUR_DATABASE_VERSION = VERSION_2017_9_26;
+    private static final int VERSION_2017_9_27 = 2;
+    private static final int CUR_DATABASE_VERSION = VERSION_2017_9_27;
 
     private final Context mContext;
 
     interface Tables {
         String ADVANCE_WALLPAPER = AdvanceWallpaper.TABLE_NAME;
+        String ACTIVE_SERVICE = ActiveService.TABLE_NAME;
     }
 
     public AlbumDatabase(Context context) {
@@ -51,6 +55,8 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 + AdvanceWallpaper.COLUMN_NAME_SELECTED + " INTEGER DEFAULT 0,"
                 + AdvanceWallpaper.COLUMN_NAME_LAZY_DOWNLOAD + " INTEGER DEFAULT 1,"
                 + AdvanceWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0);");
+
+        upgradeFrom20170926to20170927(db);
     }
 
     @Override
@@ -63,6 +69,10 @@ public class AlbumDatabase extends SQLiteOpenHelper {
             ContentResolver.cancelSync(account, mContext.getString(R.string.authority));
         }
         int version = oldVersion;
+        if (version == VERSION_2017_9_26) {
+            upgradeFrom20170926to20170927(db);
+            version = VERSION_2017_9_27;
+        }
 
         if (version != CUR_DATABASE_VERSION) {
             LogUtil.E(TAG, "Upgrade unsuccessful -- destroying old data during upgrade");
@@ -71,6 +81,15 @@ public class AlbumDatabase extends SQLiteOpenHelper {
             onCreate(db);
             version = CUR_DATABASE_VERSION;
         }
+    }
+
+    private void upgradeFrom20170926to20170927(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + Tables.ACTIVE_SERVICE + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ActiveService.COLUMN_NAME_SERVICE_ID + "  INTEGER NOT NULL DEFAULT 0);");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ActiveService.COLUMN_NAME_SERVICE_ID, 0);
+        db.insert(Tables.ACTIVE_SERVICE, null, contentValues);
     }
 
     public static void deleteDatabase(Context context) {

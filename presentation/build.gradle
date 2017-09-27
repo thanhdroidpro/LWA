@@ -88,6 +88,8 @@ dependencies {
 
     compile 'com.android.support:multidex:1.0.1'
 
+    demoCompile 'com.facebook.stetho:stetho:1.5.0'
+
     compile project(':engine')
     demoCompile project(path: ':data', configuration: 'demoDebug')
     productionCompile project(path: ':data', configuration: 'productionRelease')

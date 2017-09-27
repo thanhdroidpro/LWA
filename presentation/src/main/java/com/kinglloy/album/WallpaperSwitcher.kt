@@ -1,35 +1,34 @@
 package com.kinglloy.album
 
-import android.app.Service
 import android.app.WallpaperManager
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.IBinder
 import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.analytics.Event
+import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
+import com.kinglloy.album.domain.interactor.DefaultObserver
+import com.kinglloy.album.domain.interactor.GetActiveService
 import org.jetbrains.anko.toast
+import javax.inject.Inject
 
 /**
  * @author jinyalin
- * @since 2017/9/26.
+ * @since 2017/9/27.
  */
-class WallpaperSwitchService : Service() {
-
-    override fun onBind(p0: Intent?): IBinder {
-        return WallpaperSwitch()
-    }
-
-    inner class WallpaperSwitch : IWallpaperSwitch.Stub() {
-        override fun switchWallpaper() {
-            val activeState = currentActiveState(this@WallpaperSwitchService)
-            if (activeState == ACTIVE_NONE || activeState == ACTIVE_MIRROR) {
-                pickWallpaper(this@WallpaperSwitchService, AlbumWallpaperService::class.java)
-            } else {
-                pickWallpaper(this@WallpaperSwitchService, AlbumWallpaperServiceMirror::class.java)
+class WallpaperSwitcher @Inject constructor(val getActiveService: GetActiveService) {
+    fun switchService(context: Context) {
+        getActiveService.execute(object : DefaultObserver<Int>() {
+            override fun onNext(serviceType: Int) {
+                if (serviceType == AlbumContract.ActiveService.SERVICE_NONE
+                        || serviceType == AlbumContract.ActiveService.SERVICE_MIRROR) {
+                    pickWallpaper(context, AlbumWallpaperService::class.java)
+                } else {
+                    pickWallpaper(context, AlbumWallpaperServiceMirror::class.java)
+                }
             }
-        }
+        }, null)
     }
 
     companion object {

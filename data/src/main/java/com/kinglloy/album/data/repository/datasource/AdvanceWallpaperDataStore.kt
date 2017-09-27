@@ -18,4 +18,6 @@ interface AdvanceWallpaperDataStore {
 
     fun downloadWallpaper(wallpaperId: String): Observable<Long>
 
+    fun activeService(serviceType: Int): Observable<Boolean>
+    fun getActiveService(): Observable<Int>
 }

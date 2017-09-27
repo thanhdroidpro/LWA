@@ -9,7 +9,9 @@ public enum AlbumUriEnum {
     ADVANCE_WALLPAPER_SELECTED(102, "advance_wallpaper/selected", null),
     ADVANCE_WALLPAPER_PREVIEWING(103, "advance_wallpaper/previewing", null),
     ADVANCE_WALLPAPER_SELECT_PREVIEWING(104, "advance_wallpaper/select_previewing", null),
-    ADVANCE_WALLPAPER_ID(101, "advance_wallpaper/*", null);
+    ADVANCE_WALLPAPER_ID(101, "advance_wallpaper/*", null),
+
+    ACTIVE_SERVICE(200, "active_service", AlbumDatabase.Tables.ACTIVE_SERVICE);
 
 
     public int code;

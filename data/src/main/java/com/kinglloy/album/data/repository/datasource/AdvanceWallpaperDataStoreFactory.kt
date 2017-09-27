@@ -14,9 +14,9 @@ class AdvanceWallpaperDataStoreFactory @Inject
 constructor(val context: Context,
             val advanceWallpaperCache: AdvanceWallpaperCache) {
 
-    fun create(): AdvanceWallpaperDataStore {
-        return AdvanceWallpaperDataStoreImpl(context, advanceWallpaperCache)
-    }
+    fun create(): AdvanceWallpaperDataStore =
+            AdvanceWallpaperDataStoreImpl(context, advanceWallpaperCache)
+
 
     fun createRemoteDataStore(): AdvanceWallpaperDataStore {
         return RemoteAdvanceWallpaperDataStore(context,

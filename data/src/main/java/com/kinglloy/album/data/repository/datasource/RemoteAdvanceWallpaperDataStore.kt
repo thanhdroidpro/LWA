@@ -122,4 +122,12 @@ class RemoteAdvanceWallpaperDataStore(val context: Context,
             })
         }
     }
+
+    override fun activeService(serviceType: Int): Observable<Boolean> {
+        throw UnsupportedOperationException("Remote data store not support active service.")
+    }
+
+    override fun getActiveService(): Observable<Int> {
+        throw UnsupportedOperationException("Remote data store not support get active service.")
+    }
 }

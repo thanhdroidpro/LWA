@@ -20,7 +20,11 @@ public interface WallpaperRepository {
     Observable<Long> downloadAdvanceWallpaper(String wallpaperId);
 
     Observable<Boolean> selectPreviewingAdvanceWallpaper();
+
     Observable<Boolean> previewAdvanceWallpaper(String wallpaperId);
 
     AdvanceWallpaper getPreviewAdvanceWallpaper();
+
+    Observable<Boolean> activeService(int serviceType);
+    Observable<Integer> getActiveService();
 }

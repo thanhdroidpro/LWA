@@ -16,6 +16,7 @@ public class AlbumContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
 
     private static final String PATH_ADVANCE_WALLPAPER = "advance_wallpaper";
+    private static final String PATH_ACTIVE_SERVICE = "active_service";
     public static final String[] TOP_LEVEL_PATHS = {
             PATH_ADVANCE_WALLPAPER
     };
@@ -73,6 +74,13 @@ public class AlbumContract {
         String COLUMN_NAME_PREVIEWING = "previewing";
     }
 
+    interface ActiveServiceColumns {
+        /**
+         * Type: INTEGER range: 0 1 2
+         */
+        String COLUMN_NAME_SERVICE_ID = "service_id";
+    }
+
     public static final class AdvanceWallpaper implements AdvanceWallpaperColumns, BaseColumns {
         public static final String TABLE_NAME = "advance_wallpaper";
 
@@ -103,5 +111,16 @@ public class AlbumContract {
         public static String getWallpaperId(Uri uri) {
             return uri.getPathSegments().get(1);
         }
+    }
+
+    public static final class ActiveService implements ActiveServiceColumns, BaseColumns {
+        public static final String TABLE_NAME = "active_service";
+        public static final int SERVICE_NONE = 0;
+        public static final int SERVICE_ORIGIN = 1;
+        public static final int SERVICE_MIRROR = 2;
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_ACTIVE_SERVICE).build();
+
     }
 }

@@ -14,7 +14,7 @@ import io.reactivex.Observable
  * @since 2017/7/28.
  */
 class AdvanceWallpaperDataStoreImpl(val context: Context,
-                                    val advanceWallpaperCache: AdvanceWallpaperCache)
+                                    private val advanceWallpaperCache: AdvanceWallpaperCache)
     : AdvanceWallpaperDataStore {
     companion object {
         val TAG = "AdvanceDataStore"
@@ -43,9 +43,8 @@ class AdvanceWallpaperDataStoreImpl(val context: Context,
         return entity
     }
 
-    override fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaperEntity>> {
-        return createAdvanceWallpapersFromDB().doOnNext(advanceWallpaperCache::put)
-    }
+    override fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaperEntity>> =
+            createAdvanceWallpapersFromDB().doOnNext(advanceWallpaperCache::put)
 
     override fun selectPreviewingWallpaper():
             Observable<Boolean> {
@@ -89,8 +88,8 @@ class AdvanceWallpaperDataStoreImpl(val context: Context,
                     unpreviewValue, null, null)
             // preview new
             val uri = AlbumContract.AdvanceWallpaper.buildWallpaperUri(wallpaperId)
-            val selectedCount = context.contentResolver.update(uri, previewingValue, null, null)
-            if (selectedCount > 0) {
+            val updateCount = context.contentResolver.update(uri, previewingValue, null, null)
+            if (updateCount > 0) {
                 emitter.onNext(true)
             } else {
                 emitter.onNext(false)
@@ -108,6 +107,42 @@ class AdvanceWallpaperDataStoreImpl(val context: Context,
 
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
         throw UnsupportedOperationException("Local data store not support download wallpaper.")
+    }
+
+    override fun activeService(serviceType: Int): Observable<Boolean> {
+        return Observable.create { emitter ->
+            if (serviceType != AlbumContract.ActiveService.SERVICE_NONE
+                    && serviceType != AlbumContract.ActiveService.SERVICE_ORIGIN
+                    && serviceType != AlbumContract.ActiveService.SERVICE_MIRROR) {
+                emitter.onError(IllegalArgumentException("Service type illegal."))
+                return@create
+            }
+            val uri = AlbumContract.ActiveService.CONTENT_URI
+            val contentValue = ContentValues()
+            contentValue.put(AlbumContract.ActiveService.COLUMN_NAME_SERVICE_ID, serviceType)
+            val updateCount = context.contentResolver.update(uri, contentValue, null, null)
+            emitter.onNext(updateCount > 0)
+            emitter.onComplete()
+        }
+    }
+
+    override fun getActiveService(): Observable<Int> {
+        return Observable.create { emitter ->
+            val uri = AlbumContract.ActiveService.CONTENT_URI
+            var cursor: Cursor? = null
+            var serviceType = AlbumContract.ActiveService.SERVICE_NONE
+            try {
+                cursor = context.contentResolver.query(uri, null, null, null, null)
+                if (cursor != null && cursor.moveToFirst()) {
+                    serviceType = cursor.getInt(
+                            cursor.getColumnIndex(AlbumContract.ActiveService.COLUMN_NAME_SERVICE_ID))
+                }
+            } finally {
+                cursor?.close()
+            }
+            emitter.onNext(serviceType)
+            emitter.onComplete()
+        }
     }
 
     fun loadWallpaperEntity(wallpaperId: String): AdvanceWallpaperEntity {
