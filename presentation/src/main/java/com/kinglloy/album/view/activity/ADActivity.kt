@@ -62,12 +62,11 @@ class ADActivity : AppCompatActivity() {
             }
 
             override fun onRewardedVideoAdLoaded() {
-                onRewardedVideoAdClosed()
                 mAd?.show()
             }
 
             override fun onRewardedVideoAdOpened() {
-
+                Analytics.logEvent(this@ADActivity, Event.OPEN_VIDEO_AD)
             }
 
             override fun onRewarded(p0: RewardItem?) {

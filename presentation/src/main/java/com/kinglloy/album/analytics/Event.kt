@@ -20,4 +20,5 @@ object Event {
     val TODAY_NOT_SHOW = "today_not_show"
     val WATCH_AD_AGAIN = "watch_ad_again"
     val LOAD_AD_FAILED = "load_ad_failed"
+    val OPEN_VIDEO_AD = "open_video_ad"
 }
