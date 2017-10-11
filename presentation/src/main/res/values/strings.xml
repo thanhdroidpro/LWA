@@ -58,6 +58,7 @@
 
     <string name="app_ad_id" translatable="false">ca-app-pub-8153753100171943~1504125034</string>
     <string name="advance_banner_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/6618696822</string>
+    <string name="advance_inter_ad_unit_id" translatable="false"> ca-app-pub-8153753100171943/6486178348</string>
     <string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/3858825636</string>
     <!--for test-->
     <!--<string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
