@@ -56,6 +56,6 @@
 
     <string name="welcome">如果你喜欢这款壁纸应用，并且希望开发更多新特性，你可以通过观看广告来支持我们。</string>
 
-    <string name="ad_prompt">谢谢你对我们对支持，我们会努力把应用做得更好。点击按钮再看一则广告。</string>
+    <string name="ad_prompt">谢谢你对我们的支持，我们会努力把应用做得更好。点击按钮再看一则广告。</string>
     <string name="ad_retry">广告加载失败，点击重新加载</string>
 </resources>
