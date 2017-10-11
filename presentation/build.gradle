@@ -71,6 +71,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
     compile "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile "com.google.code.gson:gson:${GSON_VERSION}"
     compile "com.squareup.okhttp3:okhttp:${OK_HTTP_VERSION}"
@@ -81,6 +82,7 @@ dependencies {
 
     compile "com.google.firebase:firebase-core:${FIRE_BASE_VERSION}"
     compile "com.google.firebase:firebase-crash:${FIRE_BASE_VERSION}"
+    compile "com.google.firebase:firebase-ads:${FIRE_BASE_VERSION}"
 
     compile 'com.afollestad.material-dialogs:core:0.9.4.7'
 
@@ -88,7 +90,7 @@ dependencies {
 
     compile 'com.android.support:multidex:1.0.1'
 
-    demoCompile 'com.facebook.stetho:stetho:1.5.0'
+//    demoCompile 'com.facebook.stetho:stetho:1.5.0'
 
     compile project(':engine')
     demoCompile project(path: ':data', configuration: 'demoDebug')

@@ -1,14 +1,31 @@
 <resources>
+
     <style name="Theme.Album.Base" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/advance_window_background</item>
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="colorPrimaryDark">@color/gallery_theme_dark</item>
-        <item name="colorPrimary">@color/gallery_theme</item>
-        <item name="colorAccent">@color/gallery_theme</item>
+        <item name="android:windowAnimationStyle">@style/default_animation</item>
+
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Theme.WallpaperList" parent="Theme.Album.Base">
+    <style name="Theme.WallpaperList" parent="Theme.Album.Base" />
+
+    <style name="Theme.MainActivity" parent="Theme.Album.Base">
+        <item name="android:textColorSecondary">@color/colorPrimary</item>
+    </style>
+
+    <style name="Theme.AD" parent="Theme.Album.Base" />
+
+    <style name="Widget.Album.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox" />
+
+    <style name="default_animation" mce_bogus="1" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/default_anim_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/anim_stay</item>
+        <item name="android:activityCloseEnterAnimation">@anim/anim_stay</item>
+        <item name="android:activityCloseExitAnimation">@anim/default_anim_out</item>
     </style>
 
 </resources>

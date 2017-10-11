@@ -28,7 +28,7 @@ import com.kinglloy.album.model.AdvanceWallpaperItem
 import com.kinglloy.album.presenter.WallpaperListPresenter
 import com.kinglloy.album.view.WallpaperListView
 import com.kinglloy.album.view.component.DownloadingDialog
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_wallpaper_list.*
 import org.jetbrains.anko.toast
 import java.util.ArrayList
 import javax.inject.Inject
@@ -58,7 +58,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AlbumApplication.instance.applicationComponent.inject(this)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_wallpaper_list)
 
         setSupportActionBar(appBar)
 

@@ -1,29 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/wallpaperList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:drawSelectorOnTop="true"
-        android:fitsSystemWindows="true"
-        android:horizontalSpacing="@dimen/gallery_chosen_photo_grid_spacing"
-        android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="@dimen/gallery_chosen_photo_grid_spacing"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
+        android:id="@+id/app_bar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/appBar"
@@ -34,87 +24,80 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@android:id/empty"
+    <TextView
+        android:id="@+id/welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed"
         android:gravity="center"
-        android:orientation="vertical"
-        android:padding="32dp"
-        android:visibility="gone">
+        android:padding="@dimen/welcome_text_margin"
+        android:text="@string/welcome"
+        android:textColor="@color/gallery_theme"
+        android:textSize="22sp"
+        android:textStyle="italic"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar"
+        tools:targetApi="M" />
 
-        <TextView
-            android:id="@+id/emptyDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
-            android:breakStrategy="balanced"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_horizontal"
-            android:text="@string/advance_empty_description"
-            android:textColor="@color/gallery_theme"
-            android:textSize="22sp"
-            android:textStyle="italic"
-            tools:targetApi="M" />
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/adView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/welcome">
 
         <Button
-            android:id="@+id/btnLoadAdvanceWallpaper"
+            android:id="@+id/watchAD"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/advance_empty_load" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="32dp"
-        android:visibility="gone">
-
-        <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/retry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="32dp"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="16dp"
-            android:breakStrategy="balanced"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center_horizontal"
-            android:text="@string/advance_retry_description"
-            android:textColor="@color/gallery_theme"
-            android:textSize="22sp"
-            android:textStyle="italic"
-            tools:targetApi="M" />
+            android:text="@string/watch_ad" />
 
         <Button
-            android:id="@+id/btnRetry"
+            android:id="@+id/wallpaperList"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/advance_retry" />
+            android:layout_marginTop="10dp"
+            android:text="@string/use_wallpaper" />
     </LinearLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        app:adSize="BANNER"
+        app:adUnitId="@string/advance_banner_ad_unit_id"
+        app:layout_constraintBottom_toTopOf="@+id/checkBox"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttons" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        style="@style/Widget.Album.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="@string/not_show_today"
+        android:textColor="@color/gallery_theme"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

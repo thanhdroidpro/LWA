@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/appBar"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize" />
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:breakStrategy="balanced"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_horizontal"
+                android:text="@string/ad_prompt"
+                android:textColor="@color/gallery_theme"
+                android:textSize="22sp"
+                android:textStyle="italic"
+                tools:targetApi="M" />
+
+            <Button
+                android:id="@+id/btnReview"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/advance_review" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                android:breakStrategy="balanced"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_horizontal"
+                android:text="@string/ad_retry"
+                android:textColor="@color/gallery_theme"
+                android:textSize="22sp"
+                android:textStyle="italic"
+                tools:targetApi="M" />
+
+            <Button
+                android:id="@+id/btnRetry"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/advance_retry" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

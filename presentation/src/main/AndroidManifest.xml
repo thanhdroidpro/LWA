@@ -29,14 +29,24 @@
         android:roundIcon="@drawable/ic_launcher"
         android:supportsRtl="true">
         <activity
-            android:name=".view.activity.WallpaperListActivity"
-            android:theme="@style/Theme.WallpaperList">
+            android:name=".view.activity.MainActivity"
+            android:theme="@style/Theme.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".view.activity.ADActivity"
+            android:label="@string/watch_ad"
+            android:parentActivityName=".view.activity.MainActivity"
+            android:theme="@style/Theme.AD" />
+
+        <activity
+            android:name=".view.activity.WallpaperListActivity"
+            android:theme="@style/Theme.WallpaperList" />
 
         <service
             android:name=".AlbumWallpaperService"

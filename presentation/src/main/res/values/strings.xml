@@ -8,6 +8,7 @@
     <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the wallpapers from server.</string>
 
     <string name="advance_retry">Retry</string>
+    <string name="advance_review">Watch again</string>
     <string name="advance_retry_description">There has some problem.\nYou can reload the wallpaper,\nOr you can contact the developer.</string>
 
     <string name="advance_action_msg">Hint</string>
@@ -19,6 +20,11 @@
     <string name="confirm">Confirm</string>
     <string name="hint">Hint</string>
     <string name="downloading">Downloading</string>
+
+    <string name="not_show_today">Not show this today</string>
+
+    <string name="watch_ad">Watch AD</string>
+    <string name="use_wallpaper">Wallpaper List</string>
 
     <string name="exception_message_device_unsupported">Your device unsupported live wallpaper.</string>
     <string name="exception_message_generic">There was some error.</string>
@@ -44,4 +50,15 @@
         You must take a minute to download this wallpaper(several hundred KB or several MB).<br><br>
         Press download button if you are ready to download.
     ]]></string>
+
+    <string name="welcome">To help developer release new features, and if you like this wallpaper application, you can watch the ad to support.</string>
+
+    <string name="ad_prompt">Thank you for your support, we will try to make the application better. Click button to see again.</string>
+    <string name="ad_retry">AD load failed press button to reload.</string>
+
+    <string name="app_ad_id" translatable="false">ca-app-pub-8153753100171943~1504125034</string>
+    <string name="advance_banner_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/6618696822</string>
+    <string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/3858825636</string>
+    <!--for test-->
+    <!--<string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
 </resources>
