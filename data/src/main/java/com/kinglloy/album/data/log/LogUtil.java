@@ -88,8 +88,8 @@ public class LogUtil {
     }
 
     private static String getProcessInfo() {
-        return "Process wallpaperId: " + Process.myPid()
-                + " Thread wallpaperId: " + Thread.currentThread().getId() + " ";
+        return "Process Id: " + Process.myPid()
+                + " Thread Id: " + Thread.currentThread().getId() + " ";
     }
 
     private static synchronized void writeLog(String tag, String msg) {
