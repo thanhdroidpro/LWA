@@ -28,4 +28,24 @@
         <item name="android:activityCloseExitAnimation">@anim/default_anim_out</item>
     </style>
 
+    <style name="Widget.Album.Button.Base" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:drawablePadding">@dimen/drawable_padding</item>
+    </style>
+
+    <style name="Widget.Album.Button.AD" parent="Widget.Album.Button.Base" />
+
+    <style name="Widget.Album.Button.Retry" parent="Widget.Album.Button.Base">
+        <item name="android:drawableStart">@drawable/icon_retry</item>
+    </style>
+
+    <style name="Widget.Album.Text.Base" parent="" />
+
+    <style name="Widget.Album.Text.Prompt" parent="Widget.Album.Text.Base">
+        <item name="android:breakStrategy">balanced</item>
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textColor">@color/gallery_theme</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:drawablePadding">@dimen/drawable_padding</item>
+    </style>
 </resources>

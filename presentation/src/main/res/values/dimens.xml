@@ -14,7 +14,8 @@
     <dimen name="advance_grid_max_item_size">300dp</dimen>
 
     <dimen name="welcome_text_margin">22dp</dimen>
-
+    <dimen name="drawable_padding">5dp</dimen>
+    <dimen name="global_prompt_margin">16dp</dimen>
 
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_medium">14sp</dimen>

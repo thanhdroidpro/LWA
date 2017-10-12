@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -31,23 +30,21 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/Widget.Album.Text.Prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:breakStrategy="balanced"
-                android:fontFamily="sans-serif-condensed"
+                android:layout_margin="@dimen/global_prompt_margin"
+                android:drawableTop="@drawable/icon_heart"
                 android:gravity="center_horizontal"
-                android:text="@string/ad_prompt"
-                android:textColor="@color/gallery_theme"
-                android:textSize="22sp"
-                android:textStyle="italic"
-                tools:targetApi="M" />
+                android:text="@string/ad_prompt" />
 
             <Button
                 android:id="@+id/btnReview"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/Widget.Album.Button.Base"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawablePadding="@dimen/drawable_padding"
+                android:drawableStart="@drawable/icon_ad_small"
                 android:text="@string/advance_review" />
         </LinearLayout>
 
@@ -78,22 +75,17 @@
             android:visibility="gone">
 
             <TextView
+                style="@style/Widget.Album.Text.Prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp"
-                android:breakStrategy="balanced"
-                android:fontFamily="sans-serif-condensed"
+                android:layout_margin="@dimen/global_prompt_margin"
+                android:drawableTop="@drawable/icon_cry"
                 android:gravity="center_horizontal"
-                android:text="@string/ad_retry"
-                android:textColor="@color/gallery_theme"
-                android:textSize="22sp"
-                android:textStyle="italic"
-                tools:targetApi="M" />
+                android:text="@string/ad_retry" />
 
             <Button
                 android:id="@+id/btnRetry"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/Widget.Album.Button.Retry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/advance_retry" />
