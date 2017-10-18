@@ -51,11 +51,22 @@ android {
             buildConfigField("boolean", "DEMO_MODE", "true")
             buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "true")
             buildConfigField("String", "SERVER_WALLPAPER_ENDPOINT", "\"${DEMO_API_WALLPAPER_ENDPOINT}\"")
+            buildConfigField("String", "AUTHORITY", "\"${FREE_VERSUIB_AUTHORITY}\"")
+            resValue("string", "authority", "\"${FREE_VERSUIB_AUTHORITY}\"")
         }
         production {
             buildConfigField("boolean", "DEMO_MODE", "false")
             buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "${ENABLE_EXTERNAL_LOG}")
             buildConfigField("String", "SERVER_WALLPAPER_ENDPOINT", "\"${PRODUCTION_API_WALLPAPER_ENDPOINT}\"")
+            buildConfigField("String", "AUTHORITY", "\"${FREE_VERSUIB_AUTHORITY}\"")
+            resValue("string", "authority", "\"${FREE_VERSUIB_AUTHORITY}\"")
+        }
+        ultimate {
+            buildConfigField("boolean", "DEMO_MODE", "false")
+            buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "${ENABLE_EXTERNAL_LOG}")
+            buildConfigField("String", "SERVER_WALLPAPER_ENDPOINT", "\"${PRODUCTION_API_WALLPAPER_ENDPOINT}\"")
+            buildConfigField("String", "AUTHORITY", "\"${ULTIMATE_VERSUIB_AUTHORITY}\"")
+            resValue("string", "authority", "\"${ULTIMATE_VERSUIB_AUTHORITY}\"")
         }
     }
     compileOptions {

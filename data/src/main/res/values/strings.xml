@@ -1,5 +1,3 @@
 <resources>
-    <string name="authority" translatable="false">com.kinglloy.album</string>
-
     <string name="app_name">Live Wallpaper Album</string>
 </resources>

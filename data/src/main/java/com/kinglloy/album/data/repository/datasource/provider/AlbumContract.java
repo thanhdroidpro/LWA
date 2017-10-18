@@ -3,13 +3,15 @@ package com.kinglloy.album.data.repository.datasource.provider;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.kinglloy.album.data.BuildConfig;
+
 /**
  * @author jinyalin
  * @since 2017/9/26.
  */
 
 public class AlbumContract {
-    public static final String AUTHORITY = "com.kinglloy.album";
+    public static final String AUTHORITY = BuildConfig.AUTHORITY;
 
     private static final String SCHEME = "content://";
 

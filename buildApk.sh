@@ -12,4 +12,6 @@ echo "Start Build Apk"
 ./gradlew assembleProductionRelease -Dchannel=google
 ./gradlew assembleProductionRelease -Dchannel=huawei
 
+./gradlew assembleUltimateRelease -Dchannel=google
+
 echo "Build Apk Complete"

@@ -60,10 +60,15 @@ android {
         production {
             buildConfigField("boolean", "DEMO_MODE", "false")
         }
+        ultimate {
+            applicationId "com.kinglloy.album.ultimate"
+            buildConfigField("boolean", "DEMO_MODE", "false")
+        }
     }
     dexOptions {
         javaMaxHeapSize "4g"
     }
+
 }
 
 dependencies {
@@ -95,6 +100,7 @@ dependencies {
     compile project(':engine')
     demoCompile project(path: ':data', configuration: 'demoDebug')
     productionCompile project(path: ':data', configuration: 'productionRelease')
+    ultimateCompile project(path: ':data', configuration: 'ultimateRelease')
 
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -106,10 +112,11 @@ dependencies {
 project.afterEvaluate {
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
+            def flavor = variant.productFlavors[0].name
             def oldFile = output.outputFile
 
             output.outputFile = new File(oldFile.parent,
-                    "LWA-${CHANNEL}.apk")
+                    "${flavor}-LWA-${CHANNEL}.apk")
         }
     }
 }
