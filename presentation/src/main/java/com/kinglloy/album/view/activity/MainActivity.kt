@@ -11,7 +11,6 @@ import com.kinglloy.album.analytics.Event
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.defaultSharedPreferences
 import java.util.*
-import android.util.DisplayMetrics
 
 
 
@@ -32,13 +31,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
         setContentView(R.layout.activity_main)
-
-        val metrics = resources.displayMetrics
-        val f = metrics.densityDpi
-        val width = metrics.widthPixels
-        val dp = width * 160 / f
-
-        System.out.println(dp)
 
         watchAD.setOnClickListener {
             Analytics.logEvent(this, Event.OPEN_AD_ACTIVITY)
