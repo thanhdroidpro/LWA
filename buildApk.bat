@@ -12,4 +12,6 @@ call gradlew assembleProductionRelease -Dchannel=baidu
 call gradlew assembleProductionRelease -Dchannel=google
 call gradlew assembleProductionRelease -Dchannel=huawei
 
+call gradlew assembleUltimateRelease -Dchannel=google
+
 echo Build Apk Complete
