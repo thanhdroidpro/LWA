@@ -1,6 +1,6 @@
 package com.kinglloy.album.domain.interactor;
 
-import com.kinglloy.album.domain.AdvanceWallpaper;
+import com.kinglloy.album.domain.Wallpaper;
 import com.kinglloy.album.domain.repository.WallpaperRepository;
 
 import javax.inject.Inject;
@@ -18,7 +18,7 @@ public class GetPreviewAdvanceWallpaper {
         this.repository = repository;
     }
 
-    public AdvanceWallpaper getPreviewing() {
-        return repository.getPreviewAdvanceWallpaper();
+    public Wallpaper getPreviewing() {
+        return repository.getPreviewLiveWallpaper();
     }
 }

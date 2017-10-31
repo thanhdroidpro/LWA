@@ -5,7 +5,7 @@ package com.kinglloy.album.domain;
  * @since 2017/7/28.
  */
 
-public class AdvanceWallpaper {
+public class Wallpaper {
     public long id;
     public String wallpaperId;
     public String link;

@@ -27,7 +27,7 @@ public class PreviewAdvanceWallpaper extends UseCase<Boolean, PreviewAdvanceWall
 
     @Override
     Observable<Boolean> buildUseCaseObservable(PreviewAdvanceWallpaper.Params params) {
-        return repository.previewAdvanceWallpaper(params.wallpaperId);
+        return repository.previewLiveWallpaper(params.wallpaperId);
     }
 
     public static final class Params {

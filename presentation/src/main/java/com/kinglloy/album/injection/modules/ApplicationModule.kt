@@ -2,8 +2,8 @@ package com.kinglloy.album.injection.modules
 
 import android.content.Context
 import com.kinglloy.album.UIThread
-import com.kinglloy.album.data.cache.AdvanceWallpaperCache
-import com.kinglloy.album.data.cache.AdvanceWallpaperCacheImpl
+import com.kinglloy.album.data.cache.WallpaperCache
+import com.kinglloy.album.data.cache.LiveWallpaperCacheImpl
 import com.kinglloy.album.data.executor.JobExecutor
 import com.kinglloy.album.data.repository.AdvanceWallpaperDataRepository
 import com.kinglloy.album.domain.executor.PostExecutionThread
@@ -52,9 +52,9 @@ class ApplicationModule(context: Context) {
 
     @Provides
     @Singleton
-    internal fun provideAdvanceWallpaperCache(cache: AdvanceWallpaperCacheImpl):
-            AdvanceWallpaperCache {
-        return cache
+    internal fun provideAdvanceWallpaperCache(cacheLive: LiveWallpaperCacheImpl):
+            WallpaperCache {
+        return cacheLive
     }
 
 }

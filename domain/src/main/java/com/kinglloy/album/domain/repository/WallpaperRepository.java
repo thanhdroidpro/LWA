@@ -1,6 +1,6 @@
 package com.kinglloy.album.domain.repository;
 
-import com.kinglloy.album.domain.AdvanceWallpaper;
+import com.kinglloy.album.domain.Wallpaper;
 
 import java.util.List;
 
@@ -13,18 +13,29 @@ import io.reactivex.Observable;
 
 public interface WallpaperRepository {
 
-    Observable<List<AdvanceWallpaper>> getAdvanceWallpapers();
+    Observable<List<Wallpaper>> getLiveWallpapers();
 
-    Observable<List<AdvanceWallpaper>> loadAdvanceWallpapers();
+    Observable<List<Wallpaper>> getStyleWallpapers();
 
-    Observable<Long> downloadAdvanceWallpaper(String wallpaperId);
+    Observable<List<Wallpaper>> loadLiveWallpapers();
 
-    Observable<Boolean> selectPreviewingAdvanceWallpaper();
+    Observable<List<Wallpaper>> loadStyleWallpapers();
 
-    Observable<Boolean> previewAdvanceWallpaper(String wallpaperId);
+    Observable<Long> downloadLiveWallpaper(String wallpaperId);
 
-    AdvanceWallpaper getPreviewAdvanceWallpaper();
+    Observable<Long> downloadStyleWallpaper(String wallpaperId);
+
+    Observable<Boolean> selectPreviewingLiveWallpaper();
+
+    Observable<Boolean> selectPreviewingStyleWallpaper();
+
+    Observable<Boolean> previewLiveWallpaper(String wallpaperId);
+
+    Observable<Boolean> previewStyleWallpaper(String wallpaperId);
+
+    Wallpaper getPreviewLiveWallpaper();
 
     Observable<Boolean> activeService(int serviceType);
+
     Observable<Integer> getActiveService();
 }

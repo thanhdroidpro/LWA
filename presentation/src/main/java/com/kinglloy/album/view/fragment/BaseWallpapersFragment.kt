@@ -24,6 +24,7 @@ import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.analytics.Event
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.utils.WallpaperFileHelper
+import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.exception.ErrorMessageFactory
 import com.kinglloy.album.model.AdvanceWallpaperItem
 import com.kinglloy.album.presenter.WallpaperListPresenter
@@ -38,7 +39,7 @@ import javax.inject.Inject
  * @author jinyalin
  * @since 2017/10/31.
  */
-open class BaseWallpapersFragment : Fragment(), WallpaperListView {
+open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     companion object {
         val TAG = "BaseWallpapersFragment"
         val LOAD_STATE = "load_state"
@@ -65,6 +66,8 @@ open class BaseWallpapersFragment : Fragment(), WallpaperListView {
 
     private var downloadDialog: DownloadingDialog? = null
 
+    protected abstract fun getWallpaperType(): WallpaperType
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -80,8 +83,9 @@ open class BaseWallpapersFragment : Fragment(), WallpaperListView {
 
     protected fun handleState() {
         when (loadState) {
-            WallpaperListActivity.LOAD_STATE_NORMAL -> presenter.initialize()
-            WallpaperListActivity.LOAD_STATE_LOADING -> presenter.loadAdvanceWallpaper()
+            WallpaperListActivity.LOAD_STATE_NORMAL -> presenter.initialize(getWallpaperType())
+            WallpaperListActivity.LOAD_STATE_LOADING ->
+                presenter.loadAdvanceWallpaper(getWallpaperType())
             WallpaperListActivity.LOAD_STATE_RETRY -> showRetry()
         }
     }
@@ -101,11 +105,11 @@ open class BaseWallpapersFragment : Fragment(), WallpaperListView {
         wallpaperList.layoutManager = gridLayoutManager
 
         btnLoadAdvanceWallpaper.setOnClickListener {
-            presenter.loadAdvanceWallpaper()
+            presenter.loadAdvanceWallpaper(getWallpaperType())
             Analytics.logEvent(activity, Event.LOAD_ADVANCES)
         }
         btnRetry.setOnClickListener {
-            presenter.loadAdvanceWallpaper()
+            presenter.loadAdvanceWallpaper(getWallpaperType())
             Analytics.logEvent(activity, Event.RETRY_LOAD_ADVANCES)
         }
 

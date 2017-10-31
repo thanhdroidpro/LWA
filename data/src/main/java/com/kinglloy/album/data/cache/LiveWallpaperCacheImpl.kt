@@ -1,7 +1,7 @@
 package com.kinglloy.album.data.cache
 
 import android.text.TextUtils
-import com.kinglloy.album.data.entity.AdvanceWallpaperEntity
+import com.kinglloy.album.data.entity.WallpaperEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,18 +10,19 @@ import javax.inject.Singleton
  * @since 2017/8/4.
  */
 @Singleton
-class AdvanceWallpaperCacheImpl @Inject constructor() : AdvanceWallpaperCache {
-    private var wallpapers: List<AdvanceWallpaperEntity>? = null
+class LiveWallpaperCacheImpl @Inject constructor() : WallpaperCache {
+    private var liveWallpapers: List<WallpaperEntity>? = null
 
-    @Synchronized override fun put(wallpapers: List<AdvanceWallpaperEntity>) {
-        this.wallpapers = wallpapers
+    @Synchronized override fun putWallpapers(wallpapers: List<WallpaperEntity>) {
+        this.liveWallpapers = wallpapers
     }
 
     override fun selectPreviewingWallpaper() {
         if (isDirty()) {
             throw IllegalStateException("Cache is dirty.")
         }
-        for (wallpaper in wallpapers!!) {
+
+        for (wallpaper in liveWallpapers!!) {
             wallpaper.isSelected = wallpaper.isPreviewing
         }
     }
@@ -30,39 +31,38 @@ class AdvanceWallpaperCacheImpl @Inject constructor() : AdvanceWallpaperCache {
         if (isDirty()) {
             throw IllegalStateException("Cache is dirty.")
         }
-        for (wallpaper in wallpapers!!) {
+        for (wallpaper in liveWallpapers!!) {
             wallpaper.isPreviewing = TextUtils.equals(wallpaperId, wallpaper.wallpaperId)
         }
     }
 
-    override fun getWallpapers(): List<AdvanceWallpaperEntity> {
+    override fun getWallpapers(): List<WallpaperEntity> {
         if (isDirty()) {
             throw IllegalStateException("Cache is dirty.")
         }
-        return ArrayList(wallpapers!!)
+        return ArrayList(liveWallpapers!!)
     }
 
-    override fun getWallpaper(wallpaperId: String): AdvanceWallpaperEntity? {
-        if (!isCached(wallpaperId)) {
+    override fun getWallpaper(wallpaperId: String): WallpaperEntity? {
+        if (!isWallpaperCached(wallpaperId)) {
             throw IllegalStateException("WallpaperId $wallpaperId is not cached.")
         }
-        return wallpapers!!.firstOrNull { TextUtils.equals(wallpaperId, it.wallpaperId) }
+        return liveWallpapers!!.firstOrNull { TextUtils.equals(wallpaperId, it.wallpaperId) }
     }
+
 
     @Synchronized override fun evictAll() {
-        wallpapers = null
+        liveWallpapers = null
     }
 
-    override fun isCached(wallpaperId: String): Boolean {
+    override fun isWallpaperCached(wallpaperId: String): Boolean {
         if (isDirty()) {
             return false
         }
-        return wallpapers!!.any { TextUtils.equals(wallpaperId, it.wallpaperId) }
+        return liveWallpapers!!.any { TextUtils.equals(wallpaperId, it.wallpaperId) }
     }
 
-    override fun isDirty(): Boolean {
-        return wallpapers == null || wallpapers!!.isEmpty()
-    }
+    override fun isDirty(): Boolean = liveWallpapers != null && !liveWallpapers!!.isEmpty()
 
     override fun makeDirty() {
         evictAll()

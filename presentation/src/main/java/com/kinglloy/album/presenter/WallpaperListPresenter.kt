@@ -9,7 +9,8 @@ import com.kinglloy.album.WallpaperSwitcher
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.utils.WallpaperFileHelper
-import com.kinglloy.album.domain.AdvanceWallpaper
+import com.kinglloy.album.domain.Wallpaper
+import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.domain.interactor.*
 import com.kinglloy.album.exception.ErrorMessageFactory
 import com.kinglloy.album.mapper.AdvanceWallpaperItemMapper
@@ -22,8 +23,8 @@ import javax.inject.Inject
  * @since 2017/10/31.
  */
 class WallpaperListPresenter
-@Inject constructor(val getAdvanceWallpapers: GetAdvanceWallpapers,
-                    val loadAdvanceWallpaper: LoadAdvanceWallpaper,
+@Inject constructor(private val getWallpapers: GetWallpapers,
+                    private val loadWallpaper: LoadWallpaper,
                     val previewAdvanceWallpaper: PreviewAdvanceWallpaper,
                     val advanceWallpaperItemMapper: AdvanceWallpaperItemMapper,
                     val downloadAdvanceWallpaper: DownloadAdvanceWallpaper,
@@ -61,19 +62,20 @@ class WallpaperListPresenter
         this.view = view
 
         view.context().contentResolver.registerContentObserver(
-                AlbumContract.AdvanceWallpaper.CONTENT_SELECT_PREVIEWING_URI,
+                AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI,
                 true, mContentObserver)
     }
 
-    fun initialize() {
+    fun initialize(wallpaperType: WallpaperType) {
         view?.showLoading()
-        getAdvanceWallpapers.execute(wallpaperObserver, null)
+        getWallpapers.execute(wallpaperObserver,
+                GetWallpapers.Params.withType(wallpaperType))
     }
 
-    fun loadAdvanceWallpaper() {
+    fun loadAdvanceWallpaper(type: WallpaperType) {
         view?.showLoading()
-        loadAdvanceWallpaper.execute(object : DefaultObserver<List<AdvanceWallpaper>>() {
-            override fun onNext(needDownload: List<AdvanceWallpaper>) {
+        loadWallpaper.execute(object : DefaultObserver<List<Wallpaper>>() {
+            override fun onNext(needDownload: List<Wallpaper>) {
                 view?.renderWallpapers(advanceWallpaperItemMapper.transformList(needDownload))
             }
 
@@ -86,7 +88,7 @@ class WallpaperListPresenter
                         ErrorMessageFactory.create(view!!.context(), exception as Exception))
                 view?.showRetry()
             }
-        }, null)
+        }, LoadWallpaper.Params.withType(type))
     }
 
     fun previewAdvanceWallpaper(item: AdvanceWallpaperItem) {
@@ -159,15 +161,15 @@ class WallpaperListPresenter
 
     override fun destroy() {
         view!!.context().contentResolver.unregisterContentObserver(mContentObserver)
-        getAdvanceWallpapers.dispose()
-        loadAdvanceWallpaper.dispose()
+        getWallpapers.dispose()
+        loadWallpaper.dispose()
         downloadAdvanceWallpaper.dispose()
         downloadingWallpaper = null
         view = null
     }
 
-    private inner class WallpapersObserver : DefaultObserver<List<AdvanceWallpaper>>() {
-        override fun onNext(needDownload: List<AdvanceWallpaper>) {
+    private inner class WallpapersObserver : DefaultObserver<List<Wallpaper>>() {
+        override fun onNext(needDownload: List<Wallpaper>) {
             if (needDownload.isEmpty()) {
                 view?.showEmpty()
             } else {

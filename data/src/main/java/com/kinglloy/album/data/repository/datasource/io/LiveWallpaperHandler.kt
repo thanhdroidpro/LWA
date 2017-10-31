@@ -6,7 +6,7 @@ import android.database.Cursor
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.kinglloy.album.data.SyncConfig
-import com.kinglloy.album.data.entity.AdvanceWallpaperEntity
+import com.kinglloy.album.data.entity.WallpaperEntity
 import com.kinglloy.album.data.exception.NetworkConnectionException
 import com.kinglloy.album.data.exception.RemoteServerException
 import com.kinglloy.album.data.log.LogUtil
@@ -27,17 +27,17 @@ import java.util.concurrent.locks.ReentrantLock
  * @author jinyalin
  * @since 2017/7/28.
  */
-class AdvanceWallpaperHandler(context: Context) : JSONHandler(context) {
+class LiveWallpaperHandler(context: Context) : JSONHandler(context) {
     companion object {
         val TAG = "AdvanceWallpaperHandler"
         val downloadLock = ReentrantLock()
     }
 
-    private var wallpapers: ArrayList<AdvanceWallpaperEntity> = ArrayList()
+    private var wallpapers: ArrayList<WallpaperEntity> = ArrayList()
 
     override fun makeContentProviderOperations(list: ArrayList<ContentProviderOperation>) {
         val uri = AlbumContractHelper.setUriAsCalledFromSyncAdapter(
-                AlbumContract.AdvanceWallpaper.CONTENT_URI)
+                AlbumContract.LiveWallpaper.CONTENT_URI)
         list.add(ContentProviderOperation.newDelete(uri).build())
 
         val validFiles = HashSet<String>()
@@ -57,21 +57,21 @@ class AdvanceWallpaperHandler(context: Context) : JSONHandler(context) {
     }
 
     override fun process(element: JsonElement) {
-        val wallpapers = Gson().fromJson(element, Array<AdvanceWallpaperEntity>::class.java)
+        val wallpapers = Gson().fromJson(element, Array<WallpaperEntity>::class.java)
         this.wallpapers.ensureCapacity(wallpapers.size)
         this.wallpapers.addAll(wallpapers)
     }
 
-    private fun makeFilename(wallpaper: AdvanceWallpaperEntity): String {
+    private fun makeFilename(wallpaper: WallpaperEntity): String {
         return wallpaper.hashCode().toString() + "_component.apk"
     }
 
-    private fun makeStorePath(wallpaper: AdvanceWallpaperEntity): String {
+    private fun makeStorePath(wallpaper: WallpaperEntity): String {
         val outputDir = WallpaperFileHelper.getAdvanceWallpaperDir(mContext)
         return File(outputDir, makeFilename(wallpaper)).absolutePath
     }
 
-    private fun getWallpaperNameSet(entities: List<AdvanceWallpaperEntity>): Set<String> {
+    private fun getWallpaperNameSet(entities: List<WallpaperEntity>): Set<String> {
         val ids = HashSet<String>()
         for (entity in entities) {
             ids.add(makeFilename(entity))
@@ -79,33 +79,33 @@ class AdvanceWallpaperHandler(context: Context) : JSONHandler(context) {
         return ids
     }
 
-    private fun outputWallpaper(wallpaper: AdvanceWallpaperEntity,
+    private fun outputWallpaper(wallpaper: WallpaperEntity,
                                 list: ArrayList<ContentProviderOperation>) {
         val uri = AlbumContractHelper.setUriAsCalledFromSyncAdapter(
-                AlbumContract.AdvanceWallpaper.CONTENT_URI)
+                AlbumContract.LiveWallpaper.CONTENT_URI)
         val builder = ContentProviderOperation.newInsert(uri)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_WALLPAPER_ID, wallpaper.wallpaperId)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_AUTHOR, wallpaper.author)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_DOWNLOAD_URL, wallpaper.downloadUrl)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_ICON_URL, wallpaper.iconUrl)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_LINK, wallpaper.link)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_NAME, wallpaper.name)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_CHECKSUM, wallpaper.checkSum)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_STORE_PATH, wallpaper.storePath)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_PROVIDER_NAME, wallpaper.providerName)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_SELECTED, 0)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_LAZY_DOWNLOAD, 1)
-        builder.withValue(AlbumContract.AdvanceWallpaper.COLUMN_NAME_PREVIEWING, 0)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_WALLPAPER_ID, wallpaper.wallpaperId)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_AUTHOR, wallpaper.author)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_DOWNLOAD_URL, wallpaper.downloadUrl)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_ICON_URL, wallpaper.iconUrl)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_LINK, wallpaper.link)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_NAME, wallpaper.name)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_CHECKSUM, wallpaper.checkSum)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_STORE_PATH, wallpaper.storePath)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_PROVIDER_NAME, wallpaper.providerName)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_SELECTED, 0)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_LAZY_DOWNLOAD, 1)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING, 0)
 
         list.add(builder.build())
     }
 
-    private fun querySelectedWallpapers(): List<AdvanceWallpaperEntity> {
+    private fun querySelectedWallpapers(): List<WallpaperEntity> {
         var cursor: Cursor? = null
         try {
             cursor = mContext.contentResolver.query(
-                    AlbumContract.AdvanceWallpaper.CONTENT_SELECTED_URI, null, null, null, null)
-            return AdvanceWallpaperEntity.readCursor(cursor)
+                    AlbumContract.LiveWallpaper.CONTENT_SELECTED_URI, null, null, null, null)
+            return WallpaperEntity.liveWallpaperValues(cursor)
         } finally {
             if (cursor != null) {
                 cursor.close()
@@ -113,11 +113,11 @@ class AdvanceWallpaperHandler(context: Context) : JSONHandler(context) {
         }
     }
 
-    private fun downloadWallpaperComponent(wallpaper: AdvanceWallpaperEntity): Boolean {
+    private fun downloadWallpaperComponent(wallpaper: WallpaperEntity): Boolean {
         return downloadWallpaperComponent(wallpaper, null)
     }
 
-    fun downloadWallpaperComponent(wallpaper: AdvanceWallpaperEntity,
+    fun downloadWallpaperComponent(wallpaper: WallpaperEntity,
                                    observer: DefaultObserver<Long>?): Boolean {
         observer?.onNext(0)
         LogUtil.D(TAG, "Start download wallpaper component to " + wallpaper.storePath)

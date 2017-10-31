@@ -27,7 +27,7 @@ public class DownloadAdvanceWallpaper extends UseCase<Long, DownloadAdvanceWallp
 
     @Override
     Observable<Long> buildUseCaseObservable(Params params) {
-        return repository.downloadAdvanceWallpaper(params.wallpaperId);
+        return repository.downloadLiveWallpaper(params.wallpaperId);
     }
 
     public static final class Params {

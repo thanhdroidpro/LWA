@@ -1,20 +1,22 @@
 package com.kinglloy.album.data.repository.datasource
 
-import com.kinglloy.album.data.entity.AdvanceWallpaperEntity
+import com.kinglloy.album.data.entity.WallpaperEntity
 import io.reactivex.Observable
 
 /**
  * @author jinyalin
  * @since 2017/7/28.
  */
-interface AdvanceWallpaperDataStore {
+interface WallpaperDataStore {
 
-    fun getPreviewWallpaperEntity(): AdvanceWallpaperEntity
+    fun getPreviewWallpaperEntity(): WallpaperEntity
 
-    fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaperEntity>>
+    fun getWallpaperEntities(): Observable<List<WallpaperEntity>>
 
     fun selectPreviewingWallpaper(): Observable<Boolean>
     fun previewWallpaper(wallpaperId: String): Observable<Boolean>
+    fun cancelPreviewing(): Observable<Boolean>
+    fun cancelSelect(): Observable<Boolean>
 
     fun downloadWallpaper(wallpaperId: String): Observable<Long>
 

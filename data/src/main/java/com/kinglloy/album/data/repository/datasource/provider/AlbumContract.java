@@ -17,13 +17,15 @@ public class AlbumContract {
 
     public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
 
-    private static final String PATH_ADVANCE_WALLPAPER = "advance_wallpaper";
+    private static final String PATH_LIVE_WALLPAPER = "advance_wallpaper";
+    private static final String PATH_STYLE_WALLPAPER = "style_wallpaper";
     private static final String PATH_ACTIVE_SERVICE = "active_service";
     public static final String[] TOP_LEVEL_PATHS = {
-            PATH_ADVANCE_WALLPAPER
+            PATH_LIVE_WALLPAPER,
+            PATH_STYLE_WALLPAPER
     };
 
-    interface AdvanceWallpaperColumns {
+    interface LiveWallpaperColumns {
         /**
          * Type: TEXT
          */
@@ -76,6 +78,45 @@ public class AlbumContract {
         String COLUMN_NAME_PREVIEWING = "previewing";
     }
 
+    interface StyleWallpaperColumns {
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_WALLPAPER_ID = "wallpaper_id";
+
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_ICON_URL = "icon_url";
+
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_NAME = "name";
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_DOWNLOAD_URL = "download_url";
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_CHECKSUM = "checksum";
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_STORE_PATH = "store_path";
+
+        /**
+         * Type: INTEGER
+         */
+        String COLUMN_NAME_SELECTED = "selected";
+
+        /**
+         * Type: INTEGER
+         */
+        String COLUMN_NAME_PREVIEWING = "previewing";
+    }
+
     interface ActiveServiceColumns {
         /**
          * Type: INTEGER range: 0 1 2
@@ -83,7 +124,7 @@ public class AlbumContract {
         String COLUMN_NAME_SERVICE_ID = "service_id";
     }
 
-    public static final class AdvanceWallpaper implements AdvanceWallpaperColumns, BaseColumns {
+    public static final class LiveWallpaper implements LiveWallpaperColumns, BaseColumns {
         public static final String TABLE_NAME = "advance_wallpaper";
 
         public static final String PATH_SELECTED_WALLPAPER = "selected";
@@ -91,18 +132,50 @@ public class AlbumContract {
         public static final String PATH_SELECT_PREVIEWING_WALLPAPER = "select_previewing";
 
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_ADVANCE_WALLPAPER).build();
+                BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_LIVE_WALLPAPER).build();
 
         public static final Uri CONTENT_SELECTED_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ADVANCE_WALLPAPER)
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LIVE_WALLPAPER)
                         .appendPath(PATH_SELECTED_WALLPAPER).build();
 
         public static final Uri CONTENT_PREVIEWING_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ADVANCE_WALLPAPER)
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LIVE_WALLPAPER)
                         .appendPath(PATH_PREVIEWING_WALLPAPER).build();
 
         public static final Uri CONTENT_SELECT_PREVIEWING_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_ADVANCE_WALLPAPER)
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LIVE_WALLPAPER)
+                        .appendPath(PATH_SELECT_PREVIEWING_WALLPAPER).build();
+
+
+        public static Uri buildWallpaperUri(String wallpaperId) {
+            return CONTENT_URI.buildUpon().appendPath(wallpaperId).build();
+        }
+
+        public static String getWallpaperId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
+    public static final class StyleWallpaper implements StyleWallpaperColumns, BaseColumns {
+        public static final String TABLE_NAME = "style_wallpaper";
+
+        public static final String PATH_SELECTED_WALLPAPER = "selected";
+        public static final String PATH_PREVIEWING_WALLPAPER = "previewing";
+        public static final String PATH_SELECT_PREVIEWING_WALLPAPER = "select_previewing";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_STYLE_WALLPAPER).build();
+
+        public static final Uri CONTENT_SELECTED_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_STYLE_WALLPAPER)
+                        .appendPath(PATH_SELECTED_WALLPAPER).build();
+
+        public static final Uri CONTENT_PREVIEWING_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_STYLE_WALLPAPER)
+                        .appendPath(PATH_PREVIEWING_WALLPAPER).build();
+
+        public static final Uri CONTENT_SELECT_PREVIEWING_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_STYLE_WALLPAPER)
                         .appendPath(PATH_SELECT_PREVIEWING_WALLPAPER).build();
 
 

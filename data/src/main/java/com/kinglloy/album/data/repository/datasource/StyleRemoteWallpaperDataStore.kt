@@ -8,37 +8,35 @@ import android.database.Cursor
 import android.os.RemoteException
 import com.google.gson.JsonParser
 import com.kinglloy.album.data.R
-import com.kinglloy.album.data.entity.AdvanceWallpaperEntity
+import com.kinglloy.album.data.entity.WallpaperEntity
 import com.kinglloy.album.data.exception.NetworkConnectionException
 import com.kinglloy.album.data.exception.NoContentException
 import com.kinglloy.album.data.exception.RemoteServerException
 import com.kinglloy.album.data.log.LogUtil
-import com.kinglloy.album.data.repository.datasource.net.RemoteAdvanceWallpaperFetcher
+import com.kinglloy.album.data.repository.datasource.io.StyleWallpaperHandler
+import com.kinglloy.album.data.repository.datasource.net.RemoteStyleWallpaperFetcher
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
-import com.kinglloy.album.data.repository.datasource.sync.account.Account
-import com.kinglloy.album.domain.interactor.DefaultObserver
-import com.kinglloy.album.data.repository.datasource.io.AdvanceWallpaperHandler
 import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
+import com.kinglloy.album.data.repository.datasource.sync.account.Account
 import io.reactivex.Observable
 
 /**
  * @author jinyalin
- * @since 2017/7/31.
+ * @since 2017/10/31.
  */
-class RemoteAdvanceWallpaperDataStore(val context: Context,
-                                      val localDataStore: AdvanceWallpaperDataStoreImpl)
-    : AdvanceWallpaperDataStore {
+class StyleRemoteWallpaperDataStore(val context: Context,
+                                    val localDataStoreStyle: StyleWallpaperDataStoreImpl)
+    : WallpaperDataStore {
+
     companion object {
-        val TAG = "RemoteAdvanceWallpaper"
+        val TAG = "StyleRemoteWallpaperDataStore"
     }
 
-    val wallpaperHandler = AdvanceWallpaperHandler(context)
-
-    override fun getPreviewWallpaperEntity(): AdvanceWallpaperEntity {
-        throw UnsupportedOperationException("Remote data store not support get wallpaper.")
+    override fun getPreviewWallpaperEntity(): WallpaperEntity {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getAdvanceWallpapers(): Observable<List<AdvanceWallpaperEntity>> {
+    override fun getWallpaperEntities(): Observable<List<WallpaperEntity>> {
         return Observable.create { emitter ->
             if (!SyncHelper.isOnline(context)) {
                 emitter.onError(NetworkConnectionException())
@@ -50,9 +48,9 @@ class RemoteAdvanceWallpaperDataStore(val context: Context,
 
             val batch = ArrayList<ContentProviderOperation>()
             try {
-                val wallpapers = RemoteAdvanceWallpaperFetcher(context).fetchDataIfNewer()
+                val wallpapers = RemoteStyleWallpaperFetcher(context).fetchDataIfNewer()
                 val parser = JsonParser()
-                val handler = AdvanceWallpaperHandler(context)
+                val handler = StyleWallpaperHandler(context)
                 handler.process(parser.parse(wallpapers))
                 handler.makeContentProviderOperations(batch)
             } catch (e: Exception) {
@@ -74,12 +72,12 @@ class RemoteAdvanceWallpaperDataStore(val context: Context,
             }
 
             var cursor: Cursor? = null
-            val validWallpapers = ArrayList<AdvanceWallpaperEntity>()
+            val validWallpapers = ArrayList<WallpaperEntity>()
             try {
                 val contentResolver = context.contentResolver
-                cursor = contentResolver.query(AlbumContract.AdvanceWallpaper.CONTENT_URI,
+                cursor = contentResolver.query(AlbumContract.StyleWallpaper.CONTENT_URI,
                         null, null, null, null)
-                validWallpapers.addAll(AdvanceWallpaperEntity.readCursor(cursor))
+                validWallpapers.addAll(WallpaperEntity.styleWallpaperValues(cursor))
             } finally {
                 if (cursor != null) {
                     cursor.close()
@@ -96,38 +94,31 @@ class RemoteAdvanceWallpaperDataStore(val context: Context,
     }
 
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
-        throw UnsupportedOperationException("Remote data store not support select wallpaper.")
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun previewWallpaper(wallpaperId: String): Observable<Boolean> {
-        throw UnsupportedOperationException("Remote data store not support preview wallpaper.")
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun cancelPreviewing(): Observable<Boolean> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun cancelSelect(): Observable<Boolean> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        return Observable.create { emitter ->
-            val entity = localDataStore.loadWallpaperEntity(wallpaperId)
-            wallpaperHandler.downloadWallpaperComponent(entity, object : DefaultObserver<Long>() {
-                override fun onNext(downloadedLength: Long) {
-                    emitter.onNext(downloadedLength)
-                }
-
-                override fun onComplete() {
-                    emitter.onComplete()
-                }
-
-                override fun onError(exception: Throwable) {
-                    emitter.onError(exception)
-                }
-
-            })
-        }
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {
-        throw UnsupportedOperationException("Remote data store not support active service.")
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getActiveService(): Observable<Int> {
-        throw UnsupportedOperationException("Remote data store not support get active service.")
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
 }

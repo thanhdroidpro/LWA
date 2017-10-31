@@ -1,8 +1,8 @@
 package com.kinglloy.album.data.entity.mapper;
 
 import com.fernandocejas.arrow.checks.Preconditions;
-import com.kinglloy.album.data.entity.AdvanceWallpaperEntity;
-import com.kinglloy.album.domain.AdvanceWallpaper;
+import com.kinglloy.album.data.entity.WallpaperEntity;
+import com.kinglloy.album.domain.Wallpaper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +15,15 @@ import javax.inject.Singleton;
  * @since 2017/7/28.
  */
 @Singleton
-public class AdvanceWallpaperEntityMapper {
+public class WallpaperEntityMapper {
     @Inject
-    public AdvanceWallpaperEntityMapper() {
+    public WallpaperEntityMapper() {
 
     }
 
-    public AdvanceWallpaper transform(AdvanceWallpaperEntity wallpaperEntity) {
+    public Wallpaper transform(WallpaperEntity wallpaperEntity) {
         Preconditions.checkNotNull(wallpaperEntity, "Wallpaper can not be null.");
-        AdvanceWallpaper wallpaper = new AdvanceWallpaper();
+        Wallpaper wallpaper = new Wallpaper();
         wallpaper.id = wallpaperEntity.id;
         wallpaper.wallpaperId = wallpaperEntity.wallpaperId;
         wallpaper.link = wallpaperEntity.link;
@@ -40,10 +40,10 @@ public class AdvanceWallpaperEntityMapper {
         return wallpaper;
     }
 
-    public List<AdvanceWallpaper> transformList(List<AdvanceWallpaperEntity> wallpaperEntities) {
+    public List<Wallpaper> transformList(List<WallpaperEntity> wallpaperEntities) {
         Preconditions.checkNotNull(wallpaperEntities, "SourceEntity can not be null.");
-        List<AdvanceWallpaper> sources = new ArrayList<>();
-        for (AdvanceWallpaperEntity entity : wallpaperEntities) {
+        List<Wallpaper> sources = new ArrayList<>();
+        for (WallpaperEntity entity : wallpaperEntities) {
             sources.add(transform(entity));
         }
         return sources;

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.kinglloy.album.AlbumApplication
 import com.kinglloy.album.R
+import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.view.activity.WallpaperListActivity
 
 /**
@@ -32,4 +33,6 @@ class StyleWallpapersFragment : BaseWallpapersFragment() {
 
         handleState()
     }
+
+    override fun getWallpaperType() = WallpaperType.STYLE
 }

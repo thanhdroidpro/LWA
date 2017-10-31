@@ -27,6 +27,6 @@ public class SelectPreviewingAdvanceWallpaper extends UseCase<Boolean, Void> {
 
     @Override
     Observable<Boolean> buildUseCaseObservable(Void aVoid) {
-        return repository.selectPreviewingAdvanceWallpaper();
+        return repository.selectPreviewingLiveWallpaper();
     }
 }

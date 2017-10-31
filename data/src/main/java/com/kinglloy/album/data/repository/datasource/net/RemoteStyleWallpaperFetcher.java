@@ -10,14 +10,14 @@ import com.kinglloy.album.data.BuildConfig;
  * @since 2017/7/28.
  */
 
-public class RemoteAdvanceWallpaperFetcher extends DataFetcher {
+public class RemoteStyleWallpaperFetcher extends DataFetcher {
 
-    public RemoteAdvanceWallpaperFetcher(Context context) {
+    public RemoteStyleWallpaperFetcher(Context context) {
         super(context);
     }
 
 
     protected String getUrl() {
-        return BuildConfig.SERVER_WALLPAPER_ENDPOINT + "/advance";
+        return BuildConfig.SERVER_WALLPAPER_ENDPOINT + "/style_wallpaper";
     }
 }
