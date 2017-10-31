@@ -19,15 +19,16 @@ import javax.inject.Inject
 
 /**
  * @author jinyalin
- * @since 2017/10/31.
+ * @since 2017/7/28.
  */
-class WallpaperListPresenter
+class MainWallpaperListPresenter
 @Inject constructor(val getAdvanceWallpapers: GetAdvanceWallpapers,
                     val loadAdvanceWallpaper: LoadAdvanceWallpaper,
                     val previewAdvanceWallpaper: PreviewAdvanceWallpaper,
                     val advanceWallpaperItemMapper: AdvanceWallpaperItemMapper,
                     val downloadAdvanceWallpaper: DownloadAdvanceWallpaper,
-                    val wallpaperSwitcher: WallpaperSwitcher) : Presenter {
+                    val wallpaperSwitcher: WallpaperSwitcher)
+    : Presenter {
 
     companion object {
         val TAG = "WallpaperListPresenter"

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/empty"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/emptyDescription"
+        style="@style/Widget.Album.Text.Prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/global_prompt_margin"
+        android:drawableTop="@drawable/ic_launcher"
+        android:gravity="center_horizontal"
+        android:text="@string/advance_empty_description" />
+
+    <Button
+        android:id="@+id/btnLoadAdvanceWallpaper"
+        style="@style/Widget.Album.Button.Base"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/icon_ad_small"
+        android:text="@string/advance_empty_load" />
+
+</LinearLayout>

@@ -1,23 +1,24 @@
-package com.kinglloy.album.view.activity
+package com.kinglloy.album.view.fragment
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import android.support.v4.app.Fragment
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Html
 import android.text.TextUtils
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
-import com.kinglloy.album.AlbumApplication
-
 import com.kinglloy.album.R
 import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.analytics.Event
@@ -25,17 +26,21 @@ import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.exception.ErrorMessageFactory
 import com.kinglloy.album.model.AdvanceWallpaperItem
-import com.kinglloy.album.presenter.MainWallpaperListPresenter
+import com.kinglloy.album.presenter.WallpaperListPresenter
 import com.kinglloy.album.view.WallpaperListView
+import com.kinglloy.album.view.activity.WallpaperListActivity
 import com.kinglloy.album.view.component.DownloadingDialog
 import kotlinx.android.synthetic.main.activity_wallpaper_list.*
-import org.jetbrains.anko.toast
 import java.util.ArrayList
 import javax.inject.Inject
 
-class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
+/**
+ * @author jinyalin
+ * @since 2017/10/31.
+ */
+open class BaseWallpapersFragment : Fragment(), WallpaperListView {
     companion object {
-        val TAG = "AdvanceSettingActivity"
+        val TAG = "BaseWallpapersFragment"
         val LOAD_STATE = "load_state"
 
         val LOAD_STATE_NORMAL = 0
@@ -43,47 +48,48 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         val LOAD_STATE_RETRY = 2
     }
 
+    private lateinit var wallpaperList: RecyclerView
+    private lateinit var loadingView: View
+    private lateinit var emptyView: View
+    private lateinit var failedView: View
+
     @Inject
-    lateinit internal var presenter: MainWallpaperListPresenter
+    lateinit internal var presenter: WallpaperListPresenter
 
     val wallpapers = ArrayList<AdvanceWallpaperItem>()
 
-    private var loadState = LOAD_STATE_NORMAL
+    protected var loadState = WallpaperListActivity.LOAD_STATE_NORMAL
 
     private var placeHolderDrawable: ColorDrawable? = null
     private var mItemSize = 10
 
     private var downloadDialog: DownloadingDialog? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        AlbumApplication.instance.applicationComponent.inject(this)
-        setContentView(R.layout.activity_wallpaper_list)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setSupportActionBar(appBar)
+        wallpaperList = view.findViewById(R.id.wallpaperList)
+        loadingView = view.findViewById(R.id.loading)
+        emptyView = view.findViewById(android.R.id.empty)
+        failedView = view.findViewById(R.id.retry)
 
-        placeHolderDrawable = ColorDrawable(ContextCompat.getColor(this,
-                R.color.gallery_chosen_photo_placeholder))
-        initViews()
-
-        presenter.setView(this)
-
-        if (savedInstanceState != null) {
-            loadState = savedInstanceState.getInt(LOAD_STATE)
-            presenter.onRestoreInstanceState(savedInstanceState)
+        if (savedInstanceState == null) {
+            initViews()
         }
-
-        handleState()
     }
 
-    private fun handleState() {
-        if (loadState == LOAD_STATE_NORMAL) {
-            presenter.initialize()
-        } else if (loadState == LOAD_STATE_LOADING) {
-            presenter.loadAdvanceWallpaper()
-        } else if (loadState == LOAD_STATE_RETRY) {
-            showRetry()
+    protected fun handleState() {
+        when (loadState) {
+            WallpaperListActivity.LOAD_STATE_NORMAL -> presenter.initialize()
+            WallpaperListActivity.LOAD_STATE_LOADING -> presenter.loadAdvanceWallpaper()
+            WallpaperListActivity.LOAD_STATE_RETRY -> showRetry()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(LOAD_STATE, loadState)
+        presenter.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
     }
 
     private fun initViews() {
@@ -91,16 +97,16 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         itemAnimator.supportsChangeAnimations = false
         wallpaperList.itemAnimator = itemAnimator
 
-        val gridLayoutManager = GridLayoutManager(this, 1)
+        val gridLayoutManager = GridLayoutManager(activity, 1)
         wallpaperList.layoutManager = gridLayoutManager
 
         btnLoadAdvanceWallpaper.setOnClickListener {
             presenter.loadAdvanceWallpaper()
-            Analytics.logEvent(this@WallpaperListActivity, Event.LOAD_ADVANCES)
+            Analytics.logEvent(activity, Event.LOAD_ADVANCES)
         }
         btnRetry.setOnClickListener {
             presenter.loadAdvanceWallpaper()
-            Analytics.logEvent(this@WallpaperListActivity, Event.RETRY_LOAD_ADVANCES)
+            Analytics.logEvent(activity, Event.RETRY_LOAD_ADVANCES)
         }
 
         wallpaperList.viewTreeObserver
@@ -130,7 +136,6 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
 
                         // Complete setup
                         gridLayoutManager.spanCount = numColumns
-                        advanceWallpaperAdapter.setHasStableIds(true)
                         wallpaperList.adapter = advanceWallpaperAdapter
 
                         wallpaperList.viewTreeObserver.removeOnGlobalLayoutListener(this)
@@ -149,48 +154,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             insets
         }
 
-        downloadDialog = DownloadingDialog(this)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putInt(LOAD_STATE, loadState)
-        presenter.onSaveInstanceState(outState)
-        super.onSaveInstanceState(outState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter.resume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.pause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        presenter.destroy()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.advance_activity, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_advance_hint) {
-            val dialogBuilder = MaterialDialog.Builder(this)
-                    .iconRes(R.drawable.advance_wallpaper_msg)
-                    .title(R.string.hint)
-                    .content(Html.fromHtml(getString(R.string.advance_hint)))
-                    .positiveText(R.string.confirm)
-
-            dialogBuilder.build().show()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+        downloadDialog = DownloadingDialog(activity)
     }
 
     override fun renderWallpapers(wallpapers: List<AdvanceWallpaperItem>) {
@@ -203,9 +167,9 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             return
         }
         wallpaperList.visibility = View.VISIBLE
-        empty.visibility = View.GONE
-        loading.visibility = View.GONE
-        retry.visibility = View.GONE
+        emptyView.visibility = View.GONE
+        loadingView.visibility = View.GONE
+        failedView.visibility = View.GONE
         advanceWallpaperAdapter.notifyDataSetChanged()
     }
 
@@ -232,9 +196,9 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         loadState = LOAD_STATE_LOADING
 
         wallpaperList.visibility = View.GONE
-        empty.visibility = View.GONE
-        loading.visibility = View.VISIBLE
-        retry.visibility = View.GONE
+        emptyView.visibility = View.GONE
+        loadingView.visibility = View.VISIBLE
+        failedView.visibility = View.GONE
     }
 
     override fun hideLoading() {
@@ -245,9 +209,9 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         loadState = LOAD_STATE_RETRY
 
         wallpaperList.visibility = View.GONE
-        empty.visibility = View.GONE
-        loading.visibility = View.GONE
-        retry.visibility = View.VISIBLE
+        emptyView.visibility = View.GONE
+        loadingView.visibility = View.GONE
+        failedView.visibility = View.VISIBLE
     }
 
     override fun hideRetry() {
@@ -255,22 +219,20 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
     }
 
     override fun showError(message: String) {
-        toast(message)
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun showEmpty() {
         wallpaperList.visibility = View.GONE
-        empty.visibility = View.VISIBLE
-        loading.visibility = View.GONE
-        retry.visibility = View.GONE
+        emptyView.visibility = View.VISIBLE
+        loadingView.visibility = View.GONE
+        failedView.visibility = View.GONE
     }
 
-    override fun context(): Context {
-        return applicationContext
-    }
+    override fun context(): Context = activity.applicationContext
 
     override fun complete() {
-        finish()
+        activity.finish()
     }
 
     override fun wallpaperSelected(wallpaperId: String) {
@@ -284,10 +246,10 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         val downloadCallback =
                 MaterialDialog.SingleButtonCallback { _, _ ->
                     presenter.requestDownload(item)
-                    Analytics.logEvent(this@WallpaperListActivity,
+                    Analytics.logEvent(activity,
                             Event.DOWNLOAD_COMPONENT, item.name)
                 }
-        val dialogBuilder = MaterialDialog.Builder(this)
+        val dialogBuilder = MaterialDialog.Builder(activity)
                 .iconRes(R.drawable.advance_wallpaper_msg)
                 .title(R.string.hint)
                 .content(Html.fromHtml(getString(R.string.advance_download_hint)))
@@ -319,7 +281,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
 
     override fun showDownloadError(item: AdvanceWallpaperItem, e: Exception) {
         downloadDialog!!.dismiss()
-        showError(ErrorMessageFactory.create(this, e))
+        showError(ErrorMessageFactory.create(activity, e))
     }
 
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -336,7 +298,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             val item = wallpapers[position]
             holder.thumbnail.layoutParams.width = mItemSize
             holder.thumbnail.layoutParams.height = mItemSize
-            Glide.with(this@WallpaperListActivity)
+            Glide.with(activity)
                     .load(item.iconUrl)
                     .override(mItemSize, mItemSize)
                     .placeholder(placeHolderDrawable)
@@ -359,12 +321,10 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             holder.tvName.text = item.name
         }
 
-        override fun getItemCount(): Int {
-            return wallpapers.size
-        }
+        override fun getItemCount(): Int = wallpapers.size
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): AdvanceViewHolder {
-            val view = LayoutInflater.from(this@WallpaperListActivity)
+            val view = LayoutInflater.from(activity)
                     .inflate(R.layout.advance_chosen_wallpaper_item, parent, false)
 
             val vh = AdvanceViewHolder(view)
@@ -376,8 +336,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             return vh
         }
 
-        override fun getItemId(position: Int): Long {
-            return wallpapers[position].id
-        }
+        override fun getItemId(position: Int): Long = wallpapers[position].id
     }
+
 }
