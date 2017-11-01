@@ -16,6 +16,9 @@ constructor(val context: Context,
             private val liveWallpaperCache: LiveWallpaperCacheImpl,
             private val styleWallpaperCache: StyleWallpaperCacheImpl) {
 
+    fun createManageDataStore(): WallpaperDataStore =
+            WallpaperManageDataStore(context)
+
     fun createLiveDataStore(): WallpaperDataStore =
             LiveWallpaperDataStoreImpl(context, liveWallpaperCache)
 

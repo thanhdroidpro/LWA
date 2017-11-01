@@ -6,7 +6,9 @@ import android.database.Cursor
 import com.google.gson.Gson
 import com.google.gson.JsonElement
 import com.kinglloy.album.data.SyncConfig
+import com.kinglloy.album.data.entity.TempStyleWallpaperEntity
 import com.kinglloy.album.data.entity.WallpaperEntity
+import com.kinglloy.album.data.entity.mapper.WallpaperEntityMapper
 import com.kinglloy.album.data.exception.NetworkConnectionException
 import com.kinglloy.album.data.exception.RemoteServerException
 import com.kinglloy.album.data.log.LogUtil
@@ -18,16 +20,17 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.*
 import java.net.URL
-import java.util.ArrayList
 import java.util.HashSet
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
+import kotlin.collections.ArrayList
 
 /**
  * @author jinyalin
  * @since 2017/7/28.
  */
-class StyleWallpaperHandler(context: Context) : JSONHandler(context) {
+class StyleWallpaperHandler(context: Context,
+                            val mapper: WallpaperEntityMapper) : JSONHandler(context) {
     companion object {
         val TAG = "AdvanceWallpaperHandler"
         val downloadLock = ReentrantLock()
@@ -37,7 +40,7 @@ class StyleWallpaperHandler(context: Context) : JSONHandler(context) {
 
     override fun makeContentProviderOperations(list: ArrayList<ContentProviderOperation>) {
         val uri = AlbumContractHelper.setUriAsCalledFromSyncAdapter(
-                AlbumContract.LiveWallpaper.CONTENT_URI)
+                AlbumContract.StyleWallpaper.CONTENT_URI)
         list.add(ContentProviderOperation.newDelete(uri).build())
 
         val validFiles = HashSet<String>()
@@ -53,21 +56,33 @@ class StyleWallpaperHandler(context: Context) : JSONHandler(context) {
             }
         }
         // delete old wallpapers
-        WallpaperFileHelper.deleteOldComponent(mContext, validFiles)
+        WallpaperFileHelper.deleteOldStyleWallpaper(mContext, validFiles)
     }
 
     override fun process(element: JsonElement) {
-        val wallpapers = Gson().fromJson(element, Array<WallpaperEntity>::class.java)
-        this.wallpapers.ensureCapacity(wallpapers.size)
-        this.wallpapers.addAll(wallpapers)
+        val tempWallpapers = Gson().fromJson(element, Array<TempStyleWallpaperEntity>::class.java)
+        this.wallpapers.ensureCapacity(tempWallpapers.size)
+        this.wallpapers.addAll(mapper.transformFromStyleTempEntity(tempWallpapers.toCollection(ArrayList())))
     }
 
     private fun makeFilename(wallpaper: WallpaperEntity): String {
-        return wallpaper.hashCode().toString() + "_component.apk"
+        val suffix = getWallpaperFileSuffix(wallpaper.downloadUrl)
+        return wallpaper.hashCode().toString() + "_style" + suffix
+    }
+
+    private fun getWallpaperFileSuffix(downloadUrl: String): String {
+        val suffixStart = downloadUrl.lastIndexOf(".")
+        val suffix: String
+        suffix = if (suffixStart >= 0) {
+            downloadUrl.substring(suffixStart)
+        } else {
+            ".jpg"
+        }
+        return suffix
     }
 
     private fun makeStorePath(wallpaper: WallpaperEntity): String {
-        val outputDir = WallpaperFileHelper.getAdvanceWallpaperDir(mContext)
+        val outputDir = WallpaperFileHelper.getStyleWallpaperDir(mContext)
         return File(outputDir, makeFilename(wallpaper)).absolutePath
     }
 
@@ -82,20 +97,16 @@ class StyleWallpaperHandler(context: Context) : JSONHandler(context) {
     private fun outputWallpaper(wallpaper: WallpaperEntity,
                                 list: ArrayList<ContentProviderOperation>) {
         val uri = AlbumContractHelper.setUriAsCalledFromSyncAdapter(
-                AlbumContract.LiveWallpaper.CONTENT_URI)
+                AlbumContract.StyleWallpaper.CONTENT_URI)
         val builder = ContentProviderOperation.newInsert(uri)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_WALLPAPER_ID, wallpaper.wallpaperId)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_AUTHOR, wallpaper.author)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_DOWNLOAD_URL, wallpaper.downloadUrl)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_ICON_URL, wallpaper.iconUrl)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_LINK, wallpaper.link)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_NAME, wallpaper.name)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_CHECKSUM, wallpaper.checkSum)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_STORE_PATH, wallpaper.storePath)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_PROVIDER_NAME, wallpaper.providerName)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_SELECTED, 0)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_LAZY_DOWNLOAD, 1)
-        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING, 0)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_WALLPAPER_ID, wallpaper.wallpaperId)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_DOWNLOAD_URL, wallpaper.downloadUrl)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_ICON_URL, wallpaper.iconUrl)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_NAME, wallpaper.name)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_CHECKSUM, wallpaper.checkSum)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_STORE_PATH, wallpaper.storePath)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_SELECTED, 0)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_PREVIEWING, 0)
 
         list.add(builder.build())
     }
@@ -104,8 +115,8 @@ class StyleWallpaperHandler(context: Context) : JSONHandler(context) {
         var cursor: Cursor? = null
         try {
             cursor = mContext.contentResolver.query(
-                    AlbumContract.LiveWallpaper.CONTENT_SELECTED_URI, null, null, null, null)
-            return WallpaperEntity.liveWallpaperValues(cursor)
+                    AlbumContract.StyleWallpaper.CONTENT_SELECTED_URI, null, null, null, null)
+            return WallpaperEntity.styleWallpaperValues(cursor)
         } finally {
             if (cursor != null) {
                 cursor.close()
@@ -113,14 +124,14 @@ class StyleWallpaperHandler(context: Context) : JSONHandler(context) {
         }
     }
 
-    private fun downloadWallpaperComponent(wallpaper: WallpaperEntity): Boolean {
-        return downloadWallpaperComponent(wallpaper, null)
+    private fun downloadStyleWallpaper(wallpaper: WallpaperEntity): Boolean {
+        return downloadStyleWallpaper(wallpaper, null)
     }
 
-    fun downloadWallpaperComponent(wallpaper: WallpaperEntity,
-                                   observer: DefaultObserver<Long>?): Boolean {
+    fun downloadStyleWallpaper(wallpaper: WallpaperEntity,
+                               observer: DefaultObserver<Long>?): Boolean {
         observer?.onNext(0)
-        LogUtil.D(TAG, "Start download wallpaper component to " + wallpaper.storePath)
+        LogUtil.D(TAG, "Start download style wallpaper to " + wallpaper.storePath)
         val outputFile = File(wallpaper.storePath)
         if (outputFile.exists()) {
             if (WallpaperFileHelper.ensureChecksumValid(mContext,
@@ -200,4 +211,5 @@ class StyleWallpaperHandler(context: Context) : JSONHandler(context) {
             }
         }
     }
+
 }

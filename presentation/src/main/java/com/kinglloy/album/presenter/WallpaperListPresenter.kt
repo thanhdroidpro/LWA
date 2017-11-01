@@ -14,7 +14,7 @@ import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.domain.interactor.*
 import com.kinglloy.album.exception.ErrorMessageFactory
 import com.kinglloy.album.mapper.AdvanceWallpaperItemMapper
-import com.kinglloy.album.model.AdvanceWallpaperItem
+import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.view.WallpaperListView
 import javax.inject.Inject
 
@@ -25,9 +25,9 @@ import javax.inject.Inject
 class WallpaperListPresenter
 @Inject constructor(private val getWallpapers: GetWallpapers,
                     private val loadWallpaper: LoadWallpaper,
-                    val previewAdvanceWallpaper: PreviewAdvanceWallpaper,
+                    private val previewWallpaper: PreviewWallpaper,
                     val advanceWallpaperItemMapper: AdvanceWallpaperItemMapper,
-                    val downloadAdvanceWallpaper: DownloadAdvanceWallpaper,
+                    private val downloadWallpaper: DownloadWallpaper,
                     val wallpaperSwitcher: WallpaperSwitcher) : Presenter {
 
     companion object {
@@ -43,11 +43,11 @@ class WallpaperListPresenter
     private val wallpaperObserver = WallpapersObserver()
     private var view: WallpaperListView? = null
 
-    private var downloadingWallpaper: AdvanceWallpaperItem? = null
+    private var downloadingWallpaper: WallpaperItem? = null
 
     private var downloadState = DOWNLOAD_NONE
 
-    private var currentPreviewing: AdvanceWallpaperItem? = null
+    private var currentPreviewing: WallpaperItem? = null
 
     private val mContentObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean, uri: Uri) {
@@ -91,26 +91,26 @@ class WallpaperListPresenter
         }, LoadWallpaper.Params.withType(type))
     }
 
-    fun previewAdvanceWallpaper(item: AdvanceWallpaperItem) {
-        if (WallpaperFileHelper.isNeedDownloadAdvanceComponent(item.lazyDownload,
+    fun previewWallpaper(item: WallpaperItem) {
+        if (WallpaperFileHelper.isNeedDownloadLiveComponent(item.lazyDownload,
                 item.storePath) || (downloadingWallpaper != null
                 && TextUtils.equals(downloadingWallpaper!!.wallpaperId, item.wallpaperId))) {
             view?.showDownloadHintDialog(item)
         } else {
-            previewAdvanceWallpaper.execute(object : DefaultObserver<Boolean>() {
+            previewWallpaper.execute(object : DefaultObserver<Boolean>() {
                 override fun onNext(success: Boolean) {
                     currentPreviewing = item
                     wallpaperSwitcher.switchService(view!!.context())
                 }
-            }, PreviewAdvanceWallpaper.Params.previewWallpaper(item.wallpaperId))
+            }, PreviewWallpaper.Params.previewWallpaper(item.wallpaperId, item.wallpaperType))
         }
     }
 
-    fun requestDownload(item: AdvanceWallpaperItem) {
+    fun requestDownload(item: WallpaperItem) {
         view?.showDownloadingDialog(item)
         downloadingWallpaper = item
         downloadState = DOWNLOADING
-        downloadAdvanceWallpaper.execute(object : DefaultObserver<Long>() {
+        downloadWallpaper.execute(object : DefaultObserver<Long>() {
             override fun onNext(progress: Long) {
                 view?.updateDownloadingProgress(progress)
             }
@@ -126,7 +126,7 @@ class WallpaperListPresenter
                 downloadingWallpaper = null
                 downloadState = DOWNLOAD_ERROR
             }
-        }, DownloadAdvanceWallpaper.Params.download(item.wallpaperId))
+        }, DownloadWallpaper.Params.download(item.wallpaperId, item.wallpaperType))
     }
 
 
@@ -150,7 +150,7 @@ class WallpaperListPresenter
         }
     }
 
-    fun getDownloadingItem(): AdvanceWallpaperItem? = downloadingWallpaper
+    fun getDownloadingItem(): WallpaperItem? = downloadingWallpaper
 
     override fun resume() {
     }
@@ -163,7 +163,7 @@ class WallpaperListPresenter
         view!!.context().contentResolver.unregisterContentObserver(mContentObserver)
         getWallpapers.dispose()
         loadWallpaper.dispose()
-        downloadAdvanceWallpaper.dispose()
+        downloadWallpaper.dispose()
         downloadingWallpaper = null
         view = null
     }

@@ -26,7 +26,7 @@ import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.exception.ErrorMessageFactory
-import com.kinglloy.album.model.AdvanceWallpaperItem
+import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.presenter.WallpaperListPresenter
 import com.kinglloy.album.view.WallpaperListView
 import com.kinglloy.album.view.activity.WallpaperListActivity
@@ -39,7 +39,7 @@ import javax.inject.Inject
  * @author jinyalin
  * @since 2017/10/31.
  */
-open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
+abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     companion object {
         val TAG = "BaseWallpapersFragment"
         val LOAD_STATE = "load_state"
@@ -57,7 +57,7 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     @Inject
     lateinit internal var presenter: WallpaperListPresenter
 
-    val wallpapers = ArrayList<AdvanceWallpaperItem>()
+    val wallpapers = ArrayList<WallpaperItem>()
 
     protected var loadState = WallpaperListActivity.LOAD_STATE_NORMAL
 
@@ -140,7 +140,7 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
 
                         // Complete setup
                         gridLayoutManager.spanCount = numColumns
-                        wallpaperList.adapter = advanceWallpaperAdapter
+                        wallpaperList.adapter = wallpapersAdapter
 
                         wallpaperList.viewTreeObserver.removeOnGlobalLayoutListener(this)
                     }
@@ -161,7 +161,7 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         downloadDialog = DownloadingDialog(activity)
     }
 
-    override fun renderWallpapers(wallpapers: List<AdvanceWallpaperItem>) {
+    override fun renderWallpapers(wallpapers: List<WallpaperItem>) {
         loadState = LOAD_STATE_NORMAL
 
         this.wallpapers.clear()
@@ -174,10 +174,10 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         emptyView.visibility = View.GONE
         loadingView.visibility = View.GONE
         failedView.visibility = View.GONE
-        advanceWallpaperAdapter.notifyDataSetChanged()
+        wallpapersAdapter.notifyDataSetChanged()
     }
 
-    override fun selectWallpaper(wallpaper: AdvanceWallpaperItem) {
+    override fun selectWallpaper(wallpaper: WallpaperItem) {
         var oldSelectedIndex = -1
         var newSelectedIndex = -1
         for ((index, value) in wallpapers.withIndex()) {
@@ -191,8 +191,8 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
             }
         }
         if (oldSelectedIndex != newSelectedIndex) {
-            advanceWallpaperAdapter.notifyItemChanged(oldSelectedIndex)
-            advanceWallpaperAdapter.notifyItemChanged(newSelectedIndex)
+            wallpapersAdapter.notifyItemChanged(oldSelectedIndex)
+            wallpapersAdapter.notifyItemChanged(newSelectedIndex)
         }
     }
 
@@ -243,10 +243,10 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         wallpapers.forEach { it ->
             it.isSelected = TextUtils.equals(it.wallpaperId, wallpaperId)
         }
-        advanceWallpaperAdapter.notifyDataSetChanged()
+        wallpapersAdapter.notifyDataSetChanged()
     }
 
-    override fun showDownloadHintDialog(item: AdvanceWallpaperItem) {
+    override fun showDownloadHintDialog(item: WallpaperItem) {
         val downloadCallback =
                 MaterialDialog.SingleButtonCallback { _, _ ->
                     presenter.requestDownload(item)
@@ -263,7 +263,7 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         dialogBuilder.build().show()
     }
 
-    override fun showDownloadingDialog(item: AdvanceWallpaperItem) {
+    override fun showDownloadingDialog(item: WallpaperItem) {
         LogUtil.D(TAG, "showDownloadingDialog ${item.name}")
         downloadDialog!!.show()
     }
@@ -273,17 +273,17 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         downloadDialog!!.updateProgress(downloaded)
     }
 
-    override fun downloadComplete(item: AdvanceWallpaperItem) {
+    override fun downloadComplete(item: WallpaperItem) {
         val position = wallpapers.indices.firstOrNull {
             TextUtils.equals(wallpapers[it].wallpaperId, item.wallpaperId)
         } ?: -1
         if (position >= 0) {
-            advanceWallpaperAdapter.notifyItemChanged(position)
+            wallpapersAdapter.notifyItemChanged(position)
         }
         downloadDialog!!.dismiss()
     }
 
-    override fun showDownloadError(item: AdvanceWallpaperItem, e: Exception) {
+    override fun showDownloadError(item: WallpaperItem, e: Exception) {
         downloadDialog!!.dismiss()
         showError(ErrorMessageFactory.create(activity, e))
     }
@@ -297,7 +297,7 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         var tvName: TextView = nameView as TextView
     }
 
-    private val advanceWallpaperAdapter = object : RecyclerView.Adapter<AdvanceViewHolder>() {
+    private val wallpapersAdapter = object : RecyclerView.Adapter<AdvanceViewHolder>() {
         override fun onBindViewHolder(holder: AdvanceViewHolder, position: Int) {
             val item = wallpapers[position]
             holder.thumbnail.layoutParams.width = mItemSize
@@ -314,7 +314,7 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
                 holder.checkedOverlayView.visibility = View.GONE
             }
             val downloadingItem = presenter.getDownloadingItem()
-            if (WallpaperFileHelper.isNeedDownloadAdvanceComponent(item.lazyDownload,
+            if (WallpaperFileHelper.isNeedDownloadLiveComponent(item.lazyDownload,
                     item.storePath) || (downloadingItem != null
                     && TextUtils.equals(downloadingItem.wallpaperId, item.wallpaperId))) {
                 holder.downloadOverlayView.visibility = View.VISIBLE
@@ -334,7 +334,7 @@ open abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
             val vh = AdvanceViewHolder(view)
             view.setOnClickListener {
                 val item = wallpapers[vh.adapterPosition]
-                presenter.previewAdvanceWallpaper(item)
+                presenter.previewWallpaper(item)
             }
 
             return vh

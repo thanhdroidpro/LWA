@@ -19,7 +19,7 @@ import javax.inject.Inject
 open class AlbumWallpaperService :
         WallpaperService(), WallpaperActiveCallback {
     @Inject lateinit var proxyProvider: ProxyProvider
-    @Inject lateinit var selectAdvanceWallpaper: SelectPreviewingAdvanceWallpaper
+    @Inject lateinit var selectedWallpaper: SelectPreviewingAdvanceWallpaper
     @Inject lateinit var setActiveService: SetActiveService
 
     private var proxy: WallpaperService? = null
@@ -44,7 +44,7 @@ open class AlbumWallpaperService :
     override fun onWallpaperActivate() {
         setActiveService.execute(object : DefaultObserver<Boolean>() {},
                 SetActiveService.Params.setActiveService(getActiveState()))
-        selectAdvanceWallpaper.execute(object : DefaultObserver<Boolean>() {}, null)
+        selectedWallpaper.execute(object : DefaultObserver<Boolean>() {}, null)
         Analytics.logEvent(this, Event.WALLPAPER_CREATED)
     }
 

@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author jinyalin
  * @since 2017/9/27.
  */
-class WallpaperSwitcher @Inject constructor(val getActiveService: GetActiveService) {
+class WallpaperSwitcher @Inject constructor(private val getActiveService: GetActiveService) {
     fun switchService(context: Context) {
         getActiveService.execute(object : DefaultObserver<Int>() {
             override fun onNext(serviceType: Int) {

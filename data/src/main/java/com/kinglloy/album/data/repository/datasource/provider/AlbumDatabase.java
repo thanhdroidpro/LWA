@@ -11,8 +11,10 @@ import com.kinglloy.album.data.R;
 import com.kinglloy.album.data.log.LogUtil;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.ActiveService;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.LiveWallpaper;
+import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.PreviewingWallpaper;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.StyleWallpaper;
 import com.kinglloy.album.data.repository.datasource.sync.account.Account;
+import com.kinglloy.album.domain.WallpaperType;
 
 
 /**
@@ -35,6 +37,7 @@ public class AlbumDatabase extends SQLiteOpenHelper {
         String ADVANCE_WALLPAPER = LiveWallpaper.TABLE_NAME;
         String STYLE_WALLPAPER = StyleWallpaper.TABLE_NAME;
         String ACTIVE_SERVICE = ActiveService.TABLE_NAME;
+        String PREVIEWING_WALLPAPER = PreviewingWallpaper.TABLE_NAME;
     }
 
     public AlbumDatabase(Context context) {
@@ -114,6 +117,16 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 + StyleWallpaper.COLUMN_NAME_CHECKSUM + " TEXT,"
                 + StyleWallpaper.COLUMN_NAME_SELECTED + " INTEGER DEFAULT 0,"
                 + StyleWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0);");
+
+        db.execSQL("CREATE TABLE " + Tables.PREVIEWING_WALLPAPER + " ("
+                + BaseColumns._ID + " INTEGER DEFAULT 0,"
+                + PreviewingWallpaper.COLUMN_NAME_WALLPAPER_TYPE + " INTEGER NOT NULL,"
+                + PreviewingWallpaper.COLUMN_NAME_WALLPAPER_ID + " TEXT NOT NULL);");
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PreviewingWallpaper.COLUMN_NAME_WALLPAPER_TYPE,
+                WallpaperType.LIVE.getTypeInt());
+        contentValues.put(PreviewingWallpaper.COLUMN_NAME_WALLPAPER_ID, "0");
+        db.insert(Tables.PREVIEWING_WALLPAPER, null, contentValues);
     }
 
     public static void deleteDatabase(Context context) {

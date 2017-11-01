@@ -17,7 +17,9 @@ public enum AlbumUriEnum {
     STYLE_WALLPAPER_SELECT_PREVIEWING(304, "style_wallpaper/select_previewing", null),
     STYLE_WALLPAPER_ID(301, "style_wallpaper/*", null),
 
-    ACTIVE_SERVICE(200, "active_service", AlbumDatabase.Tables.ACTIVE_SERVICE);
+    ACTIVE_SERVICE(200, "active_service", AlbumDatabase.Tables.ACTIVE_SERVICE),
+
+    PREVIEWING_WALLPAPER(400, "previewing_wallpaper", AlbumDatabase.Tables.PREVIEWING_WALLPAPER);
 
 
     public int code;

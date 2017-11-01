@@ -7,6 +7,7 @@ import com.kinglloy.album.data.cache.WallpaperCache
 import com.kinglloy.album.data.entity.WallpaperEntity
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.utils.notifyChange
+import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
 
 /**
@@ -69,7 +70,7 @@ class StyleWallpaperDataStoreImpl(context: Context,
         }
     }
 
-    override fun previewWallpaper(wallpaperId: String): Observable<Boolean> {
+    override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
         return Observable.create { emitter ->
             val previewingValue = ContentValues()
             previewingValue.put(AlbumContract.StyleWallpaper.COLUMN_NAME_PREVIEWING, 1)
@@ -108,6 +109,38 @@ class StyleWallpaperDataStoreImpl(context: Context,
 
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    fun loadWallpaperEntity(wallpaperId: String): WallpaperEntity {
+        var entity: WallpaperEntity? = null
+        synchronized(wallpaperCache) {
+            if (!wallpaperCache.isDirty()
+                    && wallpaperCache.isWallpaperCached(wallpaperId)) {
+                entity = wallpaperCache.getWallpaper(wallpaperId)
+            } else {
+                entity = loadWallpaperEntityFromDB(wallpaperId)
+            }
+            if (entity == null) {
+                entity = loadWallpaperEntityFromDB(wallpaperId)
+            }
+        }
+        return entity!!
+    }
+
+    private fun loadWallpaperEntityFromDB(wallpaperId: String): WallpaperEntity? {
+        var cursor: Cursor? = null
+        try {
+            val contentResolver = context.contentResolver
+            cursor = contentResolver.query(AlbumContract.StyleWallpaper
+                    .buildWallpaperUri(wallpaperId),
+                    null, null, null, null)
+            if (cursor != null && cursor.moveToFirst()) {
+                return WallpaperEntity.styleWallpaperValue(cursor)
+            }
+            return null
+        } finally {
+            cursor?.close()
+        }
     }
 
     private fun createStyleWallpapersFromDB(): Observable<List<WallpaperEntity>> {

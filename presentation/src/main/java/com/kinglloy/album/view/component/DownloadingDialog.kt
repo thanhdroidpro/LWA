@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.kinglloy.album.R
-import com.kinglloy.album.model.AdvanceWallpaperItem
+import com.kinglloy.album.model.WallpaperItem
 
 /**
  * @author jinyalin
@@ -33,7 +33,7 @@ class DownloadingDialog constructor(context: Context) {
         progressView.text = formatSize(progress)
     }
 
-    fun showError(item: AdvanceWallpaperItem, e: Exception) {
+    fun showError(item: WallpaperItem, e: Exception) {
 
     }
 

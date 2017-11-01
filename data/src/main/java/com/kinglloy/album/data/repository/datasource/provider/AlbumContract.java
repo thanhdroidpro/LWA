@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.kinglloy.album.data.BuildConfig;
+import com.kinglloy.album.domain.WallpaperType;
 
 /**
  * @author jinyalin
@@ -20,6 +21,7 @@ public class AlbumContract {
     private static final String PATH_LIVE_WALLPAPER = "advance_wallpaper";
     private static final String PATH_STYLE_WALLPAPER = "style_wallpaper";
     private static final String PATH_ACTIVE_SERVICE = "active_service";
+    private static final String PATH_PREVIEWING_WALLPAPER = "previewing_wallpaper";
     public static final String[] TOP_LEVEL_PATHS = {
             PATH_LIVE_WALLPAPER,
             PATH_STYLE_WALLPAPER
@@ -124,6 +126,18 @@ public class AlbumContract {
         String COLUMN_NAME_SERVICE_ID = "service_id";
     }
 
+    interface PreviewingWallpaperColumns {
+        /**
+         * Type: INTEGER range: {@link com.kinglloy.album.domain.WallpaperType}
+         */
+        String COLUMN_NAME_WALLPAPER_TYPE = "wallpaper_type";
+
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_WALLPAPER_ID = "wallpaper_id";
+    }
+
     public static final class LiveWallpaper implements LiveWallpaperColumns, BaseColumns {
         public static final String TABLE_NAME = "advance_wallpaper";
 
@@ -197,5 +211,13 @@ public class AlbumContract {
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_ACTIVE_SERVICE).build();
 
+    }
+
+    public static final class PreviewingWallpaper implements PreviewingWallpaperColumns,
+            BaseColumns {
+        public static final String TABLE_NAME = "previewing_wallpaper";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_PREVIEWING_WALLPAPER).build();
     }
 }

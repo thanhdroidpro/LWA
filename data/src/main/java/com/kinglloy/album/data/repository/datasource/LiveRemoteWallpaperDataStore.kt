@@ -19,6 +19,7 @@ import com.kinglloy.album.data.repository.datasource.sync.account.Account
 import com.kinglloy.album.domain.interactor.DefaultObserver
 import com.kinglloy.album.data.repository.datasource.io.LiveWallpaperHandler
 import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
+import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
 
 /**
@@ -26,13 +27,13 @@ import io.reactivex.Observable
  * @since 2017/7/31.
  */
 class LiveRemoteWallpaperDataStore(val context: Context,
-                                   val localDataStoreLive: LiveWallpaperDataStoreImpl)
+                                   private val localDataStoreLive: LiveWallpaperDataStoreImpl)
     : WallpaperDataStore {
     companion object {
         val TAG = "RemoteAdvanceWallpaper"
     }
 
-    val wallpaperHandler = LiveWallpaperHandler(context)
+    private val wallpaperHandler = LiveWallpaperHandler(context)
 
     override fun getPreviewWallpaperEntity(): WallpaperEntity {
         throw UnsupportedOperationException("Remote data store not support get wallpaper.")
@@ -99,7 +100,7 @@ class LiveRemoteWallpaperDataStore(val context: Context,
         throw UnsupportedOperationException("Remote data store not support select wallpaper.")
     }
 
-    override fun previewWallpaper(wallpaperId: String): Observable<Boolean> {
+    override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
         throw UnsupportedOperationException("Remote data store not support preview wallpaper.")
     }
 

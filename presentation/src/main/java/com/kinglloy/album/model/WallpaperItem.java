@@ -3,12 +3,14 @@ package com.kinglloy.album.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.kinglloy.album.domain.WallpaperType;
+
 /**
  * @author jinyalin
  * @since 2017/7/28.
  */
 
-public class AdvanceWallpaperItem implements Parcelable {
+public class WallpaperItem implements Parcelable {
     public long id;
     public String wallpaperId;
     public String link;
@@ -24,11 +26,12 @@ public class AdvanceWallpaperItem implements Parcelable {
     public String storePath;
 
     public boolean isSelected;
+    public WallpaperType wallpaperType;
 
-    public AdvanceWallpaperItem() {
+    public WallpaperItem() {
     }
 
-    protected AdvanceWallpaperItem(Parcel in) {
+    protected WallpaperItem(Parcel in) {
         id = in.readLong();
         wallpaperId = in.readString();
         link = in.readString();
@@ -40,17 +43,18 @@ public class AdvanceWallpaperItem implements Parcelable {
         providerName = in.readString();
         storePath = in.readString();
         isSelected = in.readByte() != 0;
+        wallpaperType = WallpaperType.fromTypeInt(in.readByte());
     }
 
-    public static final Creator<AdvanceWallpaperItem> CREATOR = new Creator<AdvanceWallpaperItem>() {
+    public static final Creator<WallpaperItem> CREATOR = new Creator<WallpaperItem>() {
         @Override
-        public AdvanceWallpaperItem createFromParcel(Parcel in) {
-            return new AdvanceWallpaperItem(in);
+        public WallpaperItem createFromParcel(Parcel in) {
+            return new WallpaperItem(in);
         }
 
         @Override
-        public AdvanceWallpaperItem[] newArray(int size) {
-            return new AdvanceWallpaperItem[size];
+        public WallpaperItem[] newArray(int size) {
+            return new WallpaperItem[size];
         }
     };
 
@@ -72,5 +76,6 @@ public class AdvanceWallpaperItem implements Parcelable {
         dest.writeString(providerName);
         dest.writeString(storePath);
         dest.writeByte((byte) (isSelected ? 1 : 0));
+        dest.writeByte((byte) (wallpaperType.getTypeInt()));
     }
 }

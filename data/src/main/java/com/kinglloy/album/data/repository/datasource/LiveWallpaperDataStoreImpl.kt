@@ -7,6 +7,7 @@ import com.kinglloy.album.data.cache.WallpaperCache
 import com.kinglloy.album.data.entity.WallpaperEntity
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.utils.notifyChange
+import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
 
 /**
@@ -23,24 +24,7 @@ class LiveWallpaperDataStoreImpl(context: Context,
     }
 
     @Synchronized override fun getPreviewWallpaperEntity(): WallpaperEntity {
-        var cursor: Cursor? = null
-        var entity: WallpaperEntity? = null
-        try {
-            val contentResolver = context.contentResolver
-            cursor = contentResolver.query(AlbumContract.LiveWallpaper.CONTENT_PREVIEWING_URI,
-                    null, null, null, null)
-            if (cursor != null && cursor.moveToFirst()) {
-                entity = WallpaperEntity.liveWallpaperValue(cursor)
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close()
-            }
-        }
-        if (entity == null) {
-            entity = buildDefaultWallpaper()
-        }
-        return entity
+        throw UnsupportedOperationException("Live wallpaper data store not support get wallpaper.")
     }
 
     override fun getWallpaperEntities(): Observable<List<WallpaperEntity>> =
@@ -76,7 +60,7 @@ class LiveWallpaperDataStoreImpl(context: Context,
         }
     }
 
-    override fun previewWallpaper(wallpaperId: String): Observable<Boolean> {
+    override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
         return Observable.create { emitter ->
             val previewingValue = ContentValues()
             previewingValue.put(AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING, 1)
@@ -168,15 +152,5 @@ class LiveWallpaperDataStoreImpl(context: Context,
         }
     }
 
-    private fun buildDefaultWallpaper(): WallpaperEntity {
-        val entity = WallpaperEntity()
-        entity.isDefault = true
-        entity.id = -1
-        entity.wallpaperId = DEFAULT_WALLPAPER_ID
-        entity.author = "Yalin"
-        entity.link = "kinglloy.com"
-        entity.name = "Rainbow"
 
-        return entity
-    }
 }

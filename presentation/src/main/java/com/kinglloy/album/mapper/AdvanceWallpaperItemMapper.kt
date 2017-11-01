@@ -2,7 +2,7 @@ package com.kinglloy.album.mapper
 
 import com.fernandocejas.arrow.checks.Preconditions
 import com.kinglloy.album.domain.Wallpaper
-import com.kinglloy.album.model.AdvanceWallpaperItem
+import com.kinglloy.album.model.WallpaperItem
 import java.util.ArrayList
 import javax.inject.Inject
 
@@ -12,9 +12,9 @@ import javax.inject.Inject
  */
 class AdvanceWallpaperItemMapper @Inject constructor() {
 
-    fun transform(wallpaper: Wallpaper): AdvanceWallpaperItem {
+    fun transform(wallpaper: Wallpaper): WallpaperItem {
         Preconditions.checkNotNull(wallpaper, "Wallpaper can not be null.")
-        val wallpaperItem = AdvanceWallpaperItem()
+        val wallpaperItem = WallpaperItem()
         wallpaperItem.id = wallpaper.id
         wallpaperItem.wallpaperId = wallpaper.wallpaperId
         wallpaperItem.link = wallpaper.link
@@ -26,12 +26,13 @@ class AdvanceWallpaperItemMapper @Inject constructor() {
         wallpaperItem.storePath = wallpaper.storePath
         wallpaperItem.isSelected = wallpaper.isSelected
         wallpaperItem.lazyDownload = wallpaper.lazyDownload
+        wallpaperItem.wallpaperType = wallpaper.wallpaperType
         return wallpaperItem
     }
 
-    fun transformList(wallpaperEntities: List<Wallpaper>): List<AdvanceWallpaperItem> {
+    fun transformList(wallpaperEntities: List<Wallpaper>): List<WallpaperItem> {
         Preconditions.checkNotNull(wallpaperEntities, "SourceEntity can not be null.")
-        val sources = ArrayList<AdvanceWallpaperItem>()
+        val sources = ArrayList<WallpaperItem>()
         for (entity in wallpaperEntities) {
             sources.add(transform(entity))
         }

@@ -1,6 +1,7 @@
 package com.kinglloy.album.data.repository.datasource
 
 import com.kinglloy.album.data.entity.WallpaperEntity
+import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
 
 /**
@@ -14,7 +15,7 @@ interface WallpaperDataStore {
     fun getWallpaperEntities(): Observable<List<WallpaperEntity>>
 
     fun selectPreviewingWallpaper(): Observable<Boolean>
-    fun previewWallpaper(wallpaperId: String): Observable<Boolean>
+    fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean>
     fun cancelPreviewing(): Observable<Boolean>
     fun cancelSelect(): Observable<Boolean>
 

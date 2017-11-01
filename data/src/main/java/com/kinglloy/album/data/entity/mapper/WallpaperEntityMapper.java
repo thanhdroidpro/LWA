@@ -1,8 +1,10 @@
 package com.kinglloy.album.data.entity.mapper;
 
 import com.fernandocejas.arrow.checks.Preconditions;
+import com.kinglloy.album.data.entity.TempStyleWallpaperEntity;
 import com.kinglloy.album.data.entity.WallpaperEntity;
 import com.kinglloy.album.domain.Wallpaper;
+import com.kinglloy.album.domain.WallpaperType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class WallpaperEntityMapper {
         wallpaper.isDefault = wallpaperEntity.isDefault;
         wallpaper.isSelected = wallpaperEntity.isSelected;
         wallpaper.lazyDownload = wallpaperEntity.lazyDownload;
+        wallpaper.wallpaperType = wallpaperEntity.type;
 
         return wallpaper;
     }
@@ -47,5 +50,21 @@ public class WallpaperEntityMapper {
             sources.add(transform(entity));
         }
         return sources;
+    }
+
+    public List<WallpaperEntity> transformFromStyleTempEntity(ArrayList<TempStyleWallpaperEntity> temp) {
+        Preconditions.checkNotNull(temp, "TempEntities can not be null.");
+        List<WallpaperEntity> results = new ArrayList<>();
+        for (TempStyleWallpaperEntity tempEntity : temp) {
+            WallpaperEntity entity = new WallpaperEntity();
+            entity.type = WallpaperType.STYLE;
+            entity.checkSum = tempEntity.checksum;
+            entity.downloadUrl = tempEntity.imageUri;
+            entity.iconUrl = tempEntity.imageUri;
+            entity.name = tempEntity.title;
+            entity.wallpaperId = tempEntity.wallpaperId;
+            results.add(entity);
+        }
+        return results;
     }
 }

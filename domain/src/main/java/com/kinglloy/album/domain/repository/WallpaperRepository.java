@@ -1,6 +1,7 @@
 package com.kinglloy.album.domain.repository;
 
 import com.kinglloy.album.domain.Wallpaper;
+import com.kinglloy.album.domain.WallpaperType;
 
 import java.util.List;
 
@@ -25,15 +26,11 @@ public interface WallpaperRepository {
 
     Observable<Long> downloadStyleWallpaper(String wallpaperId);
 
-    Observable<Boolean> selectPreviewingLiveWallpaper();
+    Observable<Boolean> selectPreviewingWallpaper();
 
-    Observable<Boolean> selectPreviewingStyleWallpaper();
+    Observable<Boolean> previewWallpaper(String wallpaperId, WallpaperType type);
 
-    Observable<Boolean> previewLiveWallpaper(String wallpaperId);
-
-    Observable<Boolean> previewStyleWallpaper(String wallpaperId);
-
-    Wallpaper getPreviewLiveWallpaper();
+    Wallpaper getPreviewingWallpaper();
 
     Observable<Boolean> activeService(int serviceType);
 

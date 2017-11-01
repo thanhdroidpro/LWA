@@ -9,6 +9,7 @@ import android.os.RemoteException
 import com.google.gson.JsonParser
 import com.kinglloy.album.data.R
 import com.kinglloy.album.data.entity.WallpaperEntity
+import com.kinglloy.album.data.entity.mapper.WallpaperEntityMapper
 import com.kinglloy.album.data.exception.NetworkConnectionException
 import com.kinglloy.album.data.exception.NoContentException
 import com.kinglloy.album.data.exception.RemoteServerException
@@ -18,6 +19,8 @@ import com.kinglloy.album.data.repository.datasource.net.RemoteStyleWallpaperFet
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
 import com.kinglloy.album.data.repository.datasource.sync.account.Account
+import com.kinglloy.album.domain.WallpaperType
+import com.kinglloy.album.domain.interactor.DefaultObserver
 import io.reactivex.Observable
 
 /**
@@ -25,12 +28,14 @@ import io.reactivex.Observable
  * @since 2017/10/31.
  */
 class StyleRemoteWallpaperDataStore(val context: Context,
-                                    val localDataStoreStyle: StyleWallpaperDataStoreImpl)
+                                    private val localDataStoreStyle: StyleWallpaperDataStoreImpl)
     : WallpaperDataStore {
 
     companion object {
         val TAG = "StyleRemoteWallpaperDataStore"
     }
+
+    private val wallpaperHandler = StyleWallpaperHandler(context, WallpaperEntityMapper())
 
     override fun getPreviewWallpaperEntity(): WallpaperEntity {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -50,7 +55,7 @@ class StyleRemoteWallpaperDataStore(val context: Context,
             try {
                 val wallpapers = RemoteStyleWallpaperFetcher(context).fetchDataIfNewer()
                 val parser = JsonParser()
-                val handler = StyleWallpaperHandler(context)
+                val handler = StyleWallpaperHandler(context, WallpaperEntityMapper())
                 handler.process(parser.parse(wallpapers))
                 handler.makeContentProviderOperations(batch)
             } catch (e: Exception) {
@@ -97,7 +102,7 @@ class StyleRemoteWallpaperDataStore(val context: Context,
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun previewWallpaper(wallpaperId: String): Observable<Boolean> {
+    override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -110,7 +115,23 @@ class StyleRemoteWallpaperDataStore(val context: Context,
     }
 
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Observable.create { emitter ->
+            val entity = localDataStoreStyle.loadWallpaperEntity(wallpaperId)
+            wallpaperHandler.downloadStyleWallpaper(entity, object : DefaultObserver<Long>() {
+                override fun onNext(downloadedLength: Long) {
+                    emitter.onNext(downloadedLength)
+                }
+
+                override fun onComplete() {
+                    emitter.onComplete()
+                }
+
+                override fun onError(exception: Throwable) {
+                    emitter.onError(exception)
+                }
+
+            })
+        }
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {

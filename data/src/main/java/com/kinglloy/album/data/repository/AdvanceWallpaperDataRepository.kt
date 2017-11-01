@@ -6,6 +6,7 @@ import com.kinglloy.album.data.repository.datasource.WallpaperDataStoreFactory
 import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
 import com.kinglloy.album.data.repository.datasource.sync.account.Account
 import com.kinglloy.album.domain.Wallpaper
+import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.domain.repository.WallpaperRepository
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -48,23 +49,17 @@ class AdvanceWallpaperDataRepository
     override fun downloadStyleWallpaper(wallpaperId: String): Observable<Long> =
             factory.createRemoteStyleDataStore().downloadWallpaper(wallpaperId)
 
-    override fun selectPreviewingLiveWallpaper():
-            Observable<Boolean> = factory.createLiveDataStore().selectPreviewingWallpaper()
+    override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> =
+            factory.createManageDataStore().previewWallpaper(wallpaperId, type)
 
-    override fun selectPreviewingStyleWallpaper():
-            Observable<Boolean> = factory.createStyleDataStore().selectPreviewingWallpaper()
+    override fun selectPreviewingWallpaper():
+            Observable<Boolean> = factory.createManageDataStore().selectPreviewingWallpaper()
 
-    override fun previewLiveWallpaper(wallpaperId: String): Observable<Boolean> =
-            factory.createLiveDataStore().previewWallpaper(wallpaperId)
-
-    override fun previewStyleWallpaper(wallpaperId: String): Observable<Boolean> =
-            factory.createStyleDataStore().previewWallpaper(wallpaperId)
-
-    override fun getPreviewLiveWallpaper(): Wallpaper =
-            wallpaperMapper.transform(factory.createLiveDataStore().getPreviewWallpaperEntity())
+    override fun getPreviewingWallpaper(): Wallpaper =
+            wallpaperMapper.transform(factory.createManageDataStore().getPreviewWallpaperEntity())
 
     override fun activeService(serviceType: Int): Observable<Boolean>
-            = factory.createLiveDataStore().activeService(serviceType)
+            = factory.createManageDataStore().activeService(serviceType)
 
-    override fun getActiveService(): Observable<Int> = factory.createLiveDataStore().getActiveService()
+    override fun getActiveService(): Observable<Int> = factory.createManageDataStore().getActiveService()
 }

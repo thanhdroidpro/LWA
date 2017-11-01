@@ -10,15 +10,15 @@ import javax.inject.Inject;
  * @since 2017/7/28.
  */
 
-public class GetPreviewAdvanceWallpaper {
+public class GetPreviewWallpaper {
     private WallpaperRepository repository;
 
     @Inject
-    public GetPreviewAdvanceWallpaper(WallpaperRepository repository) {
+    public GetPreviewWallpaper(WallpaperRepository repository) {
         this.repository = repository;
     }
 
     public Wallpaper getPreviewing() {
-        return repository.getPreviewLiveWallpaper();
+        return repository.getPreviewingWallpaper();
     }
 }

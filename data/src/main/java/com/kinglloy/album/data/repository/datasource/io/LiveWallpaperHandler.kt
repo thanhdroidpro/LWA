@@ -53,7 +53,7 @@ class LiveWallpaperHandler(context: Context) : JSONHandler(context) {
             }
         }
         // delete old wallpapers
-        WallpaperFileHelper.deleteOldComponent(mContext, validFiles)
+        WallpaperFileHelper.deleteOldLiveComponent(mContext, validFiles)
     }
 
     override fun process(element: JsonElement) {
@@ -67,7 +67,7 @@ class LiveWallpaperHandler(context: Context) : JSONHandler(context) {
     }
 
     private fun makeStorePath(wallpaper: WallpaperEntity): String {
-        val outputDir = WallpaperFileHelper.getAdvanceWallpaperDir(mContext)
+        val outputDir = WallpaperFileHelper.getLiveWallpaperDir(mContext)
         return File(outputDir, makeFilename(wallpaper)).absolutePath
     }
 

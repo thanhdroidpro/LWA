@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.kinglloy.album.engine.advance;
+package com.kinglloy.album.engine.live;
 
 import android.content.Context;
 import android.os.Handler;
