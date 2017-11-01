@@ -1,5 +1,6 @@
 package com.kinglloy.album.view
 
+import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.model.WallpaperItem
 
 /**
@@ -26,4 +27,6 @@ interface WallpaperListView : LoadingDataView {
     fun downloadComplete(item: WallpaperItem)
 
     fun showDownloadError(item: WallpaperItem, e: Exception)
+
+    fun getWallpaperType(): WallpaperType
 }

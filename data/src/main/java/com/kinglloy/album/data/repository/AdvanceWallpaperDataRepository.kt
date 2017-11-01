@@ -22,6 +22,7 @@ class AdvanceWallpaperDataRepository
                     val factory: WallpaperDataStoreFactory,
                     private val wallpaperMapper: WallpaperEntityMapper)
     : WallpaperRepository {
+
     init {
         Account.createSyncAccount(context)
         SyncHelper.updateSyncInterval(context)
@@ -33,6 +34,9 @@ class AdvanceWallpaperDataRepository
     override fun getStyleWallpapers(): Observable<MutableList<Wallpaper>> =
             factory.createStyleDataStore().getWallpaperEntities().map(wallpaperMapper::transformList)
 
+    override fun getVideoWallpapers(): Observable<MutableList<Wallpaper>> =
+            factory.createVideoDataStore().getWallpaperEntities().map(wallpaperMapper::transformList)
+
     override fun loadLiveWallpapers(): Observable<List<Wallpaper>> {
         return factory.createRemoteLiveDataStore().getWallpaperEntities()
                 .map(wallpaperMapper::transformList)
@@ -43,11 +47,19 @@ class AdvanceWallpaperDataRepository
                 .map(wallpaperMapper::transformList)
     }
 
+    override fun loadVideoWallpapers(): Observable<MutableList<Wallpaper>> {
+        return factory.createRemoteVideoDataStore().getWallpaperEntities()
+                .map(wallpaperMapper::transformList)
+    }
+
     override fun downloadLiveWallpaper(wallpaperId: String): Observable<Long> =
             factory.createRemoteLiveDataStore().downloadWallpaper(wallpaperId)
 
     override fun downloadStyleWallpaper(wallpaperId: String): Observable<Long> =
             factory.createRemoteStyleDataStore().downloadWallpaper(wallpaperId)
+
+    override fun downloadVideoWallpaper(wallpaperId: String): Observable<Long> =
+            factory.createRemoteVideoDataStore().downloadWallpaper(wallpaperId)
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> =
             factory.createManageDataStore().previewWallpaper(wallpaperId, type)

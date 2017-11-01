@@ -39,7 +39,7 @@ public class GetWallpapers extends UseCase<List<Wallpaper>, GetWallpapers.Params
             case STYLE:
                 return repository.getStyleWallpapers();
             default:
-                return repository.getLiveWallpapers();
+                return repository.getVideoWallpapers();
         }
 
     }

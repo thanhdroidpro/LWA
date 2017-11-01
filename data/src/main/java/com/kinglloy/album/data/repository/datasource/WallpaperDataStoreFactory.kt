@@ -3,6 +3,7 @@ package com.kinglloy.album.data.repository.datasource
 import android.content.Context
 import com.kinglloy.album.data.cache.LiveWallpaperCacheImpl
 import com.kinglloy.album.data.cache.StyleWallpaperCacheImpl
+import com.kinglloy.album.data.cache.VideoWallpaperCacheImpl
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,10 +15,11 @@ import javax.inject.Singleton
 class WallpaperDataStoreFactory @Inject
 constructor(val context: Context,
             private val liveWallpaperCache: LiveWallpaperCacheImpl,
-            private val styleWallpaperCache: StyleWallpaperCacheImpl) {
+            private val styleWallpaperCache: StyleWallpaperCacheImpl,
+            private val videoWallpaperCache: VideoWallpaperCacheImpl) {
 
     fun createManageDataStore(): WallpaperDataStore =
-            WallpaperManageDataStore(context)
+            WallpaperManageDataStore(context, arrayListOf(liveWallpaperCache, styleWallpaperCache))
 
     fun createLiveDataStore(): WallpaperDataStore =
             LiveWallpaperDataStoreImpl(context, liveWallpaperCache)
@@ -36,7 +38,12 @@ constructor(val context: Context,
                 StyleWallpaperDataStoreImpl(context, styleWallpaperCache))
     }
 
-    fun onDataRefresh() {
-        liveWallpaperCache.evictAll()
+    fun createVideoDataStore(): WallpaperDataStore =
+            VideoWallpaperDataStoreImpl(context, videoWallpaperCache)
+
+    fun createRemoteVideoDataStore(): WallpaperDataStore {
+        return VideoRemoteWallpaperDataStore(context,
+                VideoWallpaperDataStoreImpl(context, styleWallpaperCache))
     }
+
 }

@@ -35,6 +35,7 @@ import java.util.ArrayList
 import javax.inject.Inject
 
 class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
+
     companion object {
         val TAG = "AdvanceSettingActivity"
         val LOAD_STATE = "load_state"
@@ -322,6 +323,8 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         downloadDialog!!.dismiss()
         showError(ErrorMessageFactory.create(this, e))
     }
+
+    override fun getWallpaperType() = WallpaperType.LIVE
 
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var checkedOverlayView: View = itemView.findViewById(R.id.checked_overlay)

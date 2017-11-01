@@ -18,13 +18,19 @@ public interface WallpaperRepository {
 
     Observable<List<Wallpaper>> getStyleWallpapers();
 
+    Observable<List<Wallpaper>> getVideoWallpapers();
+
     Observable<List<Wallpaper>> loadLiveWallpapers();
 
     Observable<List<Wallpaper>> loadStyleWallpapers();
 
+    Observable<List<Wallpaper>> loadVideoWallpapers();
+
     Observable<Long> downloadLiveWallpaper(String wallpaperId);
 
     Observable<Long> downloadStyleWallpaper(String wallpaperId);
+
+    Observable<Long> downloadVideoWallpaper(String wallpaperId);
 
     Observable<Boolean> selectPreviewingWallpaper();
 

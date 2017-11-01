@@ -135,6 +135,29 @@ public class WallpaperEntity {
         return wallpaperEntity;
     }
 
+    public static List<WallpaperEntity> videoWallpaperValues(Cursor cursor) {
+        List<WallpaperEntity> validWallpapers = new ArrayList<>();
+        while (cursor != null && cursor.moveToNext()) {
+            WallpaperEntity wallpaperEntity = videoWallpaperValue(cursor);
+            try {
+                validWallpapers.add(wallpaperEntity);
+            } catch (Exception e) {
+                LogUtil.D(TAG, "File not found with wallpaper wallpaperId : "
+                        + wallpaperEntity.wallpaperId);
+            }
+        }
+        return validWallpapers;
+    }
+
+    public static WallpaperEntity videoWallpaperValue(Cursor cursor) {
+        WallpaperEntity wallpaperEntity = new WallpaperEntity();
+
+        wallpaperEntity.type = WallpaperType.VIDEO;
+
+        return wallpaperEntity;
+    }
+
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof WallpaperEntity) {

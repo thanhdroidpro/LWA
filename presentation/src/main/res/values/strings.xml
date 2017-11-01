@@ -4,8 +4,8 @@
     <string name="app_author">Yalin</string>
     <string name="app_description">@string/app_name</string>
 
-    <string name="advance_empty_load">Load styleWallpapers</string>
-    <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the styleWallpapers from server.</string>
+    <string name="advance_empty_load">Load videoWallpapers</string>
+    <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the videoWallpapers from server.</string>
 
     <string name="advance_retry">Retry</string>
     <string name="advance_review">Watch again</string>
@@ -37,11 +37,11 @@
     <string name="exception_message_remote_service">Remote service not available</string>
     <string name="exception_message_download">Download error</string>
 
-    <string name="app_context_description">A album with a lot of living styleWallpapers.</string>
+    <string name="app_context_description">A album with a lot of living videoWallpapers.</string>
     <string name="app_context_uri">http://www.kinglloy.com/</string>
 
     <string name="advance_hint"><![CDATA[
-        The styleWallpapers are developed by different developers.<br><br>
+        The videoWallpapers are developed by different developers.<br><br>
         Use them may give you the equipment to bring different power consumption, performance consumption, even crash.<br><br>
         If you find such a problem, you can switch to other wallpaper, or contact App developers.
 

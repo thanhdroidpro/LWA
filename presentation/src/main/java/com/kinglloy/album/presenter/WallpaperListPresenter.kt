@@ -38,6 +38,8 @@ class WallpaperListPresenter
         val DOWNLOAD_NONE = 0
         val DOWNLOADING = 1
         val DOWNLOAD_ERROR = 2
+
+        private var currentPreviewing: WallpaperItem? = null
     }
 
     private val wallpaperObserver = WallpapersObserver()
@@ -46,8 +48,6 @@ class WallpaperListPresenter
     private var downloadingWallpaper: WallpaperItem? = null
 
     private var downloadState = DOWNLOAD_NONE
-
-    private var currentPreviewing: WallpaperItem? = null
 
     private val mContentObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean, uri: Uri) {
@@ -61,9 +61,20 @@ class WallpaperListPresenter
     fun setView(view: WallpaperListView) {
         this.view = view
 
-        view.context().contentResolver.registerContentObserver(
-                AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI,
-                true, mContentObserver)
+        if (view.getWallpaperType() == WallpaperType.LIVE) {
+            view.context().contentResolver.registerContentObserver(
+                    AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI,
+                    true, mContentObserver)
+        } else if (view.getWallpaperType() == WallpaperType.STYLE) {
+            view.context().contentResolver.registerContentObserver(
+                    AlbumContract.StyleWallpaper.CONTENT_SELECT_PREVIEWING_URI,
+                    true, mContentObserver)
+        } else {
+            view.context().contentResolver.registerContentObserver(
+                    AlbumContract.VideoWallpaper.CONTENT_SELECT_PREVIEWING_URI,
+                    true, mContentObserver)
+        }
+
     }
 
     fun initialize(wallpaperType: WallpaperType) {

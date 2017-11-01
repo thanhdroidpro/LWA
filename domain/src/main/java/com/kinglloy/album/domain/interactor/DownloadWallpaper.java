@@ -33,7 +33,7 @@ public class DownloadWallpaper extends UseCase<Long, DownloadWallpaper.Params> {
         } else if (params.wallpaperType == WallpaperType.STYLE) {
             return repository.downloadStyleWallpaper(params.wallpaperId);
         } else {
-            return repository.downloadLiveWallpaper(params.wallpaperId);
+            return repository.downloadVideoWallpaper(params.wallpaperId);
         }
     }
 

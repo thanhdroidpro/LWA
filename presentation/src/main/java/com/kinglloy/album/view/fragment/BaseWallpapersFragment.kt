@@ -24,7 +24,6 @@ import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.analytics.Event
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.utils.WallpaperFileHelper
-import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.exception.ErrorMessageFactory
 import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.presenter.WallpaperListPresenter
@@ -65,8 +64,6 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     private var mItemSize = 10
 
     private var downloadDialog: DownloadingDialog? = null
-
-    protected abstract fun getWallpaperType(): WallpaperType
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -185,13 +182,22 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
                 value.isSelected = false
                 oldSelectedIndex = index
             }
-            if (TextUtils.equals(value.wallpaperId, wallpaper.wallpaperId)) {
+            if (value.wallpaperType == wallpaper.wallpaperType
+                    && TextUtils.equals(value.wallpaperId, wallpaper.wallpaperId)) {
                 value.isSelected = true
                 newSelectedIndex = index
             }
         }
-        if (oldSelectedIndex != newSelectedIndex) {
+
+        if (oldSelectedIndex == newSelectedIndex) {
+            return
+        }
+        if (oldSelectedIndex >= 0 && newSelectedIndex >= 0) {
             wallpapersAdapter.notifyItemChanged(oldSelectedIndex)
+            wallpapersAdapter.notifyItemChanged(newSelectedIndex)
+        } else if (oldSelectedIndex >= 0) {
+            wallpapersAdapter.notifyItemChanged(oldSelectedIndex)
+        } else {
             wallpapersAdapter.notifyItemChanged(newSelectedIndex)
         }
     }

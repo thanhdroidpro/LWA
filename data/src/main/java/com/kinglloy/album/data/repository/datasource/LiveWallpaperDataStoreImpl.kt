@@ -1,12 +1,10 @@
 package com.kinglloy.album.data.repository.datasource
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import com.kinglloy.album.data.cache.WallpaperCache
 import com.kinglloy.album.data.entity.WallpaperEntity
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
-import com.kinglloy.album.data.utils.notifyChange
 import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
 
@@ -14,9 +12,9 @@ import io.reactivex.Observable
  * @author jinyalin
  * @since 2017/7/28.
  */
-class LiveWallpaperDataStoreImpl(context: Context,
+class LiveWallpaperDataStoreImpl(private val context: Context,
                                  private val wallpaperCache: WallpaperCache)
-    : BaseWallpaperDataStore(context) {
+    : WallpaperDataStore {
     companion object {
         val TAG = "AdvanceDataStore"
 
@@ -32,61 +30,11 @@ class LiveWallpaperDataStoreImpl(context: Context,
 
     override fun selectPreviewingWallpaper():
             Observable<Boolean> {
-        return Observable.create { emitter ->
-            val selectValue = ContentValues()
-            selectValue.put(AlbumContract.LiveWallpaper.COLUMN_NAME_SELECTED, 1)
-            val unselectedValue = ContentValues()
-            unselectedValue.put(AlbumContract.LiveWallpaper.COLUMN_NAME_SELECTED, 0)
-            // unselected old
-            context.contentResolver.update(
-                    AlbumContract.LiveWallpaper.CONTENT_SELECTED_URI,
-                    unselectedValue, null, null)
-            // select new
-            val uri = AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI
-            val selectedCount = context.contentResolver.update(uri, selectValue, null, null)
-            if (selectedCount > 0) {
-                emitter.onNext(true)
-            } else {
-                emitter.onNext(false)
-            }
-            synchronized(wallpaperCache) {
-                if (!wallpaperCache.isDirty()) {
-                    wallpaperCache.selectPreviewingWallpaper()
-                }
-            }
-
-            emitter.onComplete()
-            notifyChange(context, AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI)
-        }
+        throw UnsupportedOperationException("Live wallpaper data store not support select previewing.")
     }
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
-        return Observable.create { emitter ->
-            val previewingValue = ContentValues()
-            previewingValue.put(AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING, 1)
-            val unpreviewValue = ContentValues()
-            unpreviewValue.put(AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING, 0)
-            // unpreview old
-            context.contentResolver.update(
-                    AlbumContract.LiveWallpaper.CONTENT_PREVIEWING_URI,
-                    unpreviewValue, null, null)
-            // preview new
-            val uri = AlbumContract.LiveWallpaper.buildWallpaperUri(wallpaperId)
-            val updateCount = context.contentResolver.update(uri, previewingValue, null, null)
-            if (updateCount > 0) {
-                emitter.onNext(true)
-            } else {
-                emitter.onNext(false)
-            }
-
-            synchronized(wallpaperCache) {
-                if (!wallpaperCache.isDirty()) {
-                    wallpaperCache.previewWallpaper(wallpaperId)
-                }
-            }
-
-            emitter.onComplete()
-        }
+        throw UnsupportedOperationException("Live wallpaper data store not support preview.")
     }
 
     override fun cancelPreviewing(): Observable<Boolean> {
@@ -99,6 +47,14 @@ class LiveWallpaperDataStoreImpl(context: Context,
 
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
         throw UnsupportedOperationException("Local data store not support download wallpaper.")
+    }
+
+    override fun activeService(serviceType: Int): Observable<Boolean> {
+        throw UnsupportedOperationException("Live wallpaper data store not support active service.")
+    }
+
+    override fun getActiveService(): Observable<Int> {
+        throw UnsupportedOperationException("Live wallpaper data store not support get active service.")
     }
 
     fun loadWallpaperEntity(wallpaperId: String): WallpaperEntity {

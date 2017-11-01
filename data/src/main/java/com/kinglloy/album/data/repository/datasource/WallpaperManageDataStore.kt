@@ -4,9 +4,11 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import com.kinglloy.album.data.cache.WallpaperCache
 import com.kinglloy.album.data.entity.WallpaperEntity
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.PreviewingWallpaper.*
+import com.kinglloy.album.data.utils.notifyChange
 import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
 
@@ -14,7 +16,8 @@ import io.reactivex.Observable
  * @author jinyalin
  * @since 2017/11/1.
  */
-class WallpaperManageDataStore(val context: Context) : WallpaperDataStore {
+class WallpaperManageDataStore(val context: Context, private val caches: ArrayList<WallpaperCache>)
+    : WallpaperDataStore {
     @Synchronized override fun getPreviewWallpaperEntity(): WallpaperEntity {
         var entity: WallpaperEntity? = null
         val uri = AlbumContract.PreviewingWallpaper.CONTENT_URI
@@ -34,7 +37,7 @@ class WallpaperManageDataStore(val context: Context) : WallpaperDataStore {
                     WallpaperType.STYLE.typeInt ->
                         AlbumContract.StyleWallpaper.buildWallpaperUri(wallpaperId)
                     else ->
-                        AlbumContract.LiveWallpaper.buildWallpaperUri(wallpaperId)
+                        AlbumContract.VideoWallpaper.buildWallpaperUri(wallpaperId)
                 }
             }
         } finally {
@@ -51,7 +54,7 @@ class WallpaperManageDataStore(val context: Context) : WallpaperDataStore {
                         WallpaperType.STYLE.typeInt ->
                             WallpaperEntity.styleWallpaperValue(wallpaperCursor)
                         else ->
-                            WallpaperEntity.liveWallpaperValue(wallpaperCursor)
+                            WallpaperEntity.videoWallpaperValue(wallpaperCursor)
                     }
                 }
             } finally {
@@ -70,7 +73,72 @@ class WallpaperManageDataStore(val context: Context) : WallpaperDataStore {
     }
 
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return Observable.create { emitter ->
+            val uri = AlbumContract.PreviewingWallpaper.CONTENT_URI
+            val cursor = context.contentResolver.query(uri, null, null, null, null)
+            val type: Int
+            val selectValue = ContentValues()
+            var selectPreviewUri: Uri? = null
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    type = cursor.getInt(cursor.getColumnIndex(
+                            AlbumContract.PreviewingWallpaper.COLUMN_NAME_WALLPAPER_TYPE))
+                    val wallpaperId = cursor.getString(cursor.getColumnIndex(
+                            AlbumContract.PreviewingWallpaper.COLUMN_NAME_WALLPAPER_ID))
+
+                    when (type) {
+                        WallpaperType.LIVE.typeInt -> {
+                            selectPreviewUri = AlbumContract.LiveWallpaper.buildWallpaperUri(wallpaperId)
+                            selectValue.put(AlbumContract.LiveWallpaper.COLUMN_NAME_SELECTED, 1)
+                        }
+                        WallpaperType.STYLE.typeInt -> {
+                            selectPreviewUri = AlbumContract.StyleWallpaper.buildWallpaperUri(wallpaperId)
+                            selectValue.put(AlbumContract.StyleWallpaper.COLUMN_NAME_SELECTED, 1)
+                        }
+                        else -> {
+                            selectPreviewUri = AlbumContract.VideoWallpaper.buildWallpaperUri(wallpaperId)
+                            selectValue.put(AlbumContract.VideoWallpaper.COLUMN_NAME_SELECTED, 1)
+                        }
+                    }
+                }
+            } finally {
+                cursor?.close()
+            }
+
+            val unselectedLiveValue = ContentValues()
+            unselectedLiveValue.put(AlbumContract.LiveWallpaper.COLUMN_NAME_SELECTED, 0)
+            // unselected live old
+            context.contentResolver.update(
+                    AlbumContract.LiveWallpaper.CONTENT_SELECTED_URI,
+                    unselectedLiveValue, null, null)
+
+            val unselectedStyleValue = ContentValues()
+            unselectedStyleValue.put(AlbumContract.StyleWallpaper.COLUMN_NAME_SELECTED, 0)
+            // unselected style old
+            context.contentResolver.update(
+                    AlbumContract.StyleWallpaper.CONTENT_SELECTED_URI,
+                    unselectedStyleValue, null, null)
+
+            var selectedCount = 0
+            if (selectPreviewUri != null) {
+                selectedCount = context.contentResolver.update(selectPreviewUri, selectValue, null, null)
+            }
+            if (selectedCount > 0) {
+                emitter.onNext(true)
+            } else {
+                emitter.onNext(false)
+            }
+
+            if (selectedCount > 0) {
+                synchronized(caches) {
+                    caches.forEach { it.makeDirty() }
+                }
+
+                notifyChange(context, AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI)
+                notifyChange(context, AlbumContract.StyleWallpaper.CONTENT_SELECT_PREVIEWING_URI)
+            }
+            emitter.onComplete()
+        }
     }
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {

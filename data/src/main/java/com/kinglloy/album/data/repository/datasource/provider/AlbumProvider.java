@@ -188,8 +188,7 @@ public class AlbumProvider extends ContentProvider {
                 return builder.table(AlbumDatabase.Tables.ADVANCE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_SELECTED + " = ?", String.valueOf(1));
             }
-            case ADVANCE_WALLPAPER_PREVIEWING:
-            case ADVANCE_WALLPAPER_SELECT_PREVIEWING: {
+            case ADVANCE_WALLPAPER_PREVIEWING: {
                 return builder.table(AlbumDatabase.Tables.ADVANCE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_PREVIEWING + " = ?", String.valueOf(1));
             }
@@ -202,8 +201,7 @@ public class AlbumProvider extends ContentProvider {
                 return builder.table(AlbumDatabase.Tables.STYLE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_SELECTED + " = ?", String.valueOf(1));
             }
-            case STYLE_WALLPAPER_PREVIEWING:
-            case STYLE_WALLPAPER_SELECT_PREVIEWING: {
+            case STYLE_WALLPAPER_PREVIEWING: {
                 return builder.table(AlbumDatabase.Tables.STYLE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_PREVIEWING + " = ?", String.valueOf(1));
             }

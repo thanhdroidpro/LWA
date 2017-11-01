@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.kinglloy.album.data.BuildConfig;
-import com.kinglloy.album.domain.WallpaperType;
 
 /**
  * @author jinyalin
@@ -20,6 +19,7 @@ public class AlbumContract {
 
     private static final String PATH_LIVE_WALLPAPER = "advance_wallpaper";
     private static final String PATH_STYLE_WALLPAPER = "style_wallpaper";
+    private static final String PATH_VIDEO_WALLPAPER = "video_wallpaper";
     private static final String PATH_ACTIVE_SERVICE = "active_service";
     private static final String PATH_PREVIEWING_WALLPAPER = "previewing_wallpaper";
     public static final String[] TOP_LEVEL_PATHS = {
@@ -81,6 +81,45 @@ public class AlbumContract {
     }
 
     interface StyleWallpaperColumns {
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_WALLPAPER_ID = "wallpaper_id";
+
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_ICON_URL = "icon_url";
+
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_NAME = "name";
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_DOWNLOAD_URL = "download_url";
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_CHECKSUM = "checksum";
+        /**
+         * Type: TEXT
+         */
+        String COLUMN_NAME_STORE_PATH = "store_path";
+
+        /**
+         * Type: INTEGER
+         */
+        String COLUMN_NAME_SELECTED = "selected";
+
+        /**
+         * Type: INTEGER
+         */
+        String COLUMN_NAME_PREVIEWING = "previewing";
+    }
+
+    interface VideoWallpaperColumns {
         /**
          * Type: TEXT
          */
@@ -190,6 +229,38 @@ public class AlbumContract {
 
         public static final Uri CONTENT_SELECT_PREVIEWING_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_STYLE_WALLPAPER)
+                        .appendPath(PATH_SELECT_PREVIEWING_WALLPAPER).build();
+
+
+        public static Uri buildWallpaperUri(String wallpaperId) {
+            return CONTENT_URI.buildUpon().appendPath(wallpaperId).build();
+        }
+
+        public static String getWallpaperId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
+    public static final class VideoWallpaper implements VideoWallpaperColumns, BaseColumns {
+        public static final String TABLE_NAME = "video_wallpaper";
+
+        public static final String PATH_SELECTED_WALLPAPER = "selected";
+        public static final String PATH_PREVIEWING_WALLPAPER = "previewing";
+        public static final String PATH_SELECT_PREVIEWING_WALLPAPER = "select_previewing";
+
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_VIDEO_WALLPAPER).build();
+
+        public static final Uri CONTENT_SELECTED_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEO_WALLPAPER)
+                        .appendPath(PATH_SELECTED_WALLPAPER).build();
+
+        public static final Uri CONTENT_PREVIEWING_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEO_WALLPAPER)
+                        .appendPath(PATH_PREVIEWING_WALLPAPER).build();
+
+        public static final Uri CONTENT_SELECT_PREVIEWING_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEO_WALLPAPER)
                         .appendPath(PATH_SELECT_PREVIEWING_WALLPAPER).build();
 
 
