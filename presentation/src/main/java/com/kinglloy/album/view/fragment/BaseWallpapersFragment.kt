@@ -104,11 +104,11 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
 
         btnLoadAdvanceWallpaper.setOnClickListener {
             presenter.loadAdvanceWallpaper(getWallpaperType())
-            Analytics.logEvent(activity, Event.LOAD_ADVANCES)
+            Analytics.logEvent(activity!!, Event.LOAD_ADVANCES)
         }
         btnRetry.setOnClickListener {
             presenter.loadAdvanceWallpaper(getWallpaperType())
-            Analytics.logEvent(activity, Event.RETRY_LOAD_ADVANCES)
+            Analytics.logEvent(activity!!, Event.RETRY_LOAD_ADVANCES)
         }
 
         wallpaperList.viewTreeObserver
@@ -156,7 +156,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
             insets
         }
 
-        downloadDialog = DownloadingDialog(activity)
+        downloadDialog = DownloadingDialog(activity!!)
     }
 
     override fun renderWallpapers(wallpapers: List<WallpaperItem>) {
@@ -240,10 +240,10 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         failedView.visibility = View.GONE
     }
 
-    override fun context(): Context = activity.applicationContext
+    override fun context(): Context = activity!!.applicationContext
 
     override fun complete() {
-        activity.finish()
+        activity!!.finish()
     }
 
     override fun wallpaperSelected(wallpaperId: String) {
@@ -257,7 +257,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         val downloadCallback =
                 MaterialDialog.SingleButtonCallback { _, _ ->
                     presenter.requestDownload(item)
-                    Analytics.logEvent(activity,
+                    Analytics.logEvent(activity!!,
                             Event.DOWNLOAD_COMPONENT, item.name)
                 }
         val content =
@@ -267,7 +267,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
                 else
                     Html.fromHtml(getString(R.string.advance_download_hint))
 
-        val dialogBuilder = MaterialDialog.Builder(activity)
+        val dialogBuilder = MaterialDialog.Builder(activity!!)
                 .iconRes(R.drawable.advance_wallpaper_msg)
                 .title(R.string.hint)
                 .content(content)

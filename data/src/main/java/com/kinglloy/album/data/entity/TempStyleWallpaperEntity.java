@@ -12,4 +12,5 @@ public class TempStyleWallpaperEntity {
     public String checksum;
 
     public long size;
+    public boolean pro;
 }

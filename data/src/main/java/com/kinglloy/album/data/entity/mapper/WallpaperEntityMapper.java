@@ -40,6 +40,8 @@ public class WallpaperEntityMapper {
         wallpaper.lazyDownload = wallpaperEntity.lazyDownload;
         wallpaper.wallpaperType = wallpaperEntity.type;
         wallpaper.size = wallpaperEntity.size;
+        wallpaper.price = wallpaperEntity.price;
+        wallpaper.pro = wallpaperEntity.pro;
 
         return wallpaper;
     }
@@ -65,6 +67,7 @@ public class WallpaperEntityMapper {
             entity.name = tempEntity.title;
             entity.wallpaperId = tempEntity.wallpaperId;
             entity.size = tempEntity.size;
+            entity.pro = tempEntity.pro;
             results.add(entity);
         }
         return results;

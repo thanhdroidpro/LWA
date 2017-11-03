@@ -24,5 +24,7 @@ public class Wallpaper {
     public boolean isSelected;
 
     public long size;
+    public float price;
+    public boolean pro;
     public WallpaperType wallpaperType;
 }

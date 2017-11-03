@@ -97,6 +97,8 @@ class LiveWallpaperHandler(context: Context) : JSONHandler(context) {
         builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_LAZY_DOWNLOAD, 1)
         builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING, 0)
         builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_SIZE, wallpaper.size)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_PRICE, wallpaper.price)
+        builder.withValue(AlbumContract.LiveWallpaper.COLUMN_NAME_PRO, wallpaper.pro)
 
         list.add(builder.build())
     }

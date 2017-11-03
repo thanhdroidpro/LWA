@@ -1,11 +1,9 @@
 apply plugin: 'java'
 
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-}
 
-
-dependencies {
     compile "io.reactivex.rxjava2:rxjava:${RXJAVA_VERSION}"
     compile "com.fernandocejas:arrow:${ARROW_VERSION}"
     compile "javax.inject:javax.inject:${JAVAX_INJECT_VERSION}"

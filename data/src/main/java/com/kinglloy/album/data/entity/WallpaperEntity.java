@@ -42,6 +42,8 @@ public class WallpaperEntity {
     public boolean isPreviewing = false;
 
     public long size;
+    public float price;
+    public boolean pro;
 
     public WallpaperType type;
 
@@ -94,6 +96,10 @@ public class WallpaperEntity {
                 AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING)) == 1;
         wallpaperEntity.size = cursor.getLong(cursor.getColumnIndex(
                 AlbumContract.LiveWallpaper.COLUMN_NAME_SIZE));
+        wallpaperEntity.price = cursor.getFloat(cursor.getColumnIndex(
+                AlbumContract.LiveWallpaper.COLUMN_NAME_PRICE));
+        wallpaperEntity.pro = cursor.getInt(cursor.getColumnIndex(
+                AlbumContract.LiveWallpaper.COLUMN_NAME_PRO)) == 1;
         wallpaperEntity.type = WallpaperType.LIVE;
 
         return wallpaperEntity;
@@ -136,6 +142,8 @@ public class WallpaperEntity {
                 AlbumContract.StyleWallpaper.COLUMN_NAME_PREVIEWING)) == 1;
         wallpaperEntity.size = cursor.getLong(cursor.getColumnIndex(
                 AlbumContract.StyleWallpaper.COLUMN_NAME_SIZE));
+        wallpaperEntity.pro = cursor.getInt(cursor.getColumnIndex(
+                AlbumContract.StyleWallpaper.COLUMN_NAME_PRO)) == 1;
         wallpaperEntity.type = WallpaperType.STYLE;
 
         return wallpaperEntity;

@@ -117,7 +117,15 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 + StyleWallpaper.COLUMN_NAME_CHECKSUM + " TEXT,"
                 + StyleWallpaper.COLUMN_NAME_SELECTED + " INTEGER DEFAULT 0,"
                 + StyleWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0,"
-                + StyleWallpaper.COLUMN_NAME_SIZE + " INTEGER DEFAULT 0);");
+                + StyleWallpaper.COLUMN_NAME_SIZE + " INTEGER DEFAULT 0,"
+                + StyleWallpaper.COLUMN_NAME_PRO + " INTEGER DEFAULT 0);");
+
+        db.execSQL("ALTER TABLE " + Tables.LIVE_WALLPAPER
+                + " ADD COLUMN " + LiveWallpaper.COLUMN_NAME_SIZE + " INTEGER DEFAULT 0");
+        db.execSQL("ALTER TABLE " + Tables.LIVE_WALLPAPER
+                + " ADD COLUMN " + LiveWallpaper.COLUMN_NAME_PRICE + " REAL DEFAULT 0");
+        db.execSQL("ALTER TABLE " + Tables.LIVE_WALLPAPER
+                + " ADD COLUMN " + LiveWallpaper.COLUMN_NAME_PRO + " INTEGER DEFAULT 0");
 
         db.execSQL("CREATE TABLE " + Tables.PREVIEWING_WALLPAPER + " ("
                 + BaseColumns._ID + " INTEGER DEFAULT 0,"
@@ -128,10 +136,6 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 WallpaperType.LIVE.getTypeInt());
         contentValues.put(PreviewingWallpaper.COLUMN_NAME_WALLPAPER_ID, "0");
         db.insert(Tables.PREVIEWING_WALLPAPER, null, contentValues);
-
-        db.execSQL("ALTER TABLE " + Tables.LIVE_WALLPAPER
-                + " ADD COLUMN " + LiveWallpaper.COLUMN_NAME_SIZE
-                + " INTEGER DEFAULT 0");
     }
 
     public static void deleteDatabase(Context context) {

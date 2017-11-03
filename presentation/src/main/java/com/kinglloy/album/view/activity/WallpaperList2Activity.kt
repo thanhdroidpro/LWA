@@ -22,7 +22,7 @@ class WallpaperList2Activity : AppCompatActivity() {
 
     companion object {
         val titleArray: IntArray = intArrayOf(
-                R.string.video_type_title,
+//                R.string.video_type_title,
                 R.string.live_type_title,
                 R.string.style_type_title
         )
@@ -65,12 +65,12 @@ class WallpaperList2Activity : AppCompatActivity() {
     private inner class WallpaperTypesAdapter(fragmentManager: FragmentManager)
         : FragmentPagerAdapter(fragmentManager) {
         override fun getItem(position: Int): Fragment = when (position) {
-            0 -> VideoWallpapersFragment()
-            1 -> LiveWallpapersFragment()
+//            0 -> VideoWallpapersFragment()
+            0 -> LiveWallpapersFragment()
             else -> StyleWallpapersFragment()
         }
 
-        override fun getCount() = 3
+        override fun getCount() = 2
 
         override fun getPageTitle(position: Int): CharSequence = getString(titleArray[position])
     }

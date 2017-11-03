@@ -28,6 +28,8 @@ class AdvanceWallpaperItemMapper @Inject constructor() {
         wallpaperItem.lazyDownload = wallpaper.lazyDownload
         wallpaperItem.wallpaperType = wallpaper.wallpaperType
         wallpaperItem.size = wallpaper.size
+        wallpaperItem.price = wallpaper.price
+        wallpaperItem.pro = wallpaper.pro
         return wallpaperItem
     }
 
