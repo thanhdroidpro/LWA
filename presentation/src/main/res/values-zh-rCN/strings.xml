@@ -54,6 +54,11 @@
         如果你已经链接上WI-FI，准备好下载，请点击下面的下载按钮
     ]]></string>
 
+    <string name="advance_download_size_hint"><![CDATA[
+        这款壁纸大小为 %s，使用之前需要先下载。<br><br>
+        如果你已经链接上WI-FI，准备好下载，请点击下面的下载按钮
+    ]]></string>
+
     <string name="welcome">如果你喜欢这款壁纸应用，并且希望开发更多新特性，你可以通过观看广告来支持我们。</string>
 
     <string name="ad_prompt">谢谢你对我们的支持，我们会努力把应用做得更好。点击按钮再看一则广告。</string>

@@ -1,10 +1,12 @@
 package com.kinglloy.album.view.component
 
 import android.content.Context
+import android.text.TextUtils
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.kinglloy.album.R
 import com.kinglloy.album.model.WallpaperItem
+import com.kinglloy.album.util.formatSizeToString
 
 /**
  * @author jinyalin
@@ -13,6 +15,8 @@ import com.kinglloy.album.model.WallpaperItem
  */
 
 class DownloadingDialog constructor(context: Context) {
+    private var totalSizeString: String? = null
+
     private val dialog = MaterialDialog.Builder(context)
             .iconRes(R.drawable.advance_downloading)
             .title(R.string.downloading)
@@ -20,6 +24,10 @@ class DownloadingDialog constructor(context: Context) {
             .customView(R.layout.dialog_downloading, false).build()
 
     private val progressView = dialog.findViewById(R.id.downloadProgress) as TextView
+
+    fun setTotalSize(totalSize: Long) {
+        totalSizeString = formatSizeToString(totalSize)
+    }
 
     fun show() {
         dialog.show()
@@ -30,24 +38,14 @@ class DownloadingDialog constructor(context: Context) {
     }
 
     fun updateProgress(progress: Long) {
-        progressView.text = formatSize(progress)
+        val showString =
+                if (TextUtils.isEmpty(totalSizeString)) formatSizeToString(progress)
+                else "${formatSizeToString(progress)} / $totalSizeString"
+        progressView.text = showString
     }
 
     fun showError(item: WallpaperItem, e: Exception) {
 
     }
 
-    companion object {
-        val C = 1024
-    }
-
-    private fun formatSize(progress: Long): String {
-        if (progress < C) {
-            return "$progress B"
-        }
-        if (progress < C * C) {
-            return "${progress / C} KB"
-        }
-        return "%.2f MB".format(progress / (C * C).toFloat())
-    }
 }

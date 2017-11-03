@@ -181,15 +181,15 @@ public class AlbumProvider extends ContentProvider {
             }
             case ADVANCE_WALLPAPER_ID: {
                 String wallpaperId = LiveWallpaper.getWallpaperId(uri);
-                return builder.table(AlbumDatabase.Tables.ADVANCE_WALLPAPER)
+                return builder.table(AlbumDatabase.Tables.LIVE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_WALLPAPER_ID + " = ?", wallpaperId);
             }
             case ADVANCE_WALLPAPER_SELECTED: {
-                return builder.table(AlbumDatabase.Tables.ADVANCE_WALLPAPER)
+                return builder.table(AlbumDatabase.Tables.LIVE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_SELECTED + " = ?", String.valueOf(1));
             }
             case ADVANCE_WALLPAPER_PREVIEWING: {
-                return builder.table(AlbumDatabase.Tables.ADVANCE_WALLPAPER)
+                return builder.table(AlbumDatabase.Tables.LIVE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_PREVIEWING + " = ?", String.valueOf(1));
             }
             case STYLE_WALLPAPER_ID: {

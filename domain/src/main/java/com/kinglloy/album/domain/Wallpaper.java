@@ -23,5 +23,6 @@ public class Wallpaper {
     public boolean isDefault;
     public boolean isSelected;
 
+    public long size;
     public WallpaperType wallpaperType;
 }

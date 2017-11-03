@@ -28,13 +28,13 @@ public class AlbumDatabase extends SQLiteOpenHelper {
 
     private static final int VERSION_2017_9_26 = 1;
     private static final int VERSION_2017_9_27 = 2;
-    private static final int VERSION_2017_10_31 = 3;
-    private static final int CUR_DATABASE_VERSION = VERSION_2017_10_31;
+    private static final int VERSION_2017_11_3 = 3;
+    private static final int CUR_DATABASE_VERSION = VERSION_2017_11_3;
 
     private final Context mContext;
 
     interface Tables {
-        String ADVANCE_WALLPAPER = LiveWallpaper.TABLE_NAME;
+        String LIVE_WALLPAPER = LiveWallpaper.TABLE_NAME;
         String STYLE_WALLPAPER = StyleWallpaper.TABLE_NAME;
         String ACTIVE_SERVICE = ActiveService.TABLE_NAME;
         String PREVIEWING_WALLPAPER = PreviewingWallpaper.TABLE_NAME;
@@ -47,7 +47,7 @@ public class AlbumDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + Tables.ADVANCE_WALLPAPER + " ("
+        db.execSQL("CREATE TABLE " + Tables.LIVE_WALLPAPER + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + LiveWallpaper.COLUMN_NAME_WALLPAPER_ID + " TEXT,"
                 + LiveWallpaper.COLUMN_NAME_ICON_URL + " TEXT,"
@@ -63,7 +63,7 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 + LiveWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0);");
 
         upgradeFrom20170926to20170927(db);
-        upgradeFrom20170927to20171031(db);
+        upgradeFrom20170927to20171103(db);
     }
 
     @Override
@@ -82,14 +82,14 @@ public class AlbumDatabase extends SQLiteOpenHelper {
         }
 
         if (version == VERSION_2017_9_27) {
-            upgradeFrom20170927to20171031(db);
-            version = VERSION_2017_10_31;
+            upgradeFrom20170927to20171103(db);
+            version = VERSION_2017_11_3;
         }
 
         if (version != CUR_DATABASE_VERSION) {
             LogUtil.E(TAG, "Upgrade unsuccessful -- destroying old data during upgrade");
 
-            db.execSQL("DROP TABLE IF EXISTS " + Tables.ADVANCE_WALLPAPER);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.LIVE_WALLPAPER);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.ACTIVE_SERVICE);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.STYLE_WALLPAPER);
             onCreate(db);
@@ -106,7 +106,7 @@ public class AlbumDatabase extends SQLiteOpenHelper {
         db.insert(Tables.ACTIVE_SERVICE, null, contentValues);
     }
 
-    private void upgradeFrom20170927to20171031(SQLiteDatabase db) {
+    private void upgradeFrom20170927to20171103(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + Tables.STYLE_WALLPAPER + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + StyleWallpaper.COLUMN_NAME_WALLPAPER_ID + " TEXT,"
@@ -116,7 +116,8 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 + StyleWallpaper.COLUMN_NAME_STORE_PATH + " TEXT,"
                 + StyleWallpaper.COLUMN_NAME_CHECKSUM + " TEXT,"
                 + StyleWallpaper.COLUMN_NAME_SELECTED + " INTEGER DEFAULT 0,"
-                + StyleWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0);");
+                + StyleWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0,"
+                + StyleWallpaper.COLUMN_NAME_SIZE + " INTEGER DEFAULT 0);");
 
         db.execSQL("CREATE TABLE " + Tables.PREVIEWING_WALLPAPER + " ("
                 + BaseColumns._ID + " INTEGER DEFAULT 0,"
@@ -127,6 +128,10 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 WallpaperType.LIVE.getTypeInt());
         contentValues.put(PreviewingWallpaper.COLUMN_NAME_WALLPAPER_ID, "0");
         db.insert(Tables.PREVIEWING_WALLPAPER, null, contentValues);
+
+        db.execSQL("ALTER TABLE " + Tables.LIVE_WALLPAPER
+                + " ADD COLUMN " + LiveWallpaper.COLUMN_NAME_SIZE
+                + " INTEGER DEFAULT 0");
     }
 
     public static void deleteDatabase(Context context) {

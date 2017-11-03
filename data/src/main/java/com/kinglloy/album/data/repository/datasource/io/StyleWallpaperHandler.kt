@@ -107,6 +107,7 @@ class StyleWallpaperHandler(context: Context,
         builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_STORE_PATH, wallpaper.storePath)
         builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_SELECTED, 0)
         builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_PREVIEWING, 0)
+        builder.withValue(AlbumContract.StyleWallpaper.COLUMN_NAME_SIZE, wallpaper.size)
 
         list.add(builder.build())
     }

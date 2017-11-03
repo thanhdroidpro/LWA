@@ -26,6 +26,8 @@ public class WallpaperItem implements Parcelable {
     public String storePath;
 
     public boolean isSelected;
+    public long size;
+
     public WallpaperType wallpaperType;
 
     public WallpaperItem() {
@@ -44,6 +46,7 @@ public class WallpaperItem implements Parcelable {
         storePath = in.readString();
         isSelected = in.readByte() != 0;
         wallpaperType = WallpaperType.fromTypeInt(in.readByte());
+        size = in.readLong();
     }
 
     public static final Creator<WallpaperItem> CREATOR = new Creator<WallpaperItem>() {
@@ -77,5 +80,6 @@ public class WallpaperItem implements Parcelable {
         dest.writeString(storePath);
         dest.writeByte((byte) (isSelected ? 1 : 0));
         dest.writeByte((byte) (wallpaperType.getTypeInt()));
+        dest.writeLong(size);
     }
 }

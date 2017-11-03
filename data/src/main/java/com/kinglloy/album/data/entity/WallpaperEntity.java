@@ -41,6 +41,8 @@ public class WallpaperEntity {
 
     public boolean isPreviewing = false;
 
+    public long size;
+
     public WallpaperType type;
 
     public static List<WallpaperEntity> liveWallpaperValues(Cursor cursor) {
@@ -90,6 +92,8 @@ public class WallpaperEntity {
                 AlbumContract.LiveWallpaper.COLUMN_NAME_LAZY_DOWNLOAD)) == 1;
         wallpaperEntity.isPreviewing = cursor.getInt(cursor.getColumnIndex(
                 AlbumContract.LiveWallpaper.COLUMN_NAME_PREVIEWING)) == 1;
+        wallpaperEntity.size = cursor.getLong(cursor.getColumnIndex(
+                AlbumContract.LiveWallpaper.COLUMN_NAME_SIZE));
         wallpaperEntity.type = WallpaperType.LIVE;
 
         return wallpaperEntity;
@@ -130,6 +134,8 @@ public class WallpaperEntity {
                 AlbumContract.StyleWallpaper.COLUMN_NAME_SELECTED)) == 1;
         wallpaperEntity.isPreviewing = cursor.getInt(cursor.getColumnIndex(
                 AlbumContract.StyleWallpaper.COLUMN_NAME_PREVIEWING)) == 1;
+        wallpaperEntity.size = cursor.getLong(cursor.getColumnIndex(
+                AlbumContract.StyleWallpaper.COLUMN_NAME_SIZE));
         wallpaperEntity.type = WallpaperType.STYLE;
 
         return wallpaperEntity;

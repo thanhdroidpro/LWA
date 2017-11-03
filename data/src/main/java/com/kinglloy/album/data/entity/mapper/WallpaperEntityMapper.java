@@ -39,6 +39,7 @@ public class WallpaperEntityMapper {
         wallpaper.isSelected = wallpaperEntity.isSelected;
         wallpaper.lazyDownload = wallpaperEntity.lazyDownload;
         wallpaper.wallpaperType = wallpaperEntity.type;
+        wallpaper.size = wallpaperEntity.size;
 
         return wallpaper;
     }
@@ -63,6 +64,7 @@ public class WallpaperEntityMapper {
             entity.iconUrl = tempEntity.imageUri;
             entity.name = tempEntity.title;
             entity.wallpaperId = tempEntity.wallpaperId;
+            entity.size = tempEntity.size;
             results.add(entity);
         }
         return results;

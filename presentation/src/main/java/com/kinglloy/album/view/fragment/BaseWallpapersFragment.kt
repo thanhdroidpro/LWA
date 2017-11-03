@@ -27,6 +27,7 @@ import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.exception.ErrorMessageFactory
 import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.presenter.WallpaperListPresenter
+import com.kinglloy.album.util.formatSizeToString
 import com.kinglloy.album.view.WallpaperListView
 import com.kinglloy.album.view.activity.WallpaperListActivity
 import com.kinglloy.album.view.component.DownloadingDialog
@@ -259,10 +260,17 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
                     Analytics.logEvent(activity,
                             Event.DOWNLOAD_COMPONENT, item.name)
                 }
+        val content =
+                if (item.size > 0)
+                    Html.fromHtml(getString(R.string.advance_download_size_hint,
+                            formatSizeToString(item.size)))
+                else
+                    Html.fromHtml(getString(R.string.advance_download_hint))
+
         val dialogBuilder = MaterialDialog.Builder(activity)
                 .iconRes(R.drawable.advance_wallpaper_msg)
                 .title(R.string.hint)
-                .content(Html.fromHtml(getString(R.string.advance_download_hint)))
+                .content(content)
                 .positiveText(R.string.advance_download_msg)
                 .onPositive(downloadCallback)
 
@@ -271,6 +279,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
 
     override fun showDownloadingDialog(item: WallpaperItem) {
         LogUtil.D(TAG, "showDownloadingDialog ${item.name}")
+        downloadDialog!!.setTotalSize(item.size)
         downloadDialog!!.show()
     }
 

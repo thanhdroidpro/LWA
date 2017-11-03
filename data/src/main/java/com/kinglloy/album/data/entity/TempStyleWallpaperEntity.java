@@ -10,4 +10,6 @@ public class TempStyleWallpaperEntity {
     public String imageUri;
     public String title;
     public String checksum;
+
+    public long size;
 }

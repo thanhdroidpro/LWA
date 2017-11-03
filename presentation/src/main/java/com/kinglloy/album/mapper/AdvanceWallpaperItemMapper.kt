@@ -27,6 +27,7 @@ class AdvanceWallpaperItemMapper @Inject constructor() {
         wallpaperItem.isSelected = wallpaper.isSelected
         wallpaperItem.lazyDownload = wallpaper.lazyDownload
         wallpaperItem.wallpaperType = wallpaper.wallpaperType
+        wallpaperItem.size = wallpaper.size
         return wallpaperItem
     }
 

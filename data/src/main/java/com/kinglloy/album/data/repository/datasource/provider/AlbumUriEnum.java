@@ -5,7 +5,7 @@ package com.kinglloy.album.data.repository.datasource.provider;
  */
 
 public enum AlbumUriEnum {
-    ADVANCE_WALLPAPER(100, "advance_wallpaper", AlbumDatabase.Tables.ADVANCE_WALLPAPER),
+    ADVANCE_WALLPAPER(100, "advance_wallpaper", AlbumDatabase.Tables.LIVE_WALLPAPER),
     ADVANCE_WALLPAPER_SELECTED(102, "advance_wallpaper/selected", null),
     ADVANCE_WALLPAPER_PREVIEWING(103, "advance_wallpaper/previewing", null),
     ADVANCE_WALLPAPER_ID(101, "advance_wallpaper/*", null),

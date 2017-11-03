@@ -55,6 +55,11 @@
         Press download button if you are ready to download.
     ]]></string>
 
+    <string name="advance_download_size_hint"><![CDATA[
+        The total size of this wallpaper is %s, You must take a minute to download it.<br><br>
+        Press download button if you are ready to download.
+    ]]></string>
+
     <string name="welcome">To help developer release new features, and if you like this wallpaper application, you can watch the ad to support.</string>
 
     <string name="ad_prompt">Thank you for your support, we will try to make the application better. Click button to see again.</string>

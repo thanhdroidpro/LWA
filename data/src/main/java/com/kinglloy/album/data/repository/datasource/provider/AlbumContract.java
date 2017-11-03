@@ -78,6 +78,11 @@ public class AlbumContract {
          * Type: INTEGER
          */
         String COLUMN_NAME_PREVIEWING = "previewing";
+
+        /**
+         * Type: INTEGER
+         */
+        String COLUMN_NAME_SIZE = "size";
     }
 
     interface StyleWallpaperColumns {
@@ -117,6 +122,11 @@ public class AlbumContract {
          * Type: INTEGER
          */
         String COLUMN_NAME_PREVIEWING = "previewing";
+
+        /**
+         * Type: INTEGER
+         */
+        String COLUMN_NAME_SIZE = "size";
     }
 
     interface VideoWallpaperColumns {
@@ -156,6 +166,11 @@ public class AlbumContract {
          * Type: INTEGER
          */
         String COLUMN_NAME_PREVIEWING = "previewing";
+
+        /**
+         * Type: INTEGER
+         */
+        String COLUMN_NAME_SIZE = "size";
     }
 
     interface ActiveServiceColumns {
