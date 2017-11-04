@@ -15,8 +15,9 @@ import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 
+import com.kinglloy.album.domain.StyleWallpaperSettings;
+import com.kinglloy.album.engine.style.StyleWallpaperProxy;
 import com.kinglloy.album.engine.util.MathUtil;
-import com.kinglloy.album.engine.util.Prefs;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -67,7 +68,7 @@ public class StyleBlurRenderer implements GLSurfaceView.Renderer {
     private volatile float mNormalOffsetX;
     private volatile RectF mCurrentViewport = new RectF(); // [-1, -1] to [1, 1], flipped
 
-    private Context mContext;
+    private StyleWallpaperProxy mContext;
 
     private boolean mIsBlurred = true;
     private boolean mBlurRelatedToArtDetailMode = false;
@@ -75,7 +76,7 @@ public class StyleBlurRenderer implements GLSurfaceView.Renderer {
     private TickingFloatAnimator mBlurAnimator;
     private TickingFloatAnimator mCrossfadeAnimator = TickingFloatAnimator.create().from(0);
 
-    public StyleBlurRenderer(Context context, Callbacks callbacks) {
+    public StyleBlurRenderer(StyleWallpaperProxy context, Callbacks callbacks) {
         mContext = context;
         mCallbacks = callbacks;
 
@@ -98,10 +99,11 @@ public class StyleBlurRenderer implements GLSurfaceView.Renderer {
 
     public void recomputeMaxPrescaledBlurPixels() {
         // Compute blur sizes
-        int blurAmount = mDemoMode
-                ? DEMO_BLUR
-                : Prefs.getSharedPreferences(mContext)
-                .getInt(Prefs.PREF_BLUR_AMOUNT, DEFAULT_BLUR);
+        StyleWallpaperSettings settings = mContext.getMStyleWallpaperSettings();
+        int blurAmount = DEFAULT_BLUR;
+        if (settings != null) {
+            blurAmount = settings.enableEffect ? settings.blur : 0;
+        }
         float maxBlurRadiusOverScreenHeight = blurAmount * 0.0001f;
         DisplayMetrics dm = mContext.getResources().getDisplayMetrics();
         int maxBlurPx = (int) (dm.heightPixels * maxBlurRadiusOverScreenHeight);
@@ -113,15 +115,19 @@ public class StyleBlurRenderer implements GLSurfaceView.Renderer {
     }
 
     public void recomputeMaxDimAmount() {
-        mMaxDim = Prefs.getSharedPreferences(mContext).getInt(
-                Prefs.PREF_DIM_AMOUNT, DEFAULT_MAX_DIM);
+        StyleWallpaperSettings settings = mContext.getMStyleWallpaperSettings();
+        mMaxDim = DEFAULT_MAX_DIM;
+        if (settings != null) {
+            mMaxDim = settings.enableEffect ? settings.dim : 20;
+        }
     }
 
     public void recomputeGreyAmount() {
-        mMaxGrey = mDemoMode
-                ? DEMO_GREY
-                : Prefs.getSharedPreferences(mContext)
-                .getInt(Prefs.PREF_GREY_AMOUNT, DEFAULT_GREY);
+        StyleWallpaperSettings settings = mContext.getMStyleWallpaperSettings();
+        mMaxGrey = DEFAULT_GREY;
+        if (settings != null) {
+            mMaxGrey = settings.enableEffect ? settings.grey : 0;
+        }
     }
 
     public void onSurfaceCreated(GL10 unused, EGLConfig config) {

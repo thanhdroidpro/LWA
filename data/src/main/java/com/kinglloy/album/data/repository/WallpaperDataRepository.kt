@@ -17,7 +17,7 @@ import javax.inject.Singleton
  * @since 2017/7/27.
  */
 @Singleton
-class AdvanceWallpaperDataRepository
+class WallpaperDataRepository
 @Inject constructor(val context: Context,
                     val factory: WallpaperDataStoreFactory,
                     private val wallpaperMapper: WallpaperEntityMapper)

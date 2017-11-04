@@ -21,7 +21,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.opengl.GLES20;
 
-
 import com.kinglloy.album.engine.util.MathUtil;
 
 import java.nio.FloatBuffer;

@@ -30,7 +30,7 @@
         android:supportsRtl="true">
 
         <activity
-            android:name=".view.activity.WallpaperList2Activity"
+            android:name=".view.activity.WallpaperListActivityV2"
             android:theme="@style/Theme.WallpaperList">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,34 +52,10 @@
             android:name=".view.activity.WallpaperListActivity"
             android:theme="@style/Theme.WallpaperList" />
 
-        <!--<service-->
-            <!--android:name=".AlbumWallpaperService"-->
-            <!--android:permission="android.permission.BIND_WALLPAPER"-->
-            <!--android:process=":album">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.service.wallpaper.WallpaperService" />-->
-            <!--</intent-filter>-->
-            <!--<meta-data-->
-                <!--android:name="android.service.wallpaper"-->
-                <!--android:resource="@xml/wallpaper" />-->
-        <!--</service>-->
-
-        <!--<service-->
-            <!--android:name=".AlbumWallpaperServiceMirror"-->
-            <!--android:permission="android.permission.BIND_WALLPAPER"-->
-            <!--android:process=":album_mirror">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.service.wallpaper.WallpaperService" />-->
-            <!--</intent-filter>-->
-            <!--<meta-data-->
-                <!--android:name="android.service.wallpaper"-->
-                <!--android:resource="@xml/wallpaper" />-->
-        <!--</service>-->
-
         <service
             android:name=".AlbumWallpaperService"
             android:permission="android.permission.BIND_WALLPAPER"
-            >
+            android:process=":album">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
@@ -91,7 +67,7 @@
         <service
             android:name=".AlbumWallpaperServiceMirror"
             android:permission="android.permission.BIND_WALLPAPER"
-            >
+            android:process=":album_mirror">
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
@@ -99,6 +75,7 @@
                 android:name="android.service.wallpaper"
                 android:resource="@xml/wallpaper" />
         </service>
+
     </application>
 
 </manifest>

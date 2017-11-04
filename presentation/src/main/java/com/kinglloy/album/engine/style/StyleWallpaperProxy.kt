@@ -2,7 +2,12 @@ package com.kinglloy.album.engine.style
 
 import android.app.KeyguardManager
 import android.app.WallpaperManager
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.database.ContentObserver
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -12,17 +17,23 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.ViewConfiguration
+import com.kinglloy.album.data.log.LogUtil
+import com.kinglloy.album.data.repository.datasource.provider.settings.SettingsContract
+import com.kinglloy.album.domain.StyleWallpaperSettings
+import com.kinglloy.album.domain.interactor.DefaultObserver
+import com.kinglloy.album.domain.interactor.settings.GetStyleWallpaperSettings
 import com.kinglloy.album.engine.style.render.RenderController
 import com.kinglloy.album.engine.style.render.StyleBlurRenderer
-import com.kinglloy.album.engine.util.Prefs
+import com.kinglloy.album.presenter.MainWallpaperListPresenter
 import com.yalin.style.engine.GLWallpaperServiceProxy
-import java.io.InputStream
 
 /**
  * @author jinyalin
  * @since 2017/11/1.
  */
-class StyleWallpaperProxy(host: Context, val wallpaperPath: String) : GLWallpaperServiceProxy(host) {
+class StyleWallpaperProxy(host: Context, val wallpaperPath: String,
+                          private val getStyleWallpaperSettings: GetStyleWallpaperSettings)
+    : GLWallpaperServiceProxy(host) {
 
     companion object {
         private val TEMPORARY_FOCUS_DURATION_MILLIS: Long = 3000
@@ -30,6 +41,8 @@ class StyleWallpaperProxy(host: Context, val wallpaperPath: String) : GLWallpape
 
     private var mInitialized = false
     private var mUnlockReceiver: BroadcastReceiver? = null
+
+    var mStyleWallpaperSettings: StyleWallpaperSettings? = null
 
     override fun onCreateEngine(): Engine = StyleWallpaperEngine()
 
@@ -66,7 +79,6 @@ class StyleWallpaperProxy(host: Context, val wallpaperPath: String) : GLWallpape
     inner class StyleWallpaperEngine : GLActiveEngine(),
             StyleBlurRenderer.Callbacks, RenderController.Callbacks {
 
-
         private var mRenderer: StyleBlurRenderer? = null
 
         lateinit var mRenderController: RenderController
@@ -101,27 +113,7 @@ class StyleWallpaperProxy(host: Context, val wallpaperPath: String) : GLWallpape
         private var mValidDoubleTap = false
 
         private var mIsLockScreenVisibleReceiverRegistered = false
-        private val mLockScreenPreferenceChangeListener =
-                SharedPreferences.OnSharedPreferenceChangeListener { sp, key ->
-                    if (Prefs.PREF_DISABLE_BLUR_WHEN_LOCKED == key) {
-                        if (sp.getBoolean(Prefs.PREF_DISABLE_BLUR_WHEN_LOCKED, false)) {
-                            val intentFilter = IntentFilter()
-                            intentFilter.addAction(Intent.ACTION_USER_PRESENT)
-                            intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
-                            intentFilter.addAction(Intent.ACTION_SCREEN_ON)
-                            host.registerReceiver(mLockScreenVisibleReceiver, intentFilter)
-                            mIsLockScreenVisibleReceiverRegistered = true
-                            // If the user is not yet unlocked (i.e., using Direct Boot), we should
-                            // immediately send the lock screen visible callback
-                            if (!UserManagerCompat.isUserUnlocked(host)) {
-                                lockScreenVisibleChanged(true)
-                            }
-                        } else if (mIsLockScreenVisibleReceiverRegistered) {
-                            host.unregisterReceiver(mLockScreenVisibleReceiver)
-                            mIsLockScreenVisibleReceiverRegistered = false
-                        }
-                    }
-                }
+
         private val mLockScreenVisibleReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent?) {
                 if (intent != null) {
@@ -139,11 +131,28 @@ class StyleWallpaperProxy(host: Context, val wallpaperPath: String) : GLWallpape
             }
         }
 
+        private fun getSettings() {
+            getStyleWallpaperSettings.execute(object : DefaultObserver<StyleWallpaperSettings>() {
+                override fun onNext(styleSettings: StyleWallpaperSettings) {
+                    mStyleWallpaperSettings = styleSettings
+                    mRenderController.onSettingsChanged()
+                }
+            }, null)
+        }
+
+        private val mContentObserver = object : ContentObserver(Handler()) {
+            override fun onChange(selfChange: Boolean, uri: Uri) {
+                getSettings()
+            }
+        }
+
+
         override fun onCreate(surfaceHolder: SurfaceHolder?) {
             super.onCreate(surfaceHolder)
+
             mRenderController = RenderController(this@StyleWallpaperProxy, wallpaperPath)
 
-            mRenderer = StyleBlurRenderer(host, this).apply {
+            mRenderer = StyleBlurRenderer(this@StyleWallpaperProxy, this).apply {
                 setIsPreview(isPreview)
             }
 
@@ -155,27 +164,26 @@ class StyleWallpaperProxy(host: Context, val wallpaperPath: String) : GLWallpape
 
             mRenderController.setComponent(mRenderer!!, this)
 
-            val sp = Prefs.getSharedPreferences(host)
-            sp.registerOnSharedPreferenceChangeListener(mLockScreenPreferenceChangeListener)
-            // Trigger the initial registration if needed
-            mLockScreenPreferenceChangeListener.onSharedPreferenceChanged(sp,
-                    Prefs.PREF_DISABLE_BLUR_WHEN_LOCKED)
-
             setTouchEventsEnabled(true)
             setOffsetNotificationsEnabled(true)
+
+            getSettings()
+
+            contentResolver.registerContentObserver(
+                    SettingsContract.StyleWallpaperSettings.CONTENT_URI,
+                    true, mContentObserver)
+
         }
 
         override fun onDestroy() {
             if (mIsLockScreenVisibleReceiverRegistered) {
                 host.unregisterReceiver(mLockScreenVisibleReceiver)
             }
-            Prefs.getSharedPreferences(host)
-                    .unregisterOnSharedPreferenceChangeListener(
-                            mLockScreenPreferenceChangeListener)
             queueEvent {
                 mRenderer?.destroy()
             }
             mRenderController.destroy()
+            contentResolver.unregisterContentObserver(mContentObserver)
             super.onDestroy()
         }
 

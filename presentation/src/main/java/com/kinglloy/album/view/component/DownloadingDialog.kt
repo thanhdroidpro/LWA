@@ -26,7 +26,7 @@ class DownloadingDialog constructor(context: Context) {
     private val progressView = dialog.findViewById(R.id.downloadProgress) as TextView
 
     fun setTotalSize(totalSize: Long) {
-        totalSizeString = formatSizeToString(totalSize)
+        totalSizeString = if (totalSize > 0) formatSizeToString(totalSize) else null
     }
 
     fun show() {

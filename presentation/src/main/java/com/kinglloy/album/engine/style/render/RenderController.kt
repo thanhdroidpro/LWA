@@ -1,10 +1,8 @@
 package com.kinglloy.album.engine.style.render
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Message
-import com.kinglloy.album.engine.util.Prefs
 import java.io.FileInputStream
 import java.io.InputStream
 import javax.inject.Inject
@@ -19,25 +17,14 @@ constructor(private var mContext: Context, private val wallpaperPath: String) {
     private var mCallbacks: Callbacks? = null
     private var mVisible: Boolean = false
     private var mQueuedBitmapRegionLoader: BitmapRegionLoader? = null
-    private val mOnSharedPreferenceChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                mRenderer?.apply {
-                    if (Prefs.PREF_BLUR_AMOUNT == key) {
-                        recomputeMaxPrescaledBlurPixels()
-                        throttledForceReloadCurrentArtwork()
-                    } else if (Prefs.PREF_DIM_AMOUNT == key) {
-                        recomputeMaxDimAmount()
-                        throttledForceReloadCurrentArtwork()
-                    } else if (Prefs.PREF_GREY_AMOUNT == key) {
-                        recomputeGreyAmount()
-                        throttledForceReloadCurrentArtwork()
-                    }
-                }
-            }
 
-    init {
-        Prefs.getSharedPreferences(mContext)
-                .registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener)
+    fun onSettingsChanged() {
+        mRenderer?.apply {
+            recomputeMaxPrescaledBlurPixels()
+            recomputeMaxDimAmount()
+            recomputeGreyAmount()
+            throttledForceReloadCurrentArtwork()
+        }
     }
 
     fun setComponent(renderer: StyleBlurRenderer, callbacks: Callbacks) {
@@ -50,8 +37,6 @@ constructor(private var mContext: Context, private val wallpaperPath: String) {
         if (mQueuedBitmapRegionLoader != null) {
             mQueuedBitmapRegionLoader!!.destroy()
         }
-        Prefs.getSharedPreferences(mContext)
-                .unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener)
     }
 
     @Throws(Exception::class)

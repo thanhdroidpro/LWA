@@ -14,19 +14,19 @@ import io.reactivex.Observable;
  * @since 2017/7/31.
  */
 
-public class SelectPreviewingAdvanceWallpaper extends UseCase<Boolean, Void> {
+public class SelectPreviewingWallpaper extends UseCase<Boolean, Void> {
     private WallpaperRepository repository;
 
     @Inject
-    public SelectPreviewingAdvanceWallpaper(ThreadExecutor threadExecutor,
-                                  PostExecutionThread postExecutionThread,
-                                  WallpaperRepository repository) {
+    public SelectPreviewingWallpaper(ThreadExecutor threadExecutor,
+                                     PostExecutionThread postExecutionThread,
+                                     WallpaperRepository repository) {
         super(threadExecutor, postExecutionThread);
         this.repository = repository;
     }
 
     @Override
-    Observable<Boolean> buildUseCaseObservable(Void aVoid) {
+    public Observable<Boolean> buildUseCaseObservable(Void aVoid) {
         return repository.selectPreviewingWallpaper();
     }
 }

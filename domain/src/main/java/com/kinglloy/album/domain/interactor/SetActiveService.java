@@ -25,7 +25,7 @@ public class SetActiveService extends UseCase<Boolean, SetActiveService.Params> 
     }
 
     @Override
-    Observable<Boolean> buildUseCaseObservable(SetActiveService.Params params) {
+    public Observable<Boolean> buildUseCaseObservable(SetActiveService.Params params) {
         return repository.activeService(params.serviceType);
     }
 

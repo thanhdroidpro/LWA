@@ -32,7 +32,7 @@ public class GetWallpapers extends UseCase<List<Wallpaper>, GetWallpapers.Params
     }
 
     @Override
-    Observable<List<Wallpaper>> buildUseCaseObservable(GetWallpapers.Params params) {
+    public Observable<List<Wallpaper>> buildUseCaseObservable(GetWallpapers.Params params) {
         switch (params.wallpaperType) {
             case LIVE:
                 return repository.getLiveWallpapers();

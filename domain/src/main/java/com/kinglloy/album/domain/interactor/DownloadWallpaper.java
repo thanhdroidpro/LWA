@@ -27,7 +27,7 @@ public class DownloadWallpaper extends UseCase<Long, DownloadWallpaper.Params> {
     }
 
     @Override
-    Observable<Long> buildUseCaseObservable(Params params) {
+    public Observable<Long> buildUseCaseObservable(Params params) {
         if (params.wallpaperType == WallpaperType.LIVE) {
             return repository.downloadLiveWallpaper(params.wallpaperId);
         } else if (params.wallpaperType == WallpaperType.STYLE) {

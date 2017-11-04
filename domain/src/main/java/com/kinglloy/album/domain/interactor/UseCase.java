@@ -27,7 +27,7 @@ public abstract class UseCase<T, Params> {
         this.disposables = new CompositeDisposable();
     }
 
-    abstract Observable<T> buildUseCaseObservable(Params params);
+    public abstract Observable<T> buildUseCaseObservable(Params params);
 
     public void execute(DisposableObserver<T> observer, Params params) {
         Preconditions.checkNotNull(observer);

@@ -4,7 +4,7 @@
         <item name="android:windowBackground">@color/advance_window_background</item>
         <item name="android:windowContentOverlay">@null</item>
 
-        <item name="android:windowAnimationStyle">@style/default_animation</item>
+        <item name="android:windowAnimationStyle">@style/DefaultAnimation</item>
 
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -21,7 +21,7 @@
 
     <style name="Widget.Album.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox" />
 
-    <style name="default_animation" mce_bogus="1" parent="@android:style/Animation.Activity">
+    <style name="DefaultAnimation" mce_bogus="1" parent="@android:style/Animation.Activity">
         <item name="android:activityOpenEnterAnimation">@anim/default_anim_in</item>
         <item name="android:activityOpenExitAnimation">@anim/anim_stay</item>
         <item name="android:activityCloseEnterAnimation">@anim/anim_stay</item>
@@ -47,5 +47,13 @@
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">italic</item>
         <item name="android:drawablePadding">@dimen/drawable_padding</item>
+    </style>
+
+    <style name="Widget.Album.SeekBar" parent="Widget.AppCompat.SeekBar">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="colorControlNormal">@color/colorAccent</item>
     </style>
 </resources>

@@ -43,24 +43,30 @@ android {
             buildConfigField("boolean", "DEMO_MODE", "true")
             buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "true")
             buildConfigField("String", "SERVER_WALLPAPER_ENDPOINT", "\"${DEMO_API_WALLPAPER_ENDPOINT}\"")
-            buildConfigField("String", "AUTHORITY", "\"${FREE_VERSUIB_AUTHORITY}\"")
-            resValue("string", "authority", "\"${FREE_VERSUIB_AUTHORITY}\"")
+            buildConfigField("String", "AUTHORITY", "\"${FREE_VERSION_AUTHORITY}\"")
+            buildConfigField("String", "SETTINGS_AUTHORITY", "\"${FREE_VERSION_SETTINS_AUTHORITY}\"")
+            resValue("string", "authority", "\"${FREE_VERSION_AUTHORITY}\"")
+            resValue("string", "settings_authority", "\"${FREE_VERSION_SETTINS_AUTHORITY}\"")
         }
         production {
             dimension "default"
             buildConfigField("boolean", "DEMO_MODE", "false")
             buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "${ENABLE_EXTERNAL_LOG}")
             buildConfigField("String", "SERVER_WALLPAPER_ENDPOINT", "\"${PRODUCTION_API_WALLPAPER_ENDPOINT}\"")
-            buildConfigField("String", "AUTHORITY", "\"${FREE_VERSUIB_AUTHORITY}\"")
-            resValue("string", "authority", "\"${FREE_VERSUIB_AUTHORITY}\"")
+            buildConfigField("String", "AUTHORITY", "\"${FREE_VERSION_AUTHORITY}\"")
+            buildConfigField("String", "SETTINGS_AUTHORITY", "\"${FREE_VERSION_SETTINS_AUTHORITY}\"")
+            resValue("string", "authority", "\"${FREE_VERSION_AUTHORITY}\"")
+            resValue("string", "settings_authority", "\"${FREE_VERSION_SETTINS_AUTHORITY}\"")
         }
         ultimate {
             dimension "default"
             buildConfigField("boolean", "DEMO_MODE", "false")
             buildConfigField("boolean", "ENABLE_EXTERNAL_LOG", "${ENABLE_EXTERNAL_LOG}")
             buildConfigField("String", "SERVER_WALLPAPER_ENDPOINT", "\"${PRODUCTION_API_WALLPAPER_ENDPOINT}\"")
-            buildConfigField("String", "AUTHORITY", "\"${ULTIMATE_VERSUIB_AUTHORITY}\"")
-            resValue("string", "authority", "\"${ULTIMATE_VERSUIB_AUTHORITY}\"")
+            buildConfigField("String", "AUTHORITY", "\"${ULTIMATE_VERSION_AUTHORITY}\"")
+            buildConfigField("String", "SETTINGS_AUTHORITY", "\"${ULTIMATE_VERSION_SETTINS_AUTHORITY}\"")
+            resValue("string", "authority", "\"${ULTIMATE_VERSION_AUTHORITY}\"")
+            resValue("string", "settings_authority", "\"${ULTIMATE_VERSION_SETTINS_AUTHORITY}\"")
         }
     }
     compileOptions {
