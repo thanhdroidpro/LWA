@@ -74,9 +74,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         emptyView = view.findViewById(android.R.id.empty)
         failedView = view.findViewById(R.id.retry)
 
-        if (savedInstanceState == null) {
-            initViews()
-        }
+        initViews()
     }
 
     protected fun handleState() {
