@@ -62,6 +62,7 @@
     <string name="pay_with_google">Pay with Google</string>
 
     <string name="about_version_template">V%1$s</string>
+
     <string name="about_body"><![CDATA[
         Live Wallpaper Album(LWA) contains many popular live wallpaper on the market.
         Most of it downloaded over one million or even tens of millions in the Google Play store.
@@ -77,7 +78,7 @@
 
         When new wallpapers are released, LWA will be updated within 24 hours.<br><br>
 
-        If you have any comments or suggestions, or you need LWA's source code, please e-mail to the developer:
+        If you have any comments or suggestions, or you need LWA\'s source code, please e-mail to the developer:
         <b><a href="mailto:jinkg@live.cn">jinkg@live.cn</a></b><br><br>
 
         <b><a href="http://www.kinglloy.com/">Visit home page</a></b>
