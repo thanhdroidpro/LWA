@@ -171,7 +171,9 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                 .withSelectedItem(-1)
                 .addDrawerItems(
                         ExpandableBadgeDrawerItem().withName(R.string.drawer_item_live_wallpaper)
-                                .withIcon(R.drawable.icon_retry).withIdentifier(1)
+                                .withIcon(R.drawable.ic_drawer_live).withIdentifier(1)
+                                .withIconTintingEnabled(true)
+                                .withIconColorRes(R.color.colorPrimary)
                                 .withSelectable(false).withSubItems(
                                 SecondaryDrawerItem().withName(R.string.drawer_item_need_help)
                                         .withDescription(R.string.drawer_item_need_help_dsc)
@@ -181,7 +183,9 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                                         .withOnDrawerItemClickListener(drawerItemClick)
                         ),
                         ExpandableBadgeDrawerItem().withName(R.string.drawer_item_style_wallpaper_settings)
-                                .withIcon(R.drawable.icon_retry).withIdentifier(2)
+                                .withIcon(R.drawable.ic_drawer_style).withIdentifier(2)
+                                .withIconTintingEnabled(true)
+                                .withIconColorRes(R.color.colorPrimary)
                                 .withSelectable(false).withSubItems(
                                 styleSettingsSwitch.withIdentifier(ID_SWITCH),
                                 styleSettingsSeekBars[0].withIdentifier(ID_BLUR),
@@ -190,7 +194,9 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                         ),
                         DividerDrawerItem(),
                         ExpandableBadgeDrawerItem().withName(R.string.drawer_item_make_me_better)
-                                .withIcon(R.drawable.icon_retry).withIdentifier(3)
+                                .withIcon(R.drawable.ic_drawer_money).withIdentifier(3)
+                                .withIconTintingEnabled(true)
+                                .withIconColorRes(R.color.colorPrimary)
                                 .withSelectable(false).withSubItems(
                                 SecondaryDrawerItem().withName(R.string.drawer_item_see_ad)
                                         .withDescription(R.string.drawer_item_see_ad_dsc)
@@ -208,9 +214,11 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                         DividerDrawerItem(),
                         PrimaryDrawerItem().withName(R.string.drawer_item_about)
                                 .withDescription(R.string.drawer_item_about_dsc)
-                                .withIcon(R.drawable.icon_retry)
+                                .withIcon(R.drawable.ic_drawer_about)
                                 .withIdentifier(ID_ABOUT)
                                 .withSelectable(false)
+                                .withIconTintingEnabled(true)
+                                .withIconColorRes(R.color.colorPrimary)
                                 .withOnDrawerItemClickListener(drawerItemClick))
                 .withSavedInstance(savedInstanceState)
                 .withShowDrawerOnFirstLaunch(true)

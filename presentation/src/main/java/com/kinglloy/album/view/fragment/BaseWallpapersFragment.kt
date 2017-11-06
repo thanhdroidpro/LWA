@@ -310,6 +310,8 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         var thumbnail: ImageView = thumbnailView as ImageView
         var nameView: View = itemView.findViewById(R.id.tvName)
         var tvName: TextView = nameView as TextView
+
+        var icPro: View = itemView.findViewById(R.id.icon_pro)
     }
 
     private val wallpapersAdapter = object : RecyclerView.Adapter<AdvanceViewHolder>() {
@@ -337,6 +339,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
                 holder.downloadOverlayView.visibility = View.GONE
             }
 
+            holder.icPro.visibility = if (item.pro) View.VISIBLE else View.GONE
             holder.tvName.text = item.name
         }
 
