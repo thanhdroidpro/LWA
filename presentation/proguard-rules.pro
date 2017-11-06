@@ -88,3 +88,5 @@
 -dontwarn java.lang.invoke**
 
 -dontwarn kotlin.**
+
+-dontwarn com.mikepenz.fastadapter.**

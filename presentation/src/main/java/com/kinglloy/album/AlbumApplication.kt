@@ -3,7 +3,7 @@ package com.kinglloy.album
 import android.content.Context
 import android.support.multidex.MultiDex
 import android.support.multidex.MultiDexApplication
-import com.facebook.stetho.Stetho
+//import com.facebook.stetho.Stetho
 import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.extensions.DelegatesExt
@@ -40,15 +40,15 @@ class AlbumApplication : MultiDexApplication() {
 
         Analytics.init(this)
 
-        if (BuildConfig.DEMO_MODE) {
-            Stetho.initialize(
-                    Stetho.newInitializerBuilder(this)
-                            .enableDumpapp(
-                                    Stetho.defaultDumperPluginsProvider(this))
-                            .enableWebKitInspector(
-                                    Stetho.defaultInspectorModulesProvider(this))
-                            .build())
-        }
+//        if (BuildConfig.DEMO_MODE) {
+//            Stetho.initialize(
+//                    Stetho.newInitializerBuilder(this)
+//                            .enableDumpapp(
+//                                    Stetho.defaultDumperPluginsProvider(this))
+//                            .enableWebKitInspector(
+//                                    Stetho.defaultInspectorModulesProvider(this))
+//                            .build())
+//        }
     }
 
     private fun initializeInjector() = DaggerApplicationComponent.builder()
