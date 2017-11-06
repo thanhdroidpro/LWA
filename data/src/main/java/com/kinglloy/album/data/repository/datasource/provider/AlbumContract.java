@@ -17,14 +17,15 @@ public class AlbumContract {
 
     public static final Uri BASE_CONTENT_URI = Uri.parse(SCHEME + AUTHORITY);
 
-    private static final String PATH_LIVE_WALLPAPER = "advance_wallpaper";
+    private static final String PATH_LIVE_WALLPAPER = "live_wallpaper";
     private static final String PATH_STYLE_WALLPAPER = "style_wallpaper";
     private static final String PATH_VIDEO_WALLPAPER = "video_wallpaper";
     private static final String PATH_ACTIVE_SERVICE = "active_service";
     private static final String PATH_PREVIEWING_WALLPAPER = "previewing_wallpaper";
     public static final String[] TOP_LEVEL_PATHS = {
             PATH_LIVE_WALLPAPER,
-            PATH_STYLE_WALLPAPER
+            PATH_STYLE_WALLPAPER,
+            PATH_VIDEO_WALLPAPER
     };
 
     interface LiveWallpaperColumns {

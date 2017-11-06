@@ -19,6 +19,16 @@
 
     <style name="Theme.AD" parent="Theme.Album.Base" />
 
+    <style name="Theme.About.Base" parent="Theme.Album.Base">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
+    <style name="Theme.About" parent="Theme.About.Base">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowShowWallpaper">true</item>
+    </style>
+
     <style name="Widget.Album.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox" />
 
     <style name="DefaultAnimation" mce_bogus="1" parent="@android:style/Animation.Activity">

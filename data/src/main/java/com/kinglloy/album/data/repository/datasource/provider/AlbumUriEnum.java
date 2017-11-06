@@ -5,10 +5,10 @@ package com.kinglloy.album.data.repository.datasource.provider;
  */
 
 public enum AlbumUriEnum {
-    ADVANCE_WALLPAPER(100, "advance_wallpaper", AlbumDatabase.Tables.LIVE_WALLPAPER),
-    ADVANCE_WALLPAPER_SELECTED(102, "advance_wallpaper/selected", null),
-    ADVANCE_WALLPAPER_PREVIEWING(103, "advance_wallpaper/previewing", null),
-    ADVANCE_WALLPAPER_ID(101, "advance_wallpaper/*", null),
+    ADVANCE_WALLPAPER(100, "live_wallpaper", AlbumDatabase.Tables.LIVE_WALLPAPER),
+    ADVANCE_WALLPAPER_SELECTED(102, "live_wallpaper/selected", null),
+    ADVANCE_WALLPAPER_PREVIEWING(103, "live_wallpaper/previewing", null),
+    ADVANCE_WALLPAPER_ID(101, "live_wallpaper/*", null),
 
     STYLE_WALLPAPER(300, "style_wallpaper", AlbumDatabase.Tables.STYLE_WALLPAPER),
     STYLE_WALLPAPER_SELECTED(302, "style_wallpaper/selected", null),

@@ -1,6 +1,7 @@
 package com.kinglloy.album.view.activity
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.TabLayout
@@ -10,8 +11,12 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.text.Html
+import com.afollestad.materialdialogs.MaterialDialog
 import com.kinglloy.album.AlbumApplication
 import com.kinglloy.album.R
+import com.kinglloy.album.analytics.Analytics
+import com.kinglloy.album.analytics.Event
 import com.kinglloy.album.data.utils.STYLE_SETTINGS_MAX_BLUR
 import com.kinglloy.album.data.utils.STYLE_SETTINGS_MAX_DIM
 import com.kinglloy.album.data.utils.STYLE_SETTINGS_MAX_GREY
@@ -26,7 +31,10 @@ import com.kinglloy.album.view.fragment.StyleWallpapersFragment
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
 import com.mikepenz.materialdrawer.model.ExpandableBadgeDrawerItem
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import javax.inject.Inject
 
 /**
@@ -45,10 +53,17 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         val SP_NAME = "WallpaperListActivity"
         val SELECT_INDEX_KEY = "select_index"
 
-        val ID_SWITCH = 1000L
-        val ID_BLUR = 1001L
-        val ID_DIM = 1002L
-        val ID_GREY = 1003L
+        val ID_LIVE_PROBLEM = 1000L
+
+        val ID_SWITCH = 2000L
+        val ID_BLUR = 2001L
+        val ID_DIM = 2002L
+        val ID_GREY = 2003L
+
+        val ID_SEE_AD = 3000L
+        val ID_DONATE = 3001L
+
+        val ID_ABOUT = 4000L
     }
 
     @Inject
@@ -77,7 +92,7 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         }
     }
 
-    private val styleSettingsSwitch = MySecondarySwitchDrawerItem().withName("Apply Style Effect")
+    private val styleSettingsSwitch = MySecondarySwitchDrawerItem().withName(R.string.drawer_item_apply_style_effect)
             .withLevel(2)
             .withChecked(true)
             .withSelectable(false)
@@ -85,17 +100,17 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
 
     private val styleSettingsSeekBars =
             arrayOf(
-                    SecondarySeekDrawerItem().withName("Blur")
+                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_blur)
                             .withLevel(3)
                             .withMax(STYLE_SETTINGS_MAX_BLUR)
                             .withSelectable(false)
                             .withOnSeekBarChangeListener(onProgressChangedListener),
-                    SecondarySeekDrawerItem().withName("Dim")
+                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_dim)
                             .withLevel(3)
                             .withMax(STYLE_SETTINGS_MAX_DIM)
                             .withSelectable(false)
                             .withOnSeekBarChangeListener(onProgressChangedListener),
-                    SecondarySeekDrawerItem().withName("Grey")
+                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_grey)
                             .withLevel(3)
                             .withMax(STYLE_SETTINGS_MAX_GREY)
                             .withSelectable(false)
@@ -155,14 +170,48 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                 .withHeader(R.layout.layout_drawer_header)
                 .withSelectedItem(-1)
                 .addDrawerItems(
-                        ExpandableBadgeDrawerItem().withName("Style Settings")
+                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_live_wallpaper)
                                 .withIcon(R.drawable.icon_retry).withIdentifier(1)
+                                .withSelectable(false).withSubItems(
+                                SecondaryDrawerItem().withName(R.string.drawer_item_need_help)
+                                        .withDescription(R.string.drawer_item_need_help_dsc)
+                                        .withSelectable(false)
+                                        .withIdentifier(ID_LIVE_PROBLEM)
+                                        .withLevel(2)
+                                        .withOnDrawerItemClickListener(drawerItemClick)
+                        ),
+                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_style_wallpaper_settings)
+                                .withIcon(R.drawable.icon_retry).withIdentifier(2)
                                 .withSelectable(false).withSubItems(
                                 styleSettingsSwitch.withIdentifier(ID_SWITCH),
                                 styleSettingsSeekBars[0].withIdentifier(ID_BLUR),
                                 styleSettingsSeekBars[1].withIdentifier(ID_DIM),
                                 styleSettingsSeekBars[2].withIdentifier(ID_GREY)
-                        ))
+                        ),
+                        DividerDrawerItem(),
+                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_make_me_better)
+                                .withIcon(R.drawable.icon_retry).withIdentifier(3)
+                                .withSelectable(false).withSubItems(
+                                SecondaryDrawerItem().withName(R.string.drawer_item_see_ad)
+                                        .withDescription(R.string.drawer_item_see_ad_dsc)
+                                        .withSelectable(false)
+                                        .withIdentifier(ID_SEE_AD)
+                                        .withLevel(2)
+                                        .withOnDrawerItemClickListener(drawerItemClick),
+                                SecondaryDrawerItem().withName(R.string.drawer_item_donate)
+                                        .withDescription(R.string.drawer_item_donate_dsc)
+                                        .withSelectable(false)
+                                        .withIdentifier(ID_DONATE)
+                                        .withLevel(2)
+                                        .withOnDrawerItemClickListener(drawerItemClick)
+                        ),
+                        DividerDrawerItem(),
+                        PrimaryDrawerItem().withName(R.string.drawer_item_about)
+                                .withDescription(R.string.drawer_item_about_dsc)
+                                .withIcon(R.drawable.icon_retry)
+                                .withIdentifier(ID_ABOUT)
+                                .withSelectable(false)
+                                .withOnDrawerItemClickListener(drawerItemClick))
                 .withSavedInstance(savedInstanceState)
                 .withShowDrawerOnFirstLaunch(true)
                 .build()
@@ -185,6 +234,34 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         }
     }
 
+    private val drawerItemClick = Drawer.OnDrawerItemClickListener { _, _, drawerItem ->
+        when (drawerItem.identifier) {
+            ID_SEE_AD -> {
+                Analytics.logEvent(this, Event.OPEN_AD_ACTIVITY)
+                startActivity(Intent(this@WallpaperListActivityV2,
+                        ADActivity::class.java))
+            }
+            ID_DONATE -> {
+
+            }
+            ID_LIVE_PROBLEM -> {
+                val dialogBuilder = MaterialDialog.Builder(this)
+                        .iconRes(R.drawable.advance_wallpaper_msg)
+                        .title(R.string.hint)
+                        .content(Html.fromHtml(getString(R.string.advance_hint)))
+                        .positiveText(R.string.confirm)
+
+                dialogBuilder.build().show()
+            }
+            ID_ABOUT -> {
+                startActivity(Intent(this@WallpaperListActivityV2,
+                        AboutActivity::class.java))
+            }
+
+        }
+        return@OnDrawerItemClickListener true
+    }
+
 
     private inner class WallpaperTypesAdapter(fragmentManager: FragmentManager)
         : FragmentPagerAdapter(fragmentManager) {
@@ -194,7 +271,7 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
             else -> StyleWallpapersFragment()
         }
 
-        override fun getCount() = 2
+        override fun getCount() = titleArray.size
 
         override fun getPageTitle(position: Int): CharSequence = getString(titleArray[position])
     }

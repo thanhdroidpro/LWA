@@ -65,9 +65,9 @@ abstract class AbstractSeekDrawerItem<Item : AbstractSeekDrawerItem<Item>>
         bindViewHelper(viewHolder)
 
         viewHolder.seekBar.setOnSeekBarChangeListener(null)
+        viewHolder.seekBar.max = maxProgress
         viewHolder.seekBar.progress = currentProgress
         viewHolder.seekBar.isEnabled = seekEnable
-        viewHolder.seekBar.max = maxProgress
         viewHolder.seekBar.setOnSeekBarChangeListener(this)
 
         withOnDrawerItemClickListener { _, _, _ ->
