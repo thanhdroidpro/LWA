@@ -31,8 +31,7 @@
 
         <activity
             android:name=".view.activity.WallpaperListActivityV2"
-            android:theme="@style/Theme.WallpaperList">
-        </activity>
+            android:theme="@style/Theme.WallpaperList"></activity>
         <activity
             android:name=".view.activity.MainActivity"
             android:theme="@style/Theme.MainActivity" />
@@ -77,6 +76,9 @@
                 android:resource="@xml/wallpaper" />
         </service>
 
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
     </application>
 
 </manifest>

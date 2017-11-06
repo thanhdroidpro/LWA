@@ -99,6 +99,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-common:${ANKO_VESION}"
 
     implementation "com.google.android.gms:play-services-base:${FIRE_BASE_VERSION}"
+    implementation "com.google.android.gms:play-services-wallet:${FIRE_BASE_VERSION}"
     implementation "com.google.firebase:firebase-core:${FIRE_BASE_VERSION}"
     implementation "com.google.firebase:firebase-crash:${FIRE_BASE_VERSION}"
     implementation "com.google.firebase:firebase-ads:${FIRE_BASE_VERSION}"

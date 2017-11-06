@@ -2,6 +2,7 @@ package com.kinglloy.album.view.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.TabLayout
@@ -12,6 +13,7 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.text.Html
+import android.view.View
 import com.afollestad.materialdialogs.MaterialDialog
 import com.kinglloy.album.AlbumApplication
 import com.kinglloy.album.R
@@ -246,11 +248,19 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         when (drawerItem.identifier) {
             ID_SEE_AD -> {
                 Analytics.logEvent(this, Event.OPEN_AD_ACTIVITY)
-                startActivity(Intent(this@WallpaperListActivityV2,
+                startActivity(Intent(this,
                         ADActivity::class.java))
             }
             ID_DONATE -> {
+                val dialog = MaterialDialog.Builder(this)
+                        .iconRes(R.drawable.ic_money_white)
+                        .title(getString(R.string.string_donate))
+                        .customView(R.layout.layout_payment_selection, false).build()
 
+                dialog.findViewById(R.id.alipay).setOnClickListener(onPayClick)
+                dialog.findViewById(R.id.google_pay).setOnClickListener(onPayClick)
+
+                dialog.show()
             }
             ID_LIVE_PROBLEM -> {
                 val dialogBuilder = MaterialDialog.Builder(this)
@@ -262,7 +272,7 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                 dialogBuilder.build().show()
             }
             ID_ABOUT -> {
-                startActivity(Intent(this@WallpaperListActivityV2,
+                startActivity(Intent(this,
                         AboutActivity::class.java))
             }
 
@@ -270,6 +280,11 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         return@OnDrawerItemClickListener true
     }
 
+    private val onPayClick = View.OnClickListener { view ->
+        when (view.id) {
+
+        }
+    }
 
     private inner class WallpaperTypesAdapter(fragmentManager: FragmentManager)
         : FragmentPagerAdapter(fragmentManager) {

@@ -48,6 +48,18 @@
         <item name="android:drawableStart">@drawable/icon_retry</item>
     </style>
 
+    <style name="Widget.Album.Button.Pay" parent="Widget.Album.Button.Base">
+        <item name="android:drawablePadding">10dp</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/text_size_large</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="Widget.Album.Text.Base" parent="" />
 
     <style name="Widget.Album.Text.Prompt" parent="Widget.Album.Text.Base">

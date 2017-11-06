@@ -57,6 +57,10 @@
     <string name="app_context_description">A album with a lot of living videoWallpapers.</string>
     <string name="app_context_uri">http://www.kinglloy.com/</string>
 
+    <string name="string_donate">Donate</string>
+    <string name="pay_with_alipay">Pay with Alipay</string>
+    <string name="pay_with_google">Pay with Google</string>
+
     <string name="about_version_template">V%1$s</string>
     <string name="about_body"><![CDATA[
         Live Wallpaper Album(LWA) contains many popular live wallpaper on the market.
