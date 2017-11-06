@@ -125,7 +125,7 @@ android.applicationVariants.all { variant ->
     variant.outputs.all {
         def flavor = variant.productFlavors[0].name
 
-        outputFileName = "${flavor}-LWA-${CHANNEL}.apk"
+        outputFileName = "${flavor}-LWA-${CHANNEL}-${APP_VERSION_NAME}.apk"
     }
 }
 
