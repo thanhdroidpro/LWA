@@ -31,7 +31,7 @@
 
         <activity
             android:name=".view.activity.WallpaperListActivityV2"
-            android:theme="@style/Theme.WallpaperList"></activity>
+            android:theme="@style/Theme.WallpaperList" />
         <activity
             android:name=".view.activity.MainActivity"
             android:theme="@style/Theme.MainActivity" />
@@ -51,6 +51,10 @@
             android:label="@string/about"
             android:parentActivityName=".view.activity.WallpaperListActivityV2"
             android:theme="@style/Theme.About" />
+
+        <activity
+            android:name=".view.activity.PayActivity"
+            android:theme="@style/Theme.Pay" />
 
         <service
             android:name=".AlbumWallpaperService"

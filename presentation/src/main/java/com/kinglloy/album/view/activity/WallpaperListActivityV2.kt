@@ -282,7 +282,10 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
 
     private val onPayClick = View.OnClickListener { view ->
         when (view.id) {
-
+            R.id.google_pay ->
+                PayActivity.payWithGoogle(this)
+            R.id.alipay ->
+                PayActivity.payWithAlipay(this)
         }
     }
 

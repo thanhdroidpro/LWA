@@ -29,6 +29,8 @@
         <item name="android:windowShowWallpaper">true</item>
     </style>
 
+    <style name="Theme.Pay" parent="Theme.Album.Base" />
+
     <style name="Widget.Album.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox" />
 
     <style name="DefaultAnimation" mce_bogus="1" parent="@android:style/Animation.Activity">
