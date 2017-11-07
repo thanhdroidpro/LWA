@@ -83,7 +83,7 @@ class WallpaperListPresenter
                 GetWallpapers.Params.withType(wallpaperType))
     }
 
-    fun loadAdvanceWallpaper(type: WallpaperType) {
+    fun loadWallpapers(type: WallpaperType) {
         view?.showLoading()
         loadWallpaper.execute(object : DefaultObserver<List<Wallpaper>>() {
             override fun onNext(needDownload: List<Wallpaper>) {

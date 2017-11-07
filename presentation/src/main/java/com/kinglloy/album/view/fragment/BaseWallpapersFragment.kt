@@ -81,7 +81,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         when (loadState) {
             WallpaperListActivity.LOAD_STATE_NORMAL -> presenter.initialize(getWallpaperType())
             WallpaperListActivity.LOAD_STATE_LOADING ->
-                presenter.loadAdvanceWallpaper(getWallpaperType())
+                presenter.loadWallpapers(getWallpaperType())
             WallpaperListActivity.LOAD_STATE_RETRY -> showRetry()
         }
     }
@@ -101,11 +101,11 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         wallpaperList.layoutManager = gridLayoutManager
 
         btnLoadAdvanceWallpaper.setOnClickListener {
-            presenter.loadAdvanceWallpaper(getWallpaperType())
+            presenter.loadWallpapers(getWallpaperType())
             Analytics.logEvent(activity!!, Event.LOAD_ADVANCES)
         }
         btnRetry.setOnClickListener {
-            presenter.loadAdvanceWallpaper(getWallpaperType())
+            presenter.loadWallpapers(getWallpaperType())
             Analytics.logEvent(activity!!, Event.RETRY_LOAD_ADVANCES)
         }
 
