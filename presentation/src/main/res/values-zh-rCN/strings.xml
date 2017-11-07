@@ -62,6 +62,7 @@
     <string name="string_donate">捐赠</string>
     <string name="pay_with_alipay">支付宝支付</string>
     <string name="pay_with_google">谷歌支付</string>
+    <string name="google_pay_not_support">你的设备不支持谷歌支付，请切换其他支付方式。</string>
 
     <string name="about_version_template">V%1$s</string>
     <string name="about_body"><![CDATA[

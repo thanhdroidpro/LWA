@@ -2,7 +2,6 @@ package com.kinglloy.album.view.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.TabLayout
@@ -205,13 +204,13 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                                         .withSelectable(false)
                                         .withIdentifier(ID_SEE_AD)
                                         .withLevel(2)
-                                        .withOnDrawerItemClickListener(drawerItemClick),
-                                SecondaryDrawerItem().withName(R.string.drawer_item_donate)
-                                        .withDescription(R.string.drawer_item_donate_dsc)
-                                        .withSelectable(false)
-                                        .withIdentifier(ID_DONATE)
-                                        .withLevel(2)
                                         .withOnDrawerItemClickListener(drawerItemClick)
+//                                ,SecondaryDrawerItem().withName(R.string.drawer_item_donate)
+//                                        .withDescription(R.string.drawer_item_donate_dsc)
+//                                        .withSelectable(false)
+//                                        .withIdentifier(ID_DONATE)
+//                                        .withLevel(2)
+//                                        .withOnDrawerItemClickListener(drawerItemClick)
                         ),
                         DividerDrawerItem(),
                         PrimaryDrawerItem().withName(R.string.drawer_item_about)
@@ -252,15 +251,15 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                         ADActivity::class.java))
             }
             ID_DONATE -> {
-                val dialog = MaterialDialog.Builder(this)
-                        .iconRes(R.drawable.ic_money_white)
-                        .title(getString(R.string.string_donate))
-                        .customView(R.layout.layout_payment_selection, false).build()
-
-                dialog.findViewById(R.id.alipay).setOnClickListener(onPayClick)
-                dialog.findViewById(R.id.google_pay).setOnClickListener(onPayClick)
-
-                dialog.show()
+//                val dialog = MaterialDialog.Builder(this)
+//                        .iconRes(R.drawable.ic_money_white)
+//                        .title(getString(R.string.string_donate))
+//                        .customView(R.layout.layout_payment_selection, false).build()
+//
+//                dialog.findViewById(R.id.alipay).setOnClickListener(onPayClick)
+//                dialog.findViewById(R.id.google_pay).setOnClickListener(onPayClick)
+//
+//                dialog.show()
             }
             ID_LIVE_PROBLEM -> {
                 val dialogBuilder = MaterialDialog.Builder(this)

@@ -5,7 +5,7 @@
     <string name="app_description">@string/app_name</string>
 
     <string name="advance_empty_load">Load videoWallpapers</string>
-    <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the videoWallpapers from server.</string>
+    <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the wallpapers from server.</string>
 
     <string name="advance_retry">Retry</string>
     <string name="advance_review">Watch again and click</string>
@@ -60,6 +60,7 @@
     <string name="string_donate">Donate</string>
     <string name="pay_with_alipay">Pay with Alipay</string>
     <string name="pay_with_google">Pay with Google</string>
+    <string name="google_pay_not_support">Your device not support google pay, Please switch to other payment method.</string>
 
     <string name="about_version_template">V%1$s</string>
 
@@ -113,6 +114,7 @@
     <string name="advance_banner_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/6618696822</string>
     <string name="advance_inter_ad_unit_id" translatable="false"> ca-app-pub-8153753100171943/6486178348</string>
     <string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/3858825636</string>
+
     <!--for test-->
     <!--<string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
 </resources>
