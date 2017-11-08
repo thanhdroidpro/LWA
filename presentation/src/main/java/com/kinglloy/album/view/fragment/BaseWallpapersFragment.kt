@@ -100,6 +100,21 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.pause()
+    }
+
+    override fun onDestroy() {
+        presenter.destroy()
+        super.onDestroy()
+    }
+
     private fun initViews() {
         val itemAnimator = DefaultItemAnimator()
         itemAnimator.supportsChangeAnimations = false
