@@ -15,6 +15,7 @@ public class WallpaperFileHelper {
 
     public static final String LIVE_WALLPAPER_FOLDER = "component";
     public static final String STYLE_WALLPAPER_FOLDER = "style_wallpaper";
+    public static final String VIEDO_WALLPAPER_FOLDER = "video_wallpaper";
 
     public static void deleteOldLiveComponent(Context context, Set<String> excludeNames) {
         File dir = getLiveWallpaperDir(context);
@@ -23,6 +24,11 @@ public class WallpaperFileHelper {
 
     public static void deleteOldStyleWallpaper(Context context, Set<String> excludeNames) {
         File dir = getStyleWallpaperDir(context);
+        deleteFiles(context, dir, excludeNames);
+    }
+
+    public static void deleteOldVideoWallpaper(Context context, Set<String> excludeNames) {
+        File dir = getVideoWallpaperDir(context);
         deleteFiles(context, dir, excludeNames);
     }
 
@@ -62,7 +68,11 @@ public class WallpaperFileHelper {
         return new File(context.getFilesDir(), STYLE_WALLPAPER_FOLDER);
     }
 
-    public static boolean isNeedDownloadLiveComponent(boolean lazy, String storePath) {
+    public static File getVideoWallpaperDir(Context context) {
+        return new File(context.getFilesDir(), VIEDO_WALLPAPER_FOLDER);
+    }
+
+    public static boolean isNeedDownloadWallpaper(boolean lazy, String storePath) {
         return !new File(storePath).exists();
     }
 }

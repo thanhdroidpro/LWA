@@ -92,7 +92,7 @@ class MainWallpaperListPresenter
     }
 
     fun previewWallpaper(item: WallpaperItem, type: WallpaperType) {
-        if (WallpaperFileHelper.isNeedDownloadLiveComponent(item.lazyDownload,
+        if (WallpaperFileHelper.isNeedDownloadWallpaper(item.lazyDownload,
                 item.storePath) || (downloadingWallpaper != null
                 && TextUtils.equals(downloadingWallpaper!!.wallpaperId, item.wallpaperId))) {
             view?.showDownloadHintDialog(item)

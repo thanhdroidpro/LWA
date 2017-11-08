@@ -30,14 +30,6 @@ class StyleWallpaperDataStoreImpl(private val context: Context,
         throw UnsupportedOperationException("Style wallpaper data store not support preview.")
     }
 
-    override fun cancelPreviewing(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun cancelSelect(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
         throw UnsupportedOperationException("Style wallpaper data store not support preview.")
     }
@@ -98,17 +90,5 @@ class StyleWallpaperDataStoreImpl(private val context: Context,
             emitter.onNext(validWallpapers)
             emitter.onComplete()
         }
-    }
-
-    private fun buildDefaultWallpaper(): WallpaperEntity {
-        val entity = WallpaperEntity()
-        entity.isDefault = true
-        entity.id = -1
-        entity.wallpaperId = LiveWallpaperDataStoreImpl.DEFAULT_WALLPAPER_ID
-        entity.author = "Yalin"
-        entity.link = "kinglloy.com"
-        entity.name = "Rainbow"
-
-        return entity
     }
 }

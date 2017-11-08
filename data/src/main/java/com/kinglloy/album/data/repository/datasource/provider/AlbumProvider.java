@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import com.kinglloy.album.data.log.LogUtil;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.LiveWallpaper;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.StyleWallpaper;
+import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.VideoWallpaper;
 import com.kinglloy.album.data.utils.SelectionBuilder;
 
 import java.util.ArrayList;
@@ -80,14 +81,18 @@ public class AlbumProvider extends ContentProvider {
                 + Arrays.toString(selectionArgs) + ")");
 
         switch (uriEnum) {
-            case ADVANCE_WALLPAPER:
-            case ADVANCE_WALLPAPER_ID:
-            case ADVANCE_WALLPAPER_SELECTED:
-            case ADVANCE_WALLPAPER_PREVIEWING:
+            case LIVE_WALLPAPER:
+            case LIVE_WALLPAPER_ID:
+            case LIVE_WALLPAPER_SELECTED:
+            case LIVE_WALLPAPER_PREVIEWING:
             case STYLE_WALLPAPER:
             case STYLE_WALLPAPER_ID:
             case STYLE_WALLPAPER_SELECTED:
             case STYLE_WALLPAPER_PREVIEWING:
+            case VIDEO_WALLPAPER:
+            case VIDEO_WALLPAPER_ID:
+            case VIDEO_WALLPAPER_SELECTED:
+            case VIDEO_WALLPAPER_PREVIEWING:
             case ACTIVE_SERVICE:
             case PREVIEWING_WALLPAPER: {
                 final SelectionBuilder builder = buildSimpleSelection(uri);
@@ -118,13 +123,17 @@ public class AlbumProvider extends ContentProvider {
         long id = db.insertOrThrow(uriEnum.table, null, values);
 
         switch (uriEnum) {
-            case ADVANCE_WALLPAPER: {
+            case LIVE_WALLPAPER: {
                 return LiveWallpaper.buildWallpaperUri(
                         values.getAsString(LiveWallpaper.COLUMN_NAME_WALLPAPER_ID));
             }
             case STYLE_WALLPAPER: {
                 return StyleWallpaper.buildWallpaperUri(
                         values.getAsString(StyleWallpaper.COLUMN_NAME_WALLPAPER_ID));
+            }
+            case VIDEO_WALLPAPER: {
+                return VideoWallpaper.buildWallpaperUri(
+                        values.getAsString(VideoWallpaper.COLUMN_NAME_WALLPAPER_ID));
             }
             default: {
                 throw new UnsupportedOperationException("Unknown insert uri: " + uri);
@@ -143,12 +152,16 @@ public class AlbumProvider extends ContentProvider {
         AlbumUriEnum uriEnum = mUriMatcher.matchUri(uri);
         final SelectionBuilder builder = buildSimpleSelection(uri);
         switch (uriEnum) {
-            case ADVANCE_WALLPAPER: {
+            case LIVE_WALLPAPER: {
                 builder.where(LiveWallpaper.COLUMN_NAME_SELECTED + " = ?", "0");
                 break;
             }
             case STYLE_WALLPAPER: {
                 builder.where(StyleWallpaper.COLUMN_NAME_SELECTED + " = ?", "0");
+                break;
+            }
+            case VIDEO_WALLPAPER: {
+                builder.where(VideoWallpaper.COLUMN_NAME_SELECTED + " = ?", "0");
                 break;
             }
         }
@@ -173,37 +186,52 @@ public class AlbumProvider extends ContentProvider {
         AlbumUriEnum uriEnum = mUriMatcher.matchUri(uri);
 
         switch (uriEnum) {
-            case ADVANCE_WALLPAPER:
+            case LIVE_WALLPAPER:
             case STYLE_WALLPAPER:
+            case VIDEO_WALLPAPER:
             case ACTIVE_SERVICE:
             case PREVIEWING_WALLPAPER: {
                 return builder.table(uriEnum.table);
             }
-            case ADVANCE_WALLPAPER_ID: {
+            case LIVE_WALLPAPER_ID: {
                 String wallpaperId = LiveWallpaper.getWallpaperId(uri);
                 return builder.table(AlbumDatabase.Tables.LIVE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_WALLPAPER_ID + " = ?", wallpaperId);
             }
-            case ADVANCE_WALLPAPER_SELECTED: {
+            case LIVE_WALLPAPER_SELECTED: {
                 return builder.table(AlbumDatabase.Tables.LIVE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_SELECTED + " = ?", String.valueOf(1));
             }
-            case ADVANCE_WALLPAPER_PREVIEWING: {
+            case LIVE_WALLPAPER_PREVIEWING: {
                 return builder.table(AlbumDatabase.Tables.LIVE_WALLPAPER)
                         .where(LiveWallpaper.COLUMN_NAME_PREVIEWING + " = ?", String.valueOf(1));
             }
             case STYLE_WALLPAPER_ID: {
                 String wallpaperId = StyleWallpaper.getWallpaperId(uri);
                 return builder.table(AlbumDatabase.Tables.STYLE_WALLPAPER)
-                        .where(LiveWallpaper.COLUMN_NAME_WALLPAPER_ID + " = ?", wallpaperId);
+                        .where(StyleWallpaper.COLUMN_NAME_WALLPAPER_ID + " = ?", wallpaperId);
             }
             case STYLE_WALLPAPER_SELECTED: {
                 return builder.table(AlbumDatabase.Tables.STYLE_WALLPAPER)
-                        .where(LiveWallpaper.COLUMN_NAME_SELECTED + " = ?", String.valueOf(1));
+                        .where(StyleWallpaper.COLUMN_NAME_SELECTED + " = ?", String.valueOf(1));
             }
             case STYLE_WALLPAPER_PREVIEWING: {
                 return builder.table(AlbumDatabase.Tables.STYLE_WALLPAPER)
-                        .where(LiveWallpaper.COLUMN_NAME_PREVIEWING + " = ?", String.valueOf(1));
+                        .where(StyleWallpaper.COLUMN_NAME_PREVIEWING + " = ?", String.valueOf(1));
+            }
+            case VIDEO_WALLPAPER_ID: {
+                String wallpaperId = VideoWallpaper.getWallpaperId(uri);
+                return builder.table(AlbumDatabase.Tables.VIDEO_WALLPAPER)
+                        .where(VideoWallpaper.COLUMN_NAME_WALLPAPER_ID + " = ?", wallpaperId);
+            }
+
+            case VIDEO_WALLPAPER_SELECTED: {
+                return builder.table(AlbumDatabase.Tables.VIDEO_WALLPAPER)
+                        .where(VideoWallpaper.COLUMN_NAME_SELECTED + " = ?", String.valueOf(1));
+            }
+            case VIDEO_WALLPAPER_PREVIEWING: {
+                return builder.table(AlbumDatabase.Tables.VIDEO_WALLPAPER)
+                        .where(VideoWallpaper.COLUMN_NAME_PREVIEWING + " = ?", String.valueOf(1));
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri for " + uri);

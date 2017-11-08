@@ -13,6 +13,7 @@ import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.Acti
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.LiveWallpaper;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.PreviewingWallpaper;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.StyleWallpaper;
+import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.VideoWallpaper;
 import com.kinglloy.album.data.repository.datasource.sync.account.Account;
 import com.kinglloy.album.domain.WallpaperType;
 
@@ -36,6 +37,7 @@ public class AlbumDatabase extends SQLiteOpenHelper {
     interface Tables {
         String LIVE_WALLPAPER = LiveWallpaper.TABLE_NAME;
         String STYLE_WALLPAPER = StyleWallpaper.TABLE_NAME;
+        String VIDEO_WALLPAPER = VideoWallpaper.TABLE_NAME;
         String ACTIVE_SERVICE = ActiveService.TABLE_NAME;
         String PREVIEWING_WALLPAPER = PreviewingWallpaper.TABLE_NAME;
     }
@@ -92,6 +94,8 @@ public class AlbumDatabase extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + Tables.LIVE_WALLPAPER);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.ACTIVE_SERVICE);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.STYLE_WALLPAPER);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.VIDEO_WALLPAPER);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.PREVIEWING_WALLPAPER);
             onCreate(db);
             version = CUR_DATABASE_VERSION;
         }
@@ -119,6 +123,20 @@ public class AlbumDatabase extends SQLiteOpenHelper {
                 + StyleWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0,"
                 + StyleWallpaper.COLUMN_NAME_SIZE + " INTEGER DEFAULT 0,"
                 + StyleWallpaper.COLUMN_NAME_PRO + " INTEGER DEFAULT 0);");
+
+        db.execSQL("CREATE TABLE " + Tables.VIDEO_WALLPAPER + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + VideoWallpaper.COLUMN_NAME_WALLPAPER_ID + " TEXT,"
+                + VideoWallpaper.COLUMN_NAME_ICON_URL + " TEXT,"
+                + VideoWallpaper.COLUMN_NAME_DOWNLOAD_URL + " TEXT,"
+                + VideoWallpaper.COLUMN_NAME_NAME + " TEXT,"
+                + VideoWallpaper.COLUMN_NAME_STORE_PATH + " TEXT,"
+                + VideoWallpaper.COLUMN_NAME_CHECKSUM + " TEXT,"
+                + VideoWallpaper.COLUMN_NAME_SELECTED + " INTEGER DEFAULT 0,"
+                + VideoWallpaper.COLUMN_NAME_PREVIEWING + " INTEGER NOT NULL DEFAULT 0,"
+                + VideoWallpaper.COLUMN_NAME_PRICE + " REAL DEFAULT 0,"
+                + VideoWallpaper.COLUMN_NAME_SIZE + " INTEGER DEFAULT 0,"
+                + VideoWallpaper.COLUMN_NAME_PRO + " INTEGER DEFAULT 0);");
 
         db.execSQL("ALTER TABLE " + Tables.LIVE_WALLPAPER
                 + " ADD COLUMN " + LiveWallpaper.COLUMN_NAME_SIZE + " INTEGER DEFAULT 0");

@@ -162,16 +162,8 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
         }
     }
 
-    override fun cancelPreviewing(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun cancelSelect(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Manager wallpaper data store not support download.")
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {

@@ -2,8 +2,10 @@ package com.kinglloy.album.view.fragment
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.GridLayoutManager
@@ -54,6 +56,9 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     private lateinit var emptyView: View
     private lateinit var failedView: View
 
+    private lateinit var proBackground: Drawable
+    private lateinit var normalBackground: Drawable
+
     @Inject
     lateinit internal var presenter: WallpaperListPresenter
 
@@ -73,6 +78,9 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         loadingView = view.findViewById(R.id.loading)
         emptyView = view.findViewById(android.R.id.empty)
         failedView = view.findViewById(R.id.retry)
+
+        proBackground = ContextCompat.getDrawable(activity!!, R.drawable.pro_wallpaper_gradient)!!
+        normalBackground = ColorDrawable(ContextCompat.getColor(activity!!, R.color.color_name_bg))
 
         initViews()
     }
@@ -304,9 +312,9 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var checkedOverlayView: View = itemView.findViewById(R.id.checked_overlay)
         var downloadOverlayView: View = itemView.findViewById(R.id.download_overlay)
-        var thumbnailView: View = itemView.findViewById(R.id.thumbnail)
+        private var thumbnailView: View = itemView.findViewById(R.id.thumbnail)
         var thumbnail: ImageView = thumbnailView as ImageView
-        var nameView: View = itemView.findViewById(R.id.tvName)
+        private var nameView: View = itemView.findViewById(R.id.tvName)
         var tvName: TextView = nameView as TextView
 
         var icPro: View = itemView.findViewById(R.id.icon_pro)
@@ -329,7 +337,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
                 holder.checkedOverlayView.visibility = View.GONE
             }
             val downloadingItem = presenter.getDownloadingItem()
-            if (WallpaperFileHelper.isNeedDownloadLiveComponent(item.lazyDownload,
+            if (WallpaperFileHelper.isNeedDownloadWallpaper(item.lazyDownload,
                     item.storePath) || (downloadingItem != null
                     && TextUtils.equals(downloadingItem.wallpaperId, item.wallpaperId))) {
                 holder.downloadOverlayView.visibility = View.VISIBLE
@@ -337,6 +345,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
                 holder.downloadOverlayView.visibility = View.GONE
             }
 
+            holder.tvName.background = if (item.pro) proBackground else normalBackground
             holder.icPro.visibility = if (item.pro) View.VISIBLE else View.GONE
             holder.tvName.text = item.name
         }

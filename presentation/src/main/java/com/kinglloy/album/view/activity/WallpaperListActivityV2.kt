@@ -29,6 +29,7 @@ import com.kinglloy.album.view.component.OnProgressChangedListener
 import com.kinglloy.album.view.component.SecondarySeekDrawerItem
 import com.kinglloy.album.view.fragment.LiveWallpapersFragment
 import com.kinglloy.album.view.fragment.StyleWallpapersFragment
+import com.kinglloy.album.view.fragment.VideoWallpapersFragment
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.interfaces.OnCheckedChangeListener
@@ -46,7 +47,7 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
 
     companion object {
         val titleArray: IntArray = intArrayOf(
-//                R.string.video_type_title,
+                R.string.video_type_title,
                 R.string.live_type_title,
                 R.string.style_type_title
         )
@@ -291,8 +292,8 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
     private inner class WallpaperTypesAdapter(fragmentManager: FragmentManager)
         : FragmentPagerAdapter(fragmentManager) {
         override fun getItem(position: Int): Fragment = when (position) {
-//            0 -> VideoWallpapersFragment()
-            0 -> LiveWallpapersFragment()
+            0 -> VideoWallpapersFragment()
+            1 -> LiveWallpapersFragment()
             else -> StyleWallpapersFragment()
         }
 

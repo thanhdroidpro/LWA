@@ -16,8 +16,6 @@ interface WallpaperDataStore {
 
     fun selectPreviewingWallpaper(): Observable<Boolean>
     fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean>
-    fun cancelPreviewing(): Observable<Boolean>
-    fun cancelSelect(): Observable<Boolean>
 
     fun downloadWallpaper(wallpaperId: String): Observable<Long>
 

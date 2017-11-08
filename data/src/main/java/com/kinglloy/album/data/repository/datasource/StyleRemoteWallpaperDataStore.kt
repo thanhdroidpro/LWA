@@ -38,7 +38,7 @@ class StyleRemoteWallpaperDataStore(val context: Context,
     private val wallpaperHandler = StyleWallpaperHandler(context, WallpaperEntityMapper())
 
     override fun getPreviewWallpaperEntity(): WallpaperEntity {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Remote style wallpaper data store not support get preview.")
     }
 
     override fun getWallpaperEntities(): Observable<List<WallpaperEntity>> {
@@ -55,9 +55,8 @@ class StyleRemoteWallpaperDataStore(val context: Context,
             try {
                 val wallpapers = RemoteStyleWallpaperFetcher(context).fetchDataIfNewer()
                 val parser = JsonParser()
-                val handler = StyleWallpaperHandler(context, WallpaperEntityMapper())
-                handler.process(parser.parse(wallpapers))
-                handler.makeContentProviderOperations(batch)
+                wallpaperHandler.process(parser.parse(wallpapers))
+                wallpaperHandler.makeContentProviderOperations(batch)
             } catch (e: Exception) {
                 emitter.onError(RemoteServerException())
                 return@create
@@ -99,19 +98,11 @@ class StyleRemoteWallpaperDataStore(val context: Context,
     }
 
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Remote style wallpaper data store not support select preview.")
     }
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun cancelPreviewing(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun cancelSelect(): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Remote style wallpaper data store not support preview.")
     }
 
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
@@ -135,11 +126,11 @@ class StyleRemoteWallpaperDataStore(val context: Context,
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Remote style wallpaper data store not support active service.")
     }
 
     override fun getActiveService(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Remote style wallpaper data store not support get active service.")
     }
 
 }

@@ -165,6 +165,30 @@ public class WallpaperEntity {
 
     public static WallpaperEntity videoWallpaperValue(Cursor cursor) {
         WallpaperEntity wallpaperEntity = new WallpaperEntity();
+        wallpaperEntity.id = cursor.getInt(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper._ID));
+        wallpaperEntity.name = cursor.getString(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_NAME));
+        wallpaperEntity.wallpaperId = cursor.getString(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_WALLPAPER_ID));
+        wallpaperEntity.iconUrl = cursor.getString(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_ICON_URL));
+        wallpaperEntity.downloadUrl = cursor.getString(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_DOWNLOAD_URL));
+        wallpaperEntity.checkSum = cursor.getString(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_CHECKSUM));
+        wallpaperEntity.storePath = cursor.getString(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_STORE_PATH));
+        wallpaperEntity.isSelected = cursor.getInt(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_SELECTED)) == 1;
+        wallpaperEntity.isPreviewing = cursor.getInt(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_PREVIEWING)) == 1;
+        wallpaperEntity.size = cursor.getLong(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_SIZE));
+        wallpaperEntity.price = cursor.getFloat(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_PRICE));
+        wallpaperEntity.pro = cursor.getInt(cursor.getColumnIndex(
+                AlbumContract.VideoWallpaper.COLUMN_NAME_PRO)) == 1;
 
         wallpaperEntity.type = WallpaperType.VIDEO;
 

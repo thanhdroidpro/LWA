@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|start"
-            android:background="#8666"
+            android:background="@color/color_name_bg"
             android:paddingBottom="@dimen/advance_name_top_margin"
             android:paddingEnd="@dimen/advance_name_margin"
             android:paddingStart="@dimen/advance_name_margin"
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/advance_chosen_photo_selected"
-            android:tint="@android:color/darker_gray" />
+            android:tint="@color/color_wallpaper_item_tint" />
 
     </FrameLayout>
 
@@ -60,7 +60,6 @@
         android:id="@+id/download_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3fff"
         android:visibility="gone">
 
         <ImageView
@@ -68,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/advance_chosen_download"
-            android:tint="@android:color/darker_gray" />
+            android:tint="@color/color_wallpaper_item_tint" />
 
     </FrameLayout>
 

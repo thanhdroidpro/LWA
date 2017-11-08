@@ -11,6 +11,7 @@ import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.repository.datasource.io.JSONHandler
 import com.kinglloy.album.data.repository.datasource.io.LiveWallpaperHandler
 import com.kinglloy.album.data.repository.datasource.io.StyleWallpaperHandler
+import com.kinglloy.album.data.repository.datasource.io.VideoWallpaperHandler
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import java.io.IOException
 import java.io.StringReader
@@ -26,18 +27,22 @@ class DataHandler(val context: Context) {
         private val TAG = "DataHandler"
         private val DATA_KEY_LIVE_WALLPAPER = "live_wallpapers"
         private val DATA_KEY_STYLE_WALLPAPER = "style_wallpapers"
+        private val DATA_KEY_VIDEO_WALLPAPER = "video_wallpapers"
 
-        private val DATA_KEYS_IN_ORDER = arrayOf(DATA_KEY_LIVE_WALLPAPER, DATA_KEY_STYLE_WALLPAPER)
+        private val DATA_KEYS_IN_ORDER = arrayOf(DATA_KEY_LIVE_WALLPAPER,
+                DATA_KEY_STYLE_WALLPAPER, DATA_KEY_VIDEO_WALLPAPER)
 
     }
 
     private val liveWallpaperHandler = LiveWallpaperHandler(context)
     private val styleWallpaperHandler = StyleWallpaperHandler(context, WallpaperEntityMapper())
+    private val videoWallpaperHandler = VideoWallpaperHandler(context, WallpaperEntityMapper())
     private val handlerForKey: HashMap<String, JSONHandler> = HashMap()
 
     init {
         handlerForKey.put(DATA_KEY_LIVE_WALLPAPER, liveWallpaperHandler)
         handlerForKey.put(DATA_KEY_STYLE_WALLPAPER, styleWallpaperHandler)
+        handlerForKey.put(DATA_KEY_VIDEO_WALLPAPER, videoWallpaperHandler)
     }
 
     fun applyData(dataBodies: Array<String>) {

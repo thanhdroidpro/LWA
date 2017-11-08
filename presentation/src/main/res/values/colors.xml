@@ -17,4 +17,6 @@
     <color name="gallery_chosen_photo_placeholder">#5666</color>
 
     <color name="advance_window_background">#EEE</color>
+    <color name="color_name_bg">#8666</color>
+    <color name="color_wallpaper_item_tint">#009688</color>
 </resources>

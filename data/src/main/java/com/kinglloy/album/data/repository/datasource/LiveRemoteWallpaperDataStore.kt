@@ -104,14 +104,6 @@ class LiveRemoteWallpaperDataStore(val context: Context,
         throw UnsupportedOperationException("Remote data store not support preview wallpaper.")
     }
 
-    override fun cancelPreviewing(): Observable<Boolean> {
-        throw UnsupportedOperationException("Remote data store not support cancel preview wallpaper.")
-    }
-
-    override fun cancelSelect(): Observable<Boolean> {
-        throw UnsupportedOperationException("Remote data store not support cancel select wallpaper.")
-    }
-
     override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
         return Observable.create { emitter ->
             val entity = localDataStoreLive.loadWallpaperEntity(wallpaperId)

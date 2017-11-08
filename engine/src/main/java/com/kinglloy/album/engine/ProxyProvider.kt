@@ -7,6 +7,7 @@ import com.kinglloy.album.domain.interactor.GetPreviewWallpaper
 import com.kinglloy.album.domain.interactor.settings.GetStyleWallpaperSettings
 import com.kinglloy.album.engine.live.BokehRainbowWallpaper
 import com.kinglloy.album.engine.log.LogUtil
+import com.kinglloy.album.engine.video.VideoWallpaper
 import javax.inject.Inject
 
 /**
@@ -40,6 +41,8 @@ class ProxyProvider @Inject constructor(private val getPreviewWallpaper: GetPrev
                 e.printStackTrace()
                 BokehRainbowWallpaper(host)
             }
+        } else if (previewing.wallpaperType == WallpaperType.VIDEO) {
+            return VideoWallpaper(host, previewing.storePath)
         } else {
             val proxy = ProxyApi.getProxy(host, previewing.storePath, previewing.providerName)
             if (proxy != null) {

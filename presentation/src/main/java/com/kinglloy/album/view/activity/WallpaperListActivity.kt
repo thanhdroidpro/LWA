@@ -352,7 +352,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
                 holder.checkedOverlayView.visibility = View.GONE
             }
             val downloadingItem = presenter.getDownloadingItem()
-            if (WallpaperFileHelper.isNeedDownloadLiveComponent(item.lazyDownload,
+            if (WallpaperFileHelper.isNeedDownloadWallpaper(item.lazyDownload,
                     item.storePath) || (downloadingItem != null
                     && TextUtils.equals(downloadingItem.wallpaperId, item.wallpaperId))) {
                 holder.downloadOverlayView.visibility = View.VISIBLE
