@@ -3,17 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <me.zhanghai.android.materialprogressbar.MaterialProgressBar
-        android:layout_width="32dp"
-        android:layout_height="32dp" />
+        android:id="@+id/downloadProgressBar"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/global_prompt_margin"
+        android:layout_marginStart="@dimen/global_prompt_margin"
+        android:max="100"
+        app:mpb_progressStyle="horizontal" />
 
     <com.kinglloy.album.view.component.ShadowDipsTextView
         android:id="@+id/downloadProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:gravity="center"
         android:paddingBottom="@dimen/advance_name_top_margin"
         android:paddingEnd="@dimen/advance_name_margin"

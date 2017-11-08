@@ -20,7 +20,6 @@ import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
 import com.kinglloy.album.data.repository.datasource.sync.account.Account
 import com.kinglloy.album.domain.WallpaperType
-import com.kinglloy.album.domain.interactor.DefaultObserver
 import io.reactivex.Observable
 
 /**
@@ -103,26 +102,6 @@ class StyleRemoteWallpaperDataStore(val context: Context,
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
         throw UnsupportedOperationException("Remote style wallpaper data store not support preview.")
-    }
-
-    override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        return Observable.create { emitter ->
-            val entity = localDataStoreStyle.loadWallpaperEntity(wallpaperId)
-            wallpaperHandler.downloadStyleWallpaper(entity, object : DefaultObserver<Long>() {
-                override fun onNext(downloadedLength: Long) {
-                    emitter.onNext(downloadedLength)
-                }
-
-                override fun onComplete() {
-                    emitter.onComplete()
-                }
-
-                override fun onError(exception: Throwable) {
-                    emitter.onError(exception)
-                }
-
-            })
-        }
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {

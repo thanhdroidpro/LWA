@@ -16,9 +16,9 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public abstract class UseCase<T, Params> {
-    private final ThreadExecutor threadExecutor;
-    private final PostExecutionThread postExecutionThread;
-    private final CompositeDisposable disposables;
+    protected final ThreadExecutor threadExecutor;
+    protected final PostExecutionThread postExecutionThread;
+    protected final CompositeDisposable disposables;
 
     public UseCase(ThreadExecutor threadExecutor,
                    PostExecutionThread postExecutionThread) {

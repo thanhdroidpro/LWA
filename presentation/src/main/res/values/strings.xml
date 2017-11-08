@@ -31,6 +31,8 @@
     <string name="live_type_title">Live</string>
     <string name="style_type_title">Style</string>
 
+    <string name="string_cancel">Cancel</string>
+
     <string name="drawer_item_live_wallpaper">Live Wallpaper</string>
     <string name="drawer_item_need_help">Need Help</string>
     <string name="drawer_item_need_help_dsc">Encountered some problems.</string>

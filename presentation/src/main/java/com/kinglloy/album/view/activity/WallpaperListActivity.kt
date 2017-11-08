@@ -14,6 +14,7 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
+import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import com.kinglloy.album.AlbumApplication
@@ -151,7 +152,10 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             insets
         }
 
-        downloadDialog = DownloadingDialog(this)
+        downloadDialog = DownloadingDialog(this,
+                MaterialDialog.SingleButtonCallback { _, _ ->
+
+                })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

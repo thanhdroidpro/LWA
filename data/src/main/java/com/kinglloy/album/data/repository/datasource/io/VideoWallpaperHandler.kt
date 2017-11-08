@@ -15,12 +15,12 @@ import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContractHelper
 import com.kinglloy.album.data.utils.WallpaperFileHelper
-import com.kinglloy.album.domain.interactor.DefaultObserver
+import io.reactivex.ObservableEmitter
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.*
 import java.net.URL
-import java.util.HashSet
+import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.locks.ReentrantLock
 
@@ -130,16 +130,19 @@ class VideoWallpaperHandler(context: Context,
     }
 
     fun downloadVideoWallpaper(wallpaper: WallpaperEntity,
-                               observer: DefaultObserver<Long>?): Boolean {
-        observer?.onNext(0)
-        LogUtil.D(TAG, "Start download style wallpaper to " + wallpaper.storePath)
+                               emitter: ObservableEmitter<Long>?): Boolean {
+        emitter?.onNext(0)
+        LogUtil.D(TAG, "Start download video wallpaper to " + wallpaper.storePath)
         val outputFile = File(wallpaper.storePath)
         if (outputFile.exists()) {
             if (WallpaperFileHelper.ensureChecksumValid(mContext,
                     wallpaper.checkSum, wallpaper.storePath)) {
-                observer?.onComplete()
+                emitter?.onComplete()
                 return true
             }
+        }
+        if (maybeCancelDownload(emitter)) {
+            return false
         }
         synchronized(downloadLock) {
             var os: OutputStream? = null
@@ -148,7 +151,7 @@ class VideoWallpaperHandler(context: Context,
                 if (outputFile.exists()) {
                     if (WallpaperFileHelper.ensureChecksumValid(mContext,
                             wallpaper.checkSum, wallpaper.storePath)) {
-                        observer?.onComplete()
+                        emitter?.onComplete()
                         return true
                     } else {
                         outputFile.delete()
@@ -164,6 +167,9 @@ class VideoWallpaperHandler(context: Context,
                         .build()
                 val request = Request.Builder().url(URL(wallpaper.downloadUrl)).build()
 
+                if (maybeCancelDownload(emitter)) {
+                    return false
+                }
                 val response = httpClient.newCall(request).execute()
                 val responseCode = response.code()
                 if (responseCode in 200..299) {
@@ -172,24 +178,29 @@ class VideoWallpaperHandler(context: Context,
                     var bytesRead: Int
                     var writeLength = 0L
                     bytesRead = _is.read(buffer)
+                    if (maybeCancelDownload(emitter)) {
+                        return false
+                    }
                     while (bytesRead > 0) {
                         os.write(buffer, 0, bytesRead)
                         writeLength += bytesRead
-                        observer?.onNext(writeLength)
+                        emitter?.onNext(writeLength)
                         bytesRead = _is.read(buffer)
+                        if (maybeCancelDownload(emitter)) {
+                            return false
+                        }
                     }
                     os.flush()
-                    observer?.onComplete()
+                    emitter?.onComplete()
                     return true
                 } else {
                     LogUtil.E(TAG, "Download wallpaper component " + wallpaper.name + " failed.")
-                    observer?.onError(RemoteServerException())
+                    emitter?.onError(RemoteServerException())
                     return false
-
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
-                observer?.onError(NetworkConnectionException())
+                emitter?.onError(NetworkConnectionException())
                 LogUtil.E(TAG, "Download wallpaper component" + wallpaper.name + " failed.", e)
                 return false
             } finally {
@@ -202,6 +213,14 @@ class VideoWallpaperHandler(context: Context,
                 }
             }
         }
+    }
+
+    private fun maybeCancelDownload(emitter: ObservableEmitter<Long>?): Boolean {
+        val canceled = emitter != null && emitter.isDisposed
+        if (canceled) {
+            LogUtil.D(TAG, "Download canceled...")
+        }
+        return canceled
     }
 
     private fun ensureChecksum(file: File, checkSum: String) {

@@ -162,7 +162,9 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
             insets
         }
 
-        downloadDialog = DownloadingDialog(activity!!)
+        downloadDialog = DownloadingDialog(activity!!, MaterialDialog.SingleButtonCallback { _, _ ->
+            presenter.cancelCurrentDownload()
+        })
     }
 
     override fun renderWallpapers(wallpapers: List<WallpaperItem>) {

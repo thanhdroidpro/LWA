@@ -31,10 +31,6 @@ class VideoWallpaperDataStoreImpl(private val context: Context,
         throw UnsupportedOperationException("Video wallpaper data store not support preview.")
     }
 
-    override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        throw UnsupportedOperationException("Video wallpaper data store not support preview.")
-    }
-
     override fun activeService(serviceType: Int): Observable<Boolean> {
         throw UnsupportedOperationException("Video wallpaper data store not support active service.")
     }

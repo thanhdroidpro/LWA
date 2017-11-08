@@ -119,9 +119,17 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
                     AlbumContract.StyleWallpaper.CONTENT_SELECTED_URI,
                     unselectedStyleValue, null, null)
 
+            val unselectedVideoValue = ContentValues()
+            unselectedVideoValue.put(AlbumContract.VideoWallpaper.COLUMN_NAME_SELECTED, 0)
+            // unselected video old
+            context.contentResolver.update(
+                    AlbumContract.VideoWallpaper.CONTENT_SELECTED_URI,
+                    unselectedVideoValue, null, null)
+
             var selectedCount = 0
             if (selectPreviewUri != null) {
-                selectedCount = context.contentResolver.update(selectPreviewUri, selectValue, null, null)
+                selectedCount = context.contentResolver.update(
+                        selectPreviewUri, selectValue, null, null)
             }
             if (selectedCount > 0) {
                 emitter.onNext(true)
@@ -136,6 +144,7 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
 
                 notifyChange(context, AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI)
                 notifyChange(context, AlbumContract.StyleWallpaper.CONTENT_SELECT_PREVIEWING_URI)
+                notifyChange(context, AlbumContract.VideoWallpaper.CONTENT_SELECT_PREVIEWING_URI)
             }
             emitter.onComplete()
         }
@@ -160,10 +169,6 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
 
             emitter.onComplete()
         }
-    }
-
-    override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        throw UnsupportedOperationException("Manager wallpaper data store not support download.")
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {

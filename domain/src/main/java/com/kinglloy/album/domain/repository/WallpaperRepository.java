@@ -26,12 +26,6 @@ public interface WallpaperRepository {
 
     Observable<List<Wallpaper>> loadVideoWallpapers();
 
-    Observable<Long> downloadLiveWallpaper(String wallpaperId);
-
-    Observable<Long> downloadStyleWallpaper(String wallpaperId);
-
-    Observable<Long> downloadVideoWallpaper(String wallpaperId);
-
     Observable<Boolean> selectPreviewingWallpaper();
 
     Observable<Boolean> previewWallpaper(String wallpaperId, WallpaperType type);

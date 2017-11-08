@@ -16,7 +16,6 @@ import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.repository.datasource.net.RemoteLiveWallpaperFetcher
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.repository.datasource.sync.account.Account
-import com.kinglloy.album.domain.interactor.DefaultObserver
 import com.kinglloy.album.data.repository.datasource.io.LiveWallpaperHandler
 import com.kinglloy.album.data.repository.datasource.sync.SyncHelper
 import com.kinglloy.album.domain.WallpaperType
@@ -32,8 +31,6 @@ class LiveRemoteWallpaperDataStore(val context: Context,
     companion object {
         val TAG = "RemoteAdvanceWallpaper"
     }
-
-    private val wallpaperHandler = LiveWallpaperHandler(context)
 
     override fun getPreviewWallpaperEntity(): WallpaperEntity {
         throw UnsupportedOperationException("Remote data store not support get wallpaper.")
@@ -102,26 +99,6 @@ class LiveRemoteWallpaperDataStore(val context: Context,
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
         throw UnsupportedOperationException("Remote data store not support preview wallpaper.")
-    }
-
-    override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        return Observable.create { emitter ->
-            val entity = localDataStoreLive.loadWallpaperEntity(wallpaperId)
-            wallpaperHandler.downloadWallpaperComponent(entity, object : DefaultObserver<Long>() {
-                override fun onNext(downloadedLength: Long) {
-                    emitter.onNext(downloadedLength)
-                }
-
-                override fun onComplete() {
-                    emitter.onComplete()
-                }
-
-                override fun onError(exception: Throwable) {
-                    emitter.onError(exception)
-                }
-
-            })
-        }
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {

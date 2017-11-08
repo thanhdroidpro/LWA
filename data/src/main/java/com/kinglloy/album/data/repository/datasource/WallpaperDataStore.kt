@@ -17,8 +17,6 @@ interface WallpaperDataStore {
     fun selectPreviewingWallpaper(): Observable<Boolean>
     fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean>
 
-    fun downloadWallpaper(wallpaperId: String): Observable<Long>
-
     fun activeService(serviceType: Int): Observable<Boolean>
     fun getActiveService(): Observable<Int>
 }

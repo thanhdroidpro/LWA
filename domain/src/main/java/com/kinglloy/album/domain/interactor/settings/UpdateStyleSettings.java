@@ -1,10 +1,8 @@
 package com.kinglloy.album.domain.interactor.settings;
 
 import com.kinglloy.album.domain.StyleWallpaperSettings;
-import com.kinglloy.album.domain.WallpaperType;
 import com.kinglloy.album.domain.executor.PostExecutionThread;
 import com.kinglloy.album.domain.executor.ThreadExecutor;
-import com.kinglloy.album.domain.interactor.DownloadWallpaper;
 import com.kinglloy.album.domain.interactor.UseCase;
 import com.kinglloy.album.domain.repository.SettingsRepository;
 

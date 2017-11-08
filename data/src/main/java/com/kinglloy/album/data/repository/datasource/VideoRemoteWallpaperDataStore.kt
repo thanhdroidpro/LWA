@@ -35,8 +35,6 @@ class VideoRemoteWallpaperDataStore(val context: Context,
         val TAG = "VideoRemoteWallpaperDataStore"
     }
 
-    private val wallpaperHandler = VideoWallpaperHandler(context, WallpaperEntityMapper())
-
     override fun getPreviewWallpaperEntity(): WallpaperEntity {
         throw UnsupportedOperationException("Remote video wallpaper data store not support get preview.")
     }
@@ -104,26 +102,6 @@ class VideoRemoteWallpaperDataStore(val context: Context,
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> {
         throw UnsupportedOperationException("Remote video wallpaper data store not support previewing wallpaper.")
-    }
-
-    override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        return Observable.create { emitter ->
-            val entity = localDataStore.loadWallpaperEntity(wallpaperId)
-            wallpaperHandler.downloadVideoWallpaper(entity, object : DefaultObserver<Long>() {
-                override fun onNext(downloadedLength: Long) {
-                    emitter.onNext(downloadedLength)
-                }
-
-                override fun onComplete() {
-                    emitter.onComplete()
-                }
-
-                override fun onError(exception: Throwable) {
-                    emitter.onError(exception)
-                }
-
-            })
-        }
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {

@@ -30,10 +30,6 @@ class StyleWallpaperDataStoreImpl(private val context: Context,
         throw UnsupportedOperationException("Style wallpaper data store not support preview.")
     }
 
-    override fun downloadWallpaper(wallpaperId: String): Observable<Long> {
-        throw UnsupportedOperationException("Style wallpaper data store not support preview.")
-    }
-
     fun loadWallpaperEntity(wallpaperId: String): WallpaperEntity {
         var entity: WallpaperEntity? = null
         synchronized(wallpaperCache) {

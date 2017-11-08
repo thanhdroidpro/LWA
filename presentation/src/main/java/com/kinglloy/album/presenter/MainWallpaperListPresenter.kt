@@ -23,11 +23,10 @@ import javax.inject.Inject
  * @since 2017/7/28.
  */
 class MainWallpaperListPresenter
-@Inject constructor(val getWallpapers: GetWallpapers,
-                    val loadWallpaper: LoadWallpaper,
-                    val previewWallpaper: PreviewWallpaper,
+@Inject constructor(private val getWallpapers: GetWallpapers,
+                    private val loadWallpaper: LoadWallpaper,
+                    private val previewWallpaper: PreviewWallpaper,
                     val advanceWallpaperItemMapper: AdvanceWallpaperItemMapper,
-                    val downloadWallpaper: DownloadWallpaper,
                     val wallpaperSwitcher: WallpaperSwitcher)
     : Presenter {
 
@@ -110,23 +109,7 @@ class MainWallpaperListPresenter
         view?.showDownloadingDialog(item)
         downloadingWallpaper = item
         downloadState = DOWNLOADING
-        downloadWallpaper.execute(object : DefaultObserver<Long>() {
-            override fun onNext(progress: Long) {
-                view?.updateDownloadingProgress(progress)
-            }
 
-            override fun onComplete() {
-                view?.downloadComplete(item)
-                downloadingWallpaper = null
-                downloadState = DOWNLOAD_NONE
-            }
-
-            override fun onError(exception: Throwable) {
-                view?.showDownloadError(item, exception as Exception)
-                downloadingWallpaper = null
-                downloadState = DOWNLOAD_ERROR
-            }
-        }, DownloadWallpaper.Params.download(item.wallpaperId, item.wallpaperType))
     }
 
 
@@ -163,7 +146,6 @@ class MainWallpaperListPresenter
         view!!.context().contentResolver.unregisterContentObserver(mContentObserver)
         getWallpapers.dispose()
         loadWallpaper.dispose()
-        downloadWallpaper.dispose()
         downloadingWallpaper = null
         view = null
     }

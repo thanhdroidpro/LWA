@@ -43,7 +43,7 @@ constructor(val context: Context,
 
     fun createRemoteVideoDataStore(): WallpaperDataStore {
         return VideoRemoteWallpaperDataStore(context,
-                VideoWallpaperDataStoreImpl(context, styleWallpaperCache))
+                VideoWallpaperDataStoreImpl(context, videoWallpaperCache))
     }
 
 }

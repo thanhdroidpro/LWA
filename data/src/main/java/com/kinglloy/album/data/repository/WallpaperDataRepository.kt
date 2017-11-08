@@ -52,15 +52,6 @@ class WallpaperDataRepository
                 .map(wallpaperMapper::transformList)
     }
 
-    override fun downloadLiveWallpaper(wallpaperId: String): Observable<Long> =
-            factory.createRemoteLiveDataStore().downloadWallpaper(wallpaperId)
-
-    override fun downloadStyleWallpaper(wallpaperId: String): Observable<Long> =
-            factory.createRemoteStyleDataStore().downloadWallpaper(wallpaperId)
-
-    override fun downloadVideoWallpaper(wallpaperId: String): Observable<Long> =
-            factory.createRemoteVideoDataStore().downloadWallpaper(wallpaperId)
-
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> =
             factory.createManageDataStore().previewWallpaper(wallpaperId, type)
 
