@@ -21,12 +21,15 @@
     <string name="confirm">确定</string>
     <string name="hint">提示</string>
     <string name="downloading">下载中，请稍后</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
 
     <string name="not_show_today">今天不再提示</string>
 
     <string name="watch_ad">点击广告</string>
     <string name="about">关于</string>
     <string name="use_wallpaper">开始使用</string>
+    <string name="my_wallpaper">已下载的壁纸</string>
 
     <string name="video_type_title">视频壁纸</string>
     <string name="live_type_title">动态壁纸</string>
@@ -47,6 +50,8 @@
     <string name="drawer_item_see_ad_dsc">帮助我赚取一些小费</string>
     <string name="drawer_item_donate">捐赠</string>
     <string name="drawer_item_donate_dsc">给我一点钱</string>
+    <string name="drawer_item_my_wallpapers">我的壁纸</string>
+    <string name="drawer_item_my_wallpapers_dsc">管理我下载的壁纸</string>
     <string name="drawer_item_about">关于</string>
     <string name="drawer_item_about_dsc">关于动态壁纸合集（LWA）</string>
 

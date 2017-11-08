@@ -21,8 +21,8 @@ class StyleWallpapersFragment : BaseWallpapersFragment() {
             = inflater.inflate(R.layout.fragment_style_wallpapers_list, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         AlbumApplication.instance.applicationComponent.inject(this)
+        super.onViewCreated(view, savedInstanceState)
 
         presenter.setView(this)
 

@@ -66,6 +66,8 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         val ID_DONATE = 3001L
 
         val ID_ABOUT = 4000L
+
+        val ID_MY_WALLPAPERS = 5000L
     }
 
     @Inject
@@ -214,6 +216,15 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
 //                                        .withOnDrawerItemClickListener(drawerItemClick)
                         ),
                         DividerDrawerItem(),
+                        PrimaryDrawerItem().withName(R.string.drawer_item_my_wallpapers)
+                                .withDescription(R.string.drawer_item_my_wallpapers_dsc)
+                                .withIcon(R.drawable.ic_drawer_my_wallpapers)
+                                .withIdentifier(ID_MY_WALLPAPERS)
+                                .withSelectable(false)
+                                .withIconTintingEnabled(true)
+                                .withIconColorRes(R.color.colorPrimary)
+                                .withOnDrawerItemClickListener(drawerItemClick),
+                        DividerDrawerItem(),
                         PrimaryDrawerItem().withName(R.string.drawer_item_about)
                                 .withDescription(R.string.drawer_item_about_dsc)
                                 .withIcon(R.drawable.ic_drawer_about)
@@ -274,6 +285,10 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
             ID_ABOUT -> {
                 startActivity(Intent(this,
                         AboutActivity::class.java))
+            }
+            ID_MY_WALLPAPERS -> {
+                startActivity(Intent(this,
+                        MyWallpapersActivity::class.java))
             }
 
         }

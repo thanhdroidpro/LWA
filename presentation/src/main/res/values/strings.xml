@@ -20,12 +20,15 @@
     <string name="confirm">Confirm</string>
     <string name="hint">Hint</string>
     <string name="downloading">Downloading</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
     <string name="not_show_today">Not show this today</string>
 
     <string name="watch_ad">Watch AD</string>
     <string name="about">About</string>
     <string name="use_wallpaper">Wallpaper List</string>
+    <string name="my_wallpaper">Downloaded Wallpapers</string>
 
     <string name="video_type_title">Video</string>
     <string name="live_type_title">Live</string>
@@ -46,6 +49,8 @@
     <string name="drawer_item_see_ad_dsc">Help us earn some tips.</string>
     <string name="drawer_item_donate">Donate</string>
     <string name="drawer_item_donate_dsc">Give us some money.</string>
+    <string name="drawer_item_my_wallpapers">My Wallpapers</string>
+    <string name="drawer_item_my_wallpapers_dsc">Manage downloaded wallpapers</string>
     <string name="drawer_item_about">About</string>
     <string name="drawer_item_about_dsc">About live wallpaper album(LWA)</string>
 

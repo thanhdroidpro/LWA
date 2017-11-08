@@ -22,8 +22,8 @@ class LiveWallpapersFragment : BaseWallpapersFragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         AlbumApplication.instance.applicationComponent.inject(this)
+        super.onViewCreated(view, savedInstanceState)
 
         presenter.setView(this)
 
