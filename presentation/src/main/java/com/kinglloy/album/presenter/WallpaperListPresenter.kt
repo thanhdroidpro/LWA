@@ -57,8 +57,12 @@ class WallpaperListPresenter
     private val mContentObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean, uri: Uri) {
             LogUtil.D(TAG, "Uri change." + uri)
-            view?.selectWallpaper(wallpaperItemMapper
-                    .transform(getPreviewWallpaper.previewing))
+            if (uri == AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI ||
+                    uri == AlbumContract.VideoWallpaper.CONTENT_SELECT_PREVIEWING_URI ||
+                    uri == AlbumContract.StyleWallpaper.CONTENT_SELECT_PREVIEWING_URI) {
+                view?.selectWallpaper(wallpaperItemMapper
+                        .transform(getPreviewWallpaper.previewing))
+            }
         }
     }
 
