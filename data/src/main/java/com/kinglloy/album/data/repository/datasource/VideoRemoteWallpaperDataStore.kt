@@ -100,6 +100,10 @@ class VideoRemoteWallpaperDataStore(val context: Context,
         throw UnsupportedOperationException("Remote video wallpaper data store not support get downloaded wallpaper.")
     }
 
+    override fun deleteDownloadedWallpapers(filePaths: List<String>): Observable<Boolean> {
+        throw UnsupportedOperationException("Remote video data store not support delete downloaded wallpaper.")
+    }
+
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
         throw UnsupportedOperationException("Remote video wallpaper data store not support select preview.")
     }
@@ -109,11 +113,11 @@ class VideoRemoteWallpaperDataStore(val context: Context,
     }
 
     override fun activeService(serviceType: Int): Observable<Boolean> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Remote video data store not support active service.")
     }
 
     override fun getActiveService(): Observable<Int> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        throw UnsupportedOperationException("Remote data store not support get active service.")
     }
 
 }

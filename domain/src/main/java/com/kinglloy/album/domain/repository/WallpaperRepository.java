@@ -28,6 +28,8 @@ public interface WallpaperRepository {
 
     Observable<List<Wallpaper>> getDownloadedWallpapers();
 
+    Observable<Boolean> deleteDownloadedWallpapers(List<String> filePaths);
+
     Observable<Boolean> selectPreviewingWallpaper();
 
     Observable<Boolean> previewWallpaper(String wallpaperId, WallpaperType type);

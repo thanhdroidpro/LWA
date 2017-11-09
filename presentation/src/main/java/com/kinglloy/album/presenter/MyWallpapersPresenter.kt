@@ -8,6 +8,7 @@ import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.domain.Wallpaper
 import com.kinglloy.album.domain.interactor.DefaultObserver
+import com.kinglloy.album.domain.interactor.DeleteDownloadedWallpapers
 import com.kinglloy.album.domain.interactor.GetDownloadedWallpapers
 import com.kinglloy.album.domain.interactor.PreviewWallpaper
 import com.kinglloy.album.mapper.WallpaperItemMapper
@@ -23,15 +24,39 @@ class MyWallpapersPresenter
 @Inject constructor(private val getDownloadedWallpapers: GetDownloadedWallpapers,
                     private val previewWallpaper: PreviewWallpaper,
                     val wallpaperSwitcher: WallpaperSwitcher,
-                    val wallpaperItemMapper: WallpaperItemMapper) : Presenter {
+                    val wallpaperItemMapper: WallpaperItemMapper,
+                    private val deleteDownloadedWallpapers: DeleteDownloadedWallpapers) : Presenter {
 
     companion object {
         val TAG = "MyWallpapersPresenter"
+
+        val UNDO_SHOW_TIME = 5000L
 
         private var currentPreviewing: WallpaperItem? = null
     }
 
     private lateinit var view: MyWallpapersView
+
+    private var allWallpapers = ArrayList<WallpaperItem>()
+
+    private var currentDeleting: ArrayList<WallpaperItem>? = null
+
+    private val deleteHandler = Handler()
+    private val deleteRunnable = Runnable {
+        view.closeUndoDelete()
+        if (currentDeleting != null && currentDeleting!!.size > 0) {
+            val filesPath = ArrayList<String>()
+            currentDeleting!!.mapTo(filesPath) { it.storePath }
+            deleteDownloadedWallpapers.execute(object : DefaultObserver<Boolean>() {
+                override fun onNext(success: Boolean) {
+                    if (success) {
+                        allWallpapers.removeAll(currentDeleting!!)
+                        currentDeleting!!.clear()
+                    }
+                }
+            }, DeleteDownloadedWallpapers.Params.withPaths(filesPath))
+        }
+    }
 
     private val mContentObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean, uri: Uri) {
@@ -59,13 +84,20 @@ class MyWallpapersPresenter
     fun initialize() {
         getDownloadedWallpapers.execute(object : DefaultObserver<List<Wallpaper>>() {
             override fun onNext(wallpapers: List<Wallpaper>) {
+                allWallpapers.clear()
                 if (wallpapers.isEmpty()) {
                     view.showEmpty()
                 } else {
-                    view.renderWallpapers(wallpaperItemMapper.transformList(wallpapers))
+                    allWallpapers.addAll(wallpaperItemMapper.transformList(wallpapers))
+                    view.renderWallpapers(allWallpapers)
                 }
             }
         }, null)
+    }
+
+    fun undoDelete() {
+        deleteHandler.removeCallbacks(deleteRunnable)
+        view.renderWallpapers(allWallpapers)
     }
 
     override fun resume() {
@@ -90,6 +122,12 @@ class MyWallpapersPresenter
                 wallpaperSwitcher.switchService(view!!.context())
             }
         }, PreviewWallpaper.Params.previewWallpaper(item.wallpaperId, item.wallpaperType))
+    }
+
+    fun deleteDownloadedWallpapers(wallpapers: ArrayList<WallpaperItem>) {
+        view.showUndoDelete()
+        currentDeleting = wallpapers
+        deleteHandler.postDelayed(deleteRunnable, UNDO_SHOW_TIME)
     }
 
 }

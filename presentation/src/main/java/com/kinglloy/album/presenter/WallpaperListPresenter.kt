@@ -47,7 +47,6 @@ class WallpaperListPresenter
         private var currentPreviewing: WallpaperItem? = null
     }
 
-    private val wallpaperObserver = WallpapersObserver()
     private var view: WallpaperListView? = null
 
     private var currentDownloadId: Long = -1
@@ -63,6 +62,12 @@ class WallpaperListPresenter
         }
     }
 
+    private val mDownloadItemDeletedObserver = object : ContentObserver(Handler()) {
+        override fun onChange(selfChange: Boolean, uri: Uri) {
+            initialize(view!!.getWallpaperType())
+        }
+    }
+
     fun setView(view: WallpaperListView) {
         this.view = view
 
@@ -70,21 +75,30 @@ class WallpaperListPresenter
             view.context().contentResolver.registerContentObserver(
                     AlbumContract.LiveWallpaper.CONTENT_SELECT_PREVIEWING_URI,
                     true, mContentObserver)
+            view.context().contentResolver.registerContentObserver(
+                    AlbumContract.LiveWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI,
+                    true, mDownloadItemDeletedObserver)
         } else if (view.getWallpaperType() == WallpaperType.STYLE) {
             view.context().contentResolver.registerContentObserver(
                     AlbumContract.StyleWallpaper.CONTENT_SELECT_PREVIEWING_URI,
                     true, mContentObserver)
+            view.context().contentResolver.registerContentObserver(
+                    AlbumContract.StyleWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI,
+                    true, mDownloadItemDeletedObserver)
         } else {
             view.context().contentResolver.registerContentObserver(
                     AlbumContract.VideoWallpaper.CONTENT_SELECT_PREVIEWING_URI,
                     true, mContentObserver)
+            view.context().contentResolver.registerContentObserver(
+                    AlbumContract.VideoWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI,
+                    true, mDownloadItemDeletedObserver)
         }
 
     }
 
     fun initialize(wallpaperType: WallpaperType) {
         view?.showLoading()
-        getWallpapers.execute(wallpaperObserver,
+        getWallpapers.execute(WallpapersObserver(),
                 GetWallpapers.Params.withType(wallpaperType))
     }
 
@@ -182,6 +196,7 @@ class WallpaperListPresenter
         KinglloyDownloader.getInstance(view!!.context())
                 .unregisterListener(currentDownloadId, this)
         view!!.context().contentResolver.unregisterContentObserver(mContentObserver)
+        view!!.context().contentResolver.unregisterContentObserver(mDownloadItemDeletedObserver)
         getWallpapers.dispose()
         loadWallpaper.dispose()
         downloadingWallpaper = null

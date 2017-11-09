@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
@@ -26,7 +27,7 @@ import com.kinglloy.album.presenter.MyWallpapersPresenter
 import com.kinglloy.album.util.MultiSelectionController
 import com.kinglloy.album.view.MyWallpapersView
 import kotlinx.android.synthetic.main.activity_my_wallpapers.*
-import java.util.ArrayList
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -36,6 +37,8 @@ import javax.inject.Inject
 class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
     companion object {
         private val STATE_SELECTION = "selection"
+
+        private val SELECTION_MODE = "selection_mode"
     }
 
     private lateinit var wallpaperList: RecyclerView
@@ -51,7 +54,11 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
     private var placeHolderDrawable: ColorDrawable? = null
     private var mItemSize = 10
 
-    val wallpapers = ArrayList<WallpaperItem>()
+    private var selectionMode = false
+
+    val wallpapers = LinkedList<WallpaperItem>()
+
+    private val currentDeleting = ArrayList<WallpaperItem>()
 
     private val mMultiSelectionController =
             MultiSelectionController<WallpaperItem>(STATE_SELECTION)
@@ -73,10 +80,17 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
 
         initView()
         presenter.initialize()
+
+        if (savedInstanceState != null) {
+            selectionMode = !savedInstanceState.getBoolean(SELECTION_MODE)
+            tryUpdateSelection(false)
+        }
+        mMultiSelectionController.restoreInstanceState(savedInstanceState)
     }
 
     override fun onBackPressed() {
         if (selectionMode) {
+            updatePosition = -1
             mMultiSelectionController.reset(true)
             tryUpdateSelection(true)
         } else {
@@ -169,7 +183,7 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
         selectionMode = !selectionMode
     }
 
-    private var selectionMode = false
+
     private fun setupMultiSelect() {
         // Set up toolbar
         selectionToolbar.setNavigationOnClickListener {
@@ -177,14 +191,23 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
         }
         selectionToolbar.inflateMenu(R.menu.menu_my_wallpapers_edit)
         selectionToolbar.setOnMenuItemClickListener {
-            Toast.makeText(this@MyWallpapersActivity, "Delete...", Toast.LENGTH_SHORT).show()
-            true
+            if (mMultiSelectionController.getSelectedCount() == 0) {
+                true
+            } else {
+                updatePosition = -1
+                currentDeleting.clear()
+                currentDeleting.addAll(mMultiSelectionController.getSelection())
+                presenter.deleteDownloadedWallpapers(currentDeleting)
+                mMultiSelectionController.reset(true)
+                tryUpdateSelection(true)
+                removeItemFromAdapter(currentDeleting)
+                true
+            }
         }
 
         // Set up controller
         mMultiSelectionController.setCallbacks(object : MultiSelectionController.Callbacks {
             override fun onSelectionChanged(restored: Boolean, fromUser: Boolean) {
-//                tryUpdateSelection(!restored)
                 if (updatePosition >= 0) {
                     wallpapersAdapter.notifyItemChanged(updatePosition)
                     updatePosition = -1
@@ -193,6 +216,14 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
                 }
             }
         })
+    }
+
+    private fun removeItemFromAdapter(deleting: ArrayList<WallpaperItem>) {
+        for (item in deleting) {
+            val index = wallpapers.indexOf(item)
+            wallpapers.removeAt(index)
+            wallpapersAdapter.notifyItemRemoved(index)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -207,6 +238,15 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
             }
         }
         return true
+    }
+
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        if (outState != null) {
+            outState.putBoolean(SELECTION_MODE, selectionMode)
+            mMultiSelectionController.saveInstanceState(outState)
+        }
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {
@@ -228,9 +268,6 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
         this.wallpapers.clear()
         this.wallpapers.addAll(wallpapers)
 
-        if (wallpaperList.visibility == View.VISIBLE) {
-            return
-        }
         wallpaperList.visibility = View.VISIBLE
         emptyView.visibility = View.GONE
         loadingView.visibility = View.GONE
@@ -263,6 +300,17 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
         } else {
             wallpapersAdapter.notifyItemChanged(newSelectedIndex)
         }
+    }
+
+    override fun showUndoDelete() {
+        val snackbar = Snackbar.make(findViewById<View>(R.id.root_view),
+                getString(R.string.delete_count, currentDeleting.size), Snackbar.LENGTH_LONG)
+        snackbar.setAction(R.string.undo) { presenter.undoDelete() }
+        snackbar.show()
+    }
+
+    override fun closeUndoDelete() {
+
     }
 
     override fun showLoading() {

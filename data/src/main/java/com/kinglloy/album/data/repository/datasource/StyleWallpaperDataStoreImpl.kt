@@ -26,6 +26,10 @@ class StyleWallpaperDataStoreImpl(private val context: Context,
         throw UnsupportedOperationException("Style wallpaper data store not support get downloaded wallpaper.")
     }
 
+    override fun deleteDownloadedWallpapers(filePaths: List<String>): Observable<Boolean> {
+        throw UnsupportedOperationException("Style wallpaper data store not support delete downloaded wallpaper.")
+    }
+
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
         throw UnsupportedOperationException("Style wallpaper data store not support select previewing.")
     }

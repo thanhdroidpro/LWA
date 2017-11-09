@@ -22,6 +22,9 @@
     <string name="downloading">Downloading</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="undo">Undo</string>
+
+    <string name="delete_count">%1$s downloaded wallpaper deleted.</string>
 
     <string name="not_show_today">Not show this today</string>
 

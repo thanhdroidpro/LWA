@@ -224,6 +224,7 @@ public class AlbumContract {
         public static final String PATH_SELECTED_WALLPAPER = "selected";
         public static final String PATH_PREVIEWING_WALLPAPER = "previewing";
         public static final String PATH_SELECT_PREVIEWING_WALLPAPER = "select_previewing";
+        public static final String PATH_DOWNLOAD_ITEM_DELETED_WALLPAPER = "item_deleted";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_LIVE_WALLPAPER).build();
@@ -239,6 +240,10 @@ public class AlbumContract {
         public static final Uri CONTENT_SELECT_PREVIEWING_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_LIVE_WALLPAPER)
                         .appendPath(PATH_SELECT_PREVIEWING_WALLPAPER).build();
+
+        public static final Uri CONTENT_DOWNLOAD_ITEM_DELETED_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_LIVE_WALLPAPER)
+                        .appendPath(PATH_DOWNLOAD_ITEM_DELETED_WALLPAPER).build();
 
 
         public static Uri buildWallpaperUri(String wallpaperId) {
@@ -256,6 +261,7 @@ public class AlbumContract {
         public static final String PATH_SELECTED_WALLPAPER = "selected";
         public static final String PATH_PREVIEWING_WALLPAPER = "previewing";
         public static final String PATH_SELECT_PREVIEWING_WALLPAPER = "select_previewing";
+        public static final String PATH_DOWNLOAD_ITEM_DELETED_WALLPAPER = "item_deleted";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_STYLE_WALLPAPER).build();
@@ -272,6 +278,9 @@ public class AlbumContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_STYLE_WALLPAPER)
                         .appendPath(PATH_SELECT_PREVIEWING_WALLPAPER).build();
 
+        public static final Uri CONTENT_DOWNLOAD_ITEM_DELETED_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_STYLE_WALLPAPER)
+                        .appendPath(PATH_DOWNLOAD_ITEM_DELETED_WALLPAPER).build();
 
         public static Uri buildWallpaperUri(String wallpaperId) {
             return CONTENT_URI.buildUpon().appendPath(wallpaperId).build();
@@ -288,6 +297,7 @@ public class AlbumContract {
         public static final String PATH_SELECTED_WALLPAPER = "selected";
         public static final String PATH_PREVIEWING_WALLPAPER = "previewing";
         public static final String PATH_SELECT_PREVIEWING_WALLPAPER = "select_previewing";
+        public static final String PATH_DOWNLOAD_ITEM_DELETED_WALLPAPER = "item_deleted";
 
         public static final Uri CONTENT_URI =
                 BASE_CONTENT_URI.buildUpon().appendEncodedPath(PATH_VIDEO_WALLPAPER).build();
@@ -303,6 +313,10 @@ public class AlbumContract {
         public static final Uri CONTENT_SELECT_PREVIEWING_URI =
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEO_WALLPAPER)
                         .appendPath(PATH_SELECT_PREVIEWING_WALLPAPER).build();
+
+        public static final Uri CONTENT_DOWNLOAD_ITEM_DELETED_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_VIDEO_WALLPAPER)
+                        .appendPath(PATH_DOWNLOAD_ITEM_DELETED_WALLPAPER).build();
 
 
         public static Uri buildWallpaperUri(String wallpaperId) {

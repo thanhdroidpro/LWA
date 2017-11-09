@@ -2,6 +2,7 @@ package com.kinglloy.album.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.kinglloy.album.domain.WallpaperType;
 
@@ -33,6 +34,26 @@ public class WallpaperItem implements Parcelable {
     public WallpaperType wallpaperType;
 
     public WallpaperItem() {
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof WallpaperItem) {
+            WallpaperItem item = (WallpaperItem) obj;
+            return TextUtils.equals(item.wallpaperId, wallpaperId) &&
+                    TextUtils.equals(item.storePath, storePath) &&
+                    TextUtils.equals(item.name, name);
+        }
+        return super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 0;
+        result = 31 * result + wallpaperId.hashCode();
+        result = 31 * result + storePath.hashCode();
+        result = 31 * result + name.hashCode();
+        return result;
     }
 
     protected WallpaperItem(Parcel in) {

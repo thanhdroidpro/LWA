@@ -11,6 +11,10 @@ interface MyWallpapersView : LoadingDataView {
 
     fun selectWallpaper(wallpaper: WallpaperItem)
 
+    fun showUndoDelete()
+
+    fun closeUndoDelete()
+
     fun showEmpty()
 
     fun complete()

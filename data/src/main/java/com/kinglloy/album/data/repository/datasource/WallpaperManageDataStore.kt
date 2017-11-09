@@ -12,6 +12,7 @@ import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.data.utils.notifyChange
 import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
+import java.io.File
 
 /**
  * @author jinyalin
@@ -107,6 +108,19 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
             }
 
             emitter.onNext(downloadedWallpapers)
+            emitter.onComplete()
+        }
+    }
+
+    override fun deleteDownloadedWallpapers(filePaths: List<String>): Observable<Boolean> {
+        return Observable.create { emitter ->
+            for (path in filePaths) {
+                File(path).delete()
+            }
+            notifyChange(context, AlbumContract.LiveWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI)
+            notifyChange(context, AlbumContract.StyleWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI)
+            notifyChange(context, AlbumContract.VideoWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI)
+            emitter.onNext(true)
             emitter.onComplete()
         }
     }
