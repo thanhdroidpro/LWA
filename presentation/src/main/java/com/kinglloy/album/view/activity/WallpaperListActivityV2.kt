@@ -55,7 +55,8 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         val SP_NAME = "WallpaperListActivity"
         val SELECT_INDEX_KEY = "select_index"
 
-        val ID_LIVE_PROBLEM = 1000L
+        val ID_VIDEO_PROBLEM = 1000L
+        val ID_LIVE_PROBLEM = 1001L
 
         val ID_SWITCH = 2000L
         val ID_BLUR = 2001L
@@ -174,6 +175,18 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                 .withHeader(R.layout.layout_drawer_header)
                 .withSelectedItem(-1)
                 .addDrawerItems(
+                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_video_wallpaper)
+                                .withIcon(R.drawable.ic_drawer_video).withIdentifier(1)
+                                .withIconTintingEnabled(true)
+                                .withIconColorRes(R.color.colorPrimary)
+                                .withSelectable(false).withSubItems(
+                                SecondaryDrawerItem().withName(R.string.drawer_item_video_need_help)
+                                        .withDescription(R.string.drawer_item_video_need_help_dsc)
+                                        .withSelectable(false)
+                                        .withIdentifier(ID_VIDEO_PROBLEM)
+                                        .withLevel(2)
+                                        .withOnDrawerItemClickListener(drawerItemClick)
+                        ),
                         ExpandableBadgeDrawerItem().withName(R.string.drawer_item_live_wallpaper)
                                 .withIcon(R.drawable.ic_drawer_live).withIdentifier(1)
                                 .withIconTintingEnabled(true)
@@ -208,12 +221,12 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                                         .withIdentifier(ID_SEE_AD)
                                         .withLevel(2)
                                         .withOnDrawerItemClickListener(drawerItemClick)
-//                                ,SecondaryDrawerItem().withName(R.string.drawer_item_donate)
-//                                        .withDescription(R.string.drawer_item_donate_dsc)
-//                                        .withSelectable(false)
-//                                        .withIdentifier(ID_DONATE)
-//                                        .withLevel(2)
-//                                        .withOnDrawerItemClickListener(drawerItemClick)
+                                , SecondaryDrawerItem().withName(R.string.drawer_item_donate)
+                                .withDescription(R.string.drawer_item_donate_dsc)
+                                .withSelectable(false)
+                                .withIdentifier(ID_DONATE)
+                                .withLevel(2)
+                                .withOnDrawerItemClickListener(drawerItemClick)
                         ),
                         DividerDrawerItem(),
                         PrimaryDrawerItem().withName(R.string.drawer_item_my_wallpapers)
@@ -263,15 +276,22 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                         ADActivity::class.java))
             }
             ID_DONATE -> {
-//                val dialog = MaterialDialog.Builder(this)
-//                        .iconRes(R.drawable.ic_money_white)
-//                        .title(getString(R.string.string_donate))
-//                        .customView(R.layout.layout_payment_selection, false).build()
-//
-//                dialog.findViewById(R.id.alipay).setOnClickListener(onPayClick)
-//                dialog.findViewById(R.id.google_pay).setOnClickListener(onPayClick)
-//
-//                dialog.show()
+                val dialogBuilder = MaterialDialog.Builder(this)
+                        .iconRes(R.drawable.advance_wallpaper_msg)
+                        .title(R.string.hint)
+                        .content(Html.fromHtml(getString(R.string.donate_hint)))
+                        .positiveText(R.string.confirm)
+
+                dialogBuilder.build().show()
+            }
+            ID_VIDEO_PROBLEM -> {
+                val dialogBuilder = MaterialDialog.Builder(this)
+                        .iconRes(R.drawable.advance_wallpaper_msg)
+                        .title(R.string.hint)
+                        .content(Html.fromHtml(getString(R.string.video_hint)))
+                        .positiveText(R.string.confirm)
+
+                dialogBuilder.build().show()
             }
             ID_LIVE_PROBLEM -> {
                 val dialogBuilder = MaterialDialog.Builder(this)

@@ -40,9 +40,12 @@
 
     <string name="string_cancel">取消</string>
 
+    <string name="drawer_item_video_wallpaper">视频壁纸</string>
+    <string name="drawer_item_video_need_help">需要帮助</string>
+    <string name="drawer_item_video_need_help_dsc">下载壁纸太慢？</string>
     <string name="drawer_item_live_wallpaper">动态壁纸</string>
     <string name="drawer_item_need_help">需要帮助</string>
-    <string name="drawer_item_need_help_dsc">使用时遇到一些问题</string>
+    <string name="drawer_item_need_help_dsc">使用时遇到一些问题？</string>
     <string name="drawer_item_style_wallpaper_settings">艺术壁纸设置</string>
     <string name="drawer_item_apply_style_effect">应用艺术壁纸特效</string>
     <string name="drawer_item_style_blur">模糊</string>
@@ -75,6 +78,13 @@
     <string name="google_pay_not_support">你的设备不支持谷歌支付，请切换其他支付方式。</string>
 
     <string name="about_version_template">V%1$s</string>
+
+    <string name="donate_hint"><![CDATA[
+        如果你喜欢八音壁纸，并希望它以后有更稳定的服务，你可以选择为开发者捐赠。<br><br>
+
+        <b><a href="http://www.kinglloy.com/donate/">点此捐赠</a></b>
+    ]]></string>
+
     <string name="about_body"><![CDATA[
         八音壁纸（ETW）包含很多市场上火爆的动态壁纸，在谷歌应用市场上下载量超过百万甚至千万。
         八音壁纸将它们整合在一起，并移除了它们各自的广告，以清爽的方式呈现给大家。很大程度上提升了用户体验。
@@ -111,6 +121,15 @@
     <string name="advance_download_size_hint"><![CDATA[
         这款壁纸大小为 %s，使用之前需要先下载。<br><br>
         如果你已经链接上WI-FI，准备好下载，请点击下面的下载按钮
+    ]]></string>
+
+    <string name="video_hint"><![CDATA[
+        视频壁纸资源一般较大（数十MB），均放在八音壁纸租用的服务器上。
+        八音壁纸由个人开发者开发，没有收入来源，且个人金钱有限，因此租用的服务器带宽较小。<br><br>
+
+        如果你喜欢八音壁纸，并希望它以后有更稳定的服务，你可以选择为开发者捐赠。<br><br>
+
+        <b><a href="http://www.kinglloy.com/donate/">点此捐赠</a></b>
     ]]></string>
 
     <string name="welcome">如果你喜欢这款壁纸应用，并且希望开发更多新特性，你可以通过观看并点击广告来支持我们。</string>
