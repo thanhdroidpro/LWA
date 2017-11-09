@@ -234,7 +234,9 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_edit -> {
-                tryUpdateSelection(true)
+                if (wallpapers.size > 0) {
+                    tryUpdateSelection(true)
+                }
             }
         }
         return true
