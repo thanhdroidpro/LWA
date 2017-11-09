@@ -13,6 +13,7 @@ interface WallpaperDataStore {
     fun getPreviewWallpaperEntity(): WallpaperEntity
 
     fun getWallpaperEntities(): Observable<List<WallpaperEntity>>
+    fun getDownloadedWallpaperEntities(): Observable<List<WallpaperEntity>>
 
     fun selectPreviewingWallpaper(): Observable<Boolean>
     fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean>

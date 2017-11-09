@@ -93,6 +93,10 @@ class LiveRemoteWallpaperDataStore(val context: Context,
         }
     }
 
+    override fun getDownloadedWallpaperEntities(): Observable<List<WallpaperEntity>> {
+        throw UnsupportedOperationException("Remote data store not support get downloaded wallpaper.")
+    }
+
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
         throw UnsupportedOperationException("Remote data store not support select wallpaper.")
     }

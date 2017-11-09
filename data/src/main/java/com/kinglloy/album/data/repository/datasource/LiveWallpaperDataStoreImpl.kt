@@ -28,6 +28,10 @@ class LiveWallpaperDataStoreImpl(private val context: Context,
     override fun getWallpaperEntities(): Observable<List<WallpaperEntity>> =
             createAdvanceWallpapersFromDB().doOnNext(wallpaperCache::putWallpapers)
 
+    override fun getDownloadedWallpaperEntities(): Observable<List<WallpaperEntity>> {
+        throw UnsupportedOperationException("Live wallpaper data store not support get downloaded wallpaper.")
+    }
+
     override fun selectPreviewingWallpaper():
             Observable<Boolean> {
         throw UnsupportedOperationException("Live wallpaper data store not support select previewing.")

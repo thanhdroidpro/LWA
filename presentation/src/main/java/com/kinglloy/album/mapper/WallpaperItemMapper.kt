@@ -10,7 +10,7 @@ import javax.inject.Inject
  * @author jinyalin
  * @since 2017/7/28.
  */
-class AdvanceWallpaperItemMapper @Inject constructor() {
+class WallpaperItemMapper @Inject constructor() {
 
     fun transform(wallpaper: Wallpaper): WallpaperItem {
         Preconditions.checkNotNull(wallpaper, "Wallpaper can not be null.")

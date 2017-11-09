@@ -14,7 +14,7 @@ import com.kinglloy.album.domain.Wallpaper
 import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.domain.interactor.*
 import com.kinglloy.album.exception.ErrorMessageFactory
-import com.kinglloy.album.mapper.AdvanceWallpaperItemMapper
+import com.kinglloy.album.mapper.WallpaperItemMapper
 import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.view.WallpaperListView
 import com.kinglloy.download.DownloadListener
@@ -31,8 +31,9 @@ class WallpaperListPresenter
 @Inject constructor(private val getWallpapers: GetWallpapers,
                     private val loadWallpaper: LoadWallpaper,
                     private val previewWallpaper: PreviewWallpaper,
-                    val advanceWallpaperItemMapper: AdvanceWallpaperItemMapper,
-                    val wallpaperSwitcher: WallpaperSwitcher) : Presenter, DownloadListener {
+                    val wallpaperItemMapper: WallpaperItemMapper,
+                    val wallpaperSwitcher: WallpaperSwitcher,
+                    val getPreviewWallpaper: GetPreviewWallpaper) : Presenter, DownloadListener {
 
     companion object {
         val TAG = "WallpaperListPresenter"
@@ -57,9 +58,8 @@ class WallpaperListPresenter
     private val mContentObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean, uri: Uri) {
             LogUtil.D(TAG, "Uri change." + uri)
-            if (currentPreviewing != null) {
-                view?.selectWallpaper(currentPreviewing!!)
-            }
+            view?.selectWallpaper(wallpaperItemMapper
+                    .transform(getPreviewWallpaper.previewing))
         }
     }
 
@@ -92,7 +92,7 @@ class WallpaperListPresenter
         view?.showLoading()
         loadWallpaper.execute(object : DefaultObserver<List<Wallpaper>>() {
             override fun onNext(needDownload: List<Wallpaper>) {
-                view?.renderWallpapers(advanceWallpaperItemMapper.transformList(needDownload))
+                view?.renderWallpapers(wallpaperItemMapper.transformList(needDownload))
             }
 
             override fun onComplete() {
@@ -229,7 +229,7 @@ class WallpaperListPresenter
             if (needDownload.isEmpty()) {
                 view?.showEmpty()
             } else {
-                view?.renderWallpapers(advanceWallpaperItemMapper.transformList(needDownload))
+                view?.renderWallpapers(wallpaperItemMapper.transformList(needDownload))
             }
         }
 

@@ -15,7 +15,5 @@ interface MyWallpapersView : LoadingDataView {
 
     fun complete()
 
-    fun wallpaperSelected(wallpaperId: String)
-
     fun deleteWallpapers(wallpapers: List<WallpaperItem>)
 }

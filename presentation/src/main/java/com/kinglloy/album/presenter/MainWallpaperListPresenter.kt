@@ -13,7 +13,7 @@ import com.kinglloy.album.domain.Wallpaper
 import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.domain.interactor.*
 import com.kinglloy.album.exception.ErrorMessageFactory
-import com.kinglloy.album.mapper.AdvanceWallpaperItemMapper
+import com.kinglloy.album.mapper.WallpaperItemMapper
 import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.view.WallpaperListView
 import javax.inject.Inject
@@ -26,7 +26,7 @@ class MainWallpaperListPresenter
 @Inject constructor(private val getWallpapers: GetWallpapers,
                     private val loadWallpaper: LoadWallpaper,
                     private val previewWallpaper: PreviewWallpaper,
-                    val advanceWallpaperItemMapper: AdvanceWallpaperItemMapper,
+                    val advanceWallpaperItemMapper: WallpaperItemMapper,
                     val wallpaperSwitcher: WallpaperSwitcher)
     : Presenter {
 

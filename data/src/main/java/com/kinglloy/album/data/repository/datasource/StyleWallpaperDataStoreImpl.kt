@@ -22,6 +22,10 @@ class StyleWallpaperDataStoreImpl(private val context: Context,
     override fun getWallpaperEntities(): Observable<List<WallpaperEntity>> =
             createStyleWallpapersFromDB().doOnNext(wallpaperCache::putWallpapers)
 
+    override fun getDownloadedWallpaperEntities(): Observable<List<WallpaperEntity>> {
+        throw UnsupportedOperationException("Style wallpaper data store not support get downloaded wallpaper.")
+    }
+
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
         throw UnsupportedOperationException("Style wallpaper data store not support select previewing.")
     }

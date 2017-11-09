@@ -8,6 +8,7 @@ import com.kinglloy.album.data.cache.WallpaperCache
 import com.kinglloy.album.data.entity.WallpaperEntity
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.PreviewingWallpaper.*
+import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.data.utils.notifyChange
 import com.kinglloy.album.domain.WallpaperType
 import io.reactivex.Observable
@@ -70,6 +71,44 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
 
     override fun getWallpaperEntities(): Observable<List<WallpaperEntity>> {
         throw UnsupportedOperationException("Wallpaper manage data store not support get wallpaper entities.")
+    }
+
+    override fun getDownloadedWallpaperEntities(): Observable<List<WallpaperEntity>> {
+        return Observable.create { emitter ->
+            val videoWallpaperUri = AlbumContract.VideoWallpaper.CONTENT_URI
+            val liveWallpaperUri = AlbumContract.LiveWallpaper.CONTENT_URI
+            val styleWallpaperUri = AlbumContract.StyleWallpaper.CONTENT_URI
+
+            val videoWallpaperCursor = context.contentResolver.query(videoWallpaperUri,
+                    null, null, null, null)
+            val liveWallpaperCursor = context.contentResolver.query(liveWallpaperUri,
+                    null, null, null, null)
+            val styleWallpaperCursor = context.contentResolver.query(styleWallpaperUri,
+                    null, null, null, null)
+
+            val downloadedWallpapers = ArrayList<WallpaperEntity>()
+            try {
+                if (videoWallpaperCursor != null && videoWallpaperCursor.moveToFirst()) {
+                    val videoWallpapers = WallpaperEntity.videoWallpaperValues(videoWallpaperCursor)
+                    downloadedWallpapers.addAll(filterDownloadedWallpapers(videoWallpapers))
+                }
+                if (liveWallpaperCursor != null && liveWallpaperCursor.moveToFirst()) {
+                    val liveWallpapers = WallpaperEntity.liveWallpaperValues(liveWallpaperCursor)
+                    downloadedWallpapers.addAll(filterDownloadedWallpapers(liveWallpapers))
+                }
+                if (styleWallpaperCursor != null && styleWallpaperCursor.moveToFirst()) {
+                    val styleWallpapers = WallpaperEntity.styleWallpaperValues(styleWallpaperCursor)
+                    downloadedWallpapers.addAll(filterDownloadedWallpapers(styleWallpapers))
+                }
+            } finally {
+                videoWallpaperCursor?.close()
+                liveWallpaperCursor?.close()
+                styleWallpaperCursor?.close()
+            }
+
+            emitter.onNext(downloadedWallpapers)
+            emitter.onComplete()
+        }
     }
 
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
@@ -218,6 +257,16 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
         entity.type = WallpaperType.LIVE
 
         return entity
+    }
+
+    private fun filterDownloadedWallpapers(wallpapers: List<WallpaperEntity>)
+            : ArrayList<WallpaperEntity> {
+        val downloaded = ArrayList<WallpaperEntity>()
+        wallpapers.filterNotTo(downloaded) {
+            WallpaperFileHelper.isNeedDownloadWallpaper(it.lazyDownload,
+                    it.storePath)
+        }
+        return downloaded
     }
 
 }

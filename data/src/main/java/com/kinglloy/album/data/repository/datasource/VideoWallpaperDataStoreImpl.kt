@@ -22,6 +22,9 @@ class VideoWallpaperDataStoreImpl(private val context: Context,
     override fun getWallpaperEntities(): Observable<List<WallpaperEntity>> =
             createVideoWallpapersFromDB().doOnNext(wallpaperCache::putWallpapers)
 
+    override fun getDownloadedWallpaperEntities(): Observable<List<WallpaperEntity>> {
+        throw UnsupportedOperationException("Video wallpaper data store not support get downloaded wallpaper.")
+    }
 
     override fun selectPreviewingWallpaper(): Observable<Boolean> {
         throw UnsupportedOperationException("Video wallpaper data store not support select previewing.")

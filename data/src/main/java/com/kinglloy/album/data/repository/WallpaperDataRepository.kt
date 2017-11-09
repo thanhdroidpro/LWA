@@ -52,6 +52,10 @@ class WallpaperDataRepository
                 .map(wallpaperMapper::transformList)
     }
 
+    override fun getDownloadedWallpapers(): Observable<MutableList<Wallpaper>> =
+            factory.createManageDataStore().getDownloadedWallpaperEntities()
+                    .map(wallpaperMapper::transformList)
+
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> =
             factory.createManageDataStore().previewWallpaper(wallpaperId, type)
 

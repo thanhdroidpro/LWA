@@ -5,6 +5,7 @@ import com.kinglloy.album.AlbumApplication
 import com.kinglloy.album.AlbumWallpaperService
 import com.kinglloy.album.view.activity.WallpaperListActivity
 import com.kinglloy.album.injection.modules.ApplicationModule
+import com.kinglloy.album.view.activity.MyWallpapersActivity
 import com.kinglloy.album.view.activity.WallpaperListActivityV2
 import com.kinglloy.album.view.fragment.BaseWallpapersFragment
 import com.kinglloy.album.view.fragment.LiveWallpapersFragment
@@ -32,6 +33,7 @@ interface ApplicationComponent {
 
     fun inject(mainActivity: WallpaperListActivity)
     fun inject(mainActivity: WallpaperListActivityV2)
+    fun inject(myWallpapersActivity: MyWallpapersActivity)
 
     //Exposed to sub-graphs.
     fun context(): Context
