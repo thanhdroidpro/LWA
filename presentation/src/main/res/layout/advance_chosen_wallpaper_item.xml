@@ -41,7 +41,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/checked_overlay"
+        android:id="@+id/current_select_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#8fff"
@@ -52,6 +52,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/ic_wallpaper_current"
+            android:tint="@color/color_wallpaper_item_tint" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/checked_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#8fff"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/advance_chosen_photo_selected"
             android:tint="@color/color_wallpaper_item_tint" />
 
     </FrameLayout>

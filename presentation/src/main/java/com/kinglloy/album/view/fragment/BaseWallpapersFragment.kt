@@ -327,7 +327,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     }
 
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var checkedOverlayView: View = itemView.findViewById(R.id.checked_overlay)
+        var checkedOverlayView: View = itemView.findViewById(R.id.current_select_overlay)
         var downloadOverlayView: View = itemView.findViewById(R.id.download_overlay)
         private var thumbnailView: View = itemView.findViewById(R.id.thumbnail)
         var thumbnail: ImageView = thumbnailView as ImageView

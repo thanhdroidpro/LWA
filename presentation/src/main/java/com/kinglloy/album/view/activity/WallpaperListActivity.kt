@@ -14,7 +14,6 @@ import android.text.TextUtils
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.bumptech.glide.Glide
 import com.kinglloy.album.AlbumApplication
@@ -331,7 +330,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
     override fun getWallpaperType() = WallpaperType.LIVE
 
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var checkedOverlayView: View = itemView.findViewById(R.id.checked_overlay)
+        var checkedOverlayView: View = itemView.findViewById(R.id.current_select_overlay)
         var downloadOverlayView: View = itemView.findViewById(R.id.download_overlay)
         var thumbnailView: View = itemView.findViewById(R.id.thumbnail)
         var thumbnail: ImageView = thumbnailView as ImageView

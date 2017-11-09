@@ -1,8 +1,12 @@
 package com.kinglloy.album.view.activity
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
@@ -19,6 +23,7 @@ import com.kinglloy.album.AlbumApplication
 import com.kinglloy.album.R
 import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.presenter.MyWallpapersPresenter
+import com.kinglloy.album.util.MultiSelectionController
 import com.kinglloy.album.view.MyWallpapersView
 import kotlinx.android.synthetic.main.activity_my_wallpapers.*
 import java.util.ArrayList
@@ -29,6 +34,9 @@ import javax.inject.Inject
  * On 2017/11/8.
  */
 class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
+    companion object {
+        private val STATE_SELECTION = "selection"
+    }
 
     private lateinit var wallpaperList: RecyclerView
     private lateinit var loadingView: View
@@ -44,6 +52,10 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
     private var mItemSize = 10
 
     val wallpapers = ArrayList<WallpaperItem>()
+
+    private val mMultiSelectionController =
+            MultiSelectionController<WallpaperItem>(STATE_SELECTION)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +73,15 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
 
         initView()
         presenter.initialize()
+    }
+
+    override fun onBackPressed() {
+        if (selectionMode) {
+            mMultiSelectionController.reset(true)
+            tryUpdateSelection(true)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private fun initView() {
@@ -131,7 +152,7 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
                     resources.getInteger(android.R.integer.config_shortAnimTime)
                 else 0
 
-        if (!selectionVisible) {
+        if (!selectionMode) {
             selectionToolbarContainer.visibility = View.VISIBLE
             selectionToolbarContainer.translationY =
                     (-selectionToolbarContainer.height).toFloat()
@@ -140,23 +161,38 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
                     .setDuration(duration.toLong())
                     .withEndAction(null)
         } else {
-
+            selectionToolbarContainer.animate()
+                    .translationY((-selectionToolbarContainer.height).toFloat())
+                    .setDuration(duration.toLong())
+                    .withEndAction { selectionToolbarContainer.visibility = View.INVISIBLE }
         }
-        selectionVisible = !selectionVisible
+        selectionMode = !selectionMode
     }
 
-    private var selectionVisible = false
+    private var selectionMode = false
     private fun setupMultiSelect() {
         // Set up toolbar
         selectionToolbar.setNavigationOnClickListener {
-            selectionVisible = true
-            tryUpdateSelection(true)
+            onBackPressed()
         }
         selectionToolbar.inflateMenu(R.menu.menu_my_wallpapers_edit)
         selectionToolbar.setOnMenuItemClickListener {
             Toast.makeText(this@MyWallpapersActivity, "Delete...", Toast.LENGTH_SHORT).show()
             true
         }
+
+        // Set up controller
+        mMultiSelectionController.setCallbacks(object : MultiSelectionController.Callbacks {
+            override fun onSelectionChanged(restored: Boolean, fromUser: Boolean) {
+//                tryUpdateSelection(!restored)
+                if (updatePosition >= 0) {
+                    wallpapersAdapter.notifyItemChanged(updatePosition)
+                    updatePosition = -1
+                } else {
+                    wallpapersAdapter.notifyDataSetChanged()
+                }
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -268,7 +304,8 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
     override fun context() = applicationContext!!
 
     class WallpaperViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var checkedOverlayView: View = itemView.findViewById(R.id.checked_overlay)
+        var selectedOverlayView: View = itemView.findViewById(R.id.current_select_overlay)
+        var checkOverlayView: View = itemView.findViewById(R.id.checked_overlay)
         private var thumbnailView: View = itemView.findViewById(R.id.thumbnail)
         var thumbnail: ImageView = thumbnailView as ImageView
         private var nameView: View = itemView.findViewById(R.id.tvName)
@@ -277,6 +314,11 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
         var icPro: View = itemView.findViewById(R.id.icon_pro)
     }
 
+    private var mLastTouchPosition: Int = 0
+    private var mLastTouchX: Int = 0
+    private var mLastTouchY: Int = 0
+
+    private var updatePosition: Int = -1
     private val wallpapersAdapter = object : RecyclerView.Adapter<WallpaperViewHolder>() {
         override fun onBindViewHolder(holder: WallpaperViewHolder, position: Int) {
             val item = wallpapers[position]
@@ -289,10 +331,50 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
                     .into(holder.thumbnail)
 
             if (item.isSelected) {
-                holder.checkedOverlayView.visibility = View.VISIBLE
+                holder.selectedOverlayView.visibility = View.VISIBLE
             } else {
-                holder.checkedOverlayView.visibility = View.GONE
+                holder.selectedOverlayView.visibility = View.GONE
             }
+            val checked = mMultiSelectionController.isSelected(item)
+
+            if (mLastTouchPosition == holder.adapterPosition
+                    && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Handler().post {
+                    if (!holder.checkOverlayView.isAttachedToWindow) {
+                        // Can't animate detached Views
+                        holder.checkOverlayView.visibility = if (checked) View.VISIBLE else View.GONE
+                        return@post
+                    }
+                    if (checked) {
+                        holder.checkOverlayView.visibility = View.VISIBLE
+                    }
+
+                    // find the smallest radius that'll cover the item
+                    val coverRadius = maxDistanceToCorner(
+                            mLastTouchX, mLastTouchY,
+                            0, 0, holder.itemView.width, holder.itemView.height)
+
+                    val revealAnim = ViewAnimationUtils.createCircularReveal(
+                            holder.checkOverlayView,
+                            mLastTouchX,
+                            mLastTouchY,
+                            if (checked) 0f else coverRadius,
+                            if (checked) coverRadius else 0f)
+                            .setDuration(150)
+
+                    if (!checked) {
+                        revealAnim.addListener(object : AnimatorListenerAdapter() {
+                            override fun onAnimationEnd(animation: Animator) {
+                                holder.checkOverlayView.visibility = View.GONE
+                            }
+                        })
+                    }
+                    revealAnim.start()
+                }
+            } else {
+                holder.checkOverlayView.visibility = if (checked) View.VISIBLE else View.GONE
+            }
+
 
             holder.tvName.background = if (item.pro) proBackground else normalBackground
             holder.icPro.visibility = if (item.pro) View.VISIBLE else View.GONE
@@ -306,12 +388,44 @@ class MyWallpapersActivity : AppCompatActivity(), MyWallpapersView {
                     .inflate(R.layout.advance_chosen_wallpaper_item, parent, false)
 
             val vh = WallpaperViewHolder(view)
+            view.layoutParams.height = mItemSize
+            view.setOnTouchListener { _, motionEvent ->
+                if (motionEvent.actionMasked != MotionEvent.ACTION_CANCEL) {
+                    mLastTouchPosition = vh.adapterPosition
+                    mLastTouchX = motionEvent.x.toInt()
+                    mLastTouchY = motionEvent.y.toInt()
+                }
+                false
+            }
+
             view.setOnClickListener {
                 val item = wallpapers[vh.adapterPosition]
-                presenter.previewWallpaper(item)
+                if (selectionMode) {
+                    updatePosition = vh.adapterPosition
+                    if (updatePosition != RecyclerView.NO_POSITION
+                            && !wallpapers[updatePosition].isSelected) {
+                        mMultiSelectionController.toggle(wallpapers[updatePosition], true)
+                    }
+                } else {
+                    presenter.previewWallpaper(item)
+                }
             }
 
             return vh
+        }
+
+        private fun maxDistanceToCorner(x: Int, y: Int, left: Int, top: Int,
+                                        right: Int, bottom: Int): Float {
+            var maxDistance = 0f
+            maxDistance = Math.max(maxDistance,
+                    Math.hypot((x - left).toDouble(), (y - top).toDouble()).toFloat())
+            maxDistance = Math.max(maxDistance,
+                    Math.hypot((x - right).toDouble(), (y - top).toDouble()).toFloat())
+            maxDistance = Math.max(maxDistance,
+                    Math.hypot((x - left).toDouble(), (y - bottom).toDouble()).toFloat())
+            maxDistance = Math.max(maxDistance,
+                    Math.hypot((x - right).toDouble(), (y - bottom).toDouble()).toFloat())
+            return maxDistance
         }
 
         override fun getItemId(position: Int): Long = wallpapers[position].id

@@ -84,7 +84,7 @@
             android:id="@+id/selectionToolbar"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
-            android:background="@color/gallery_theme_dark"
+            android:background="@color/colorAccent"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:title="@string/edit" />
 
