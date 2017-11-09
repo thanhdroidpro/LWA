@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">动态壁纸合集</string>
+    <string name="app_name">八音壁纸</string>
 
     <string name="app_author">Yalin</string>
     <string name="app_description">@string/app_name</string>
@@ -53,7 +53,7 @@
     <string name="drawer_item_my_wallpapers">我的壁纸</string>
     <string name="drawer_item_my_wallpapers_dsc">管理我下载的壁纸</string>
     <string name="drawer_item_about">关于</string>
-    <string name="drawer_item_about_dsc">关于动态壁纸合集（LWA）</string>
+    <string name="drawer_item_about_dsc">关于八音壁纸（ETW）</string>
 
     <string name="exception_message_device_unsupported">您的设备不支持动态壁纸。</string>
     <string name="exception_message_generic">操作出现了一个错误。</string>
@@ -73,18 +73,18 @@
 
     <string name="about_version_template">V%1$s</string>
     <string name="about_body"><![CDATA[
-        动态壁纸合集（LWA）包含很多市场上火爆的动态壁纸，在谷歌应用市场上下载量超过百万甚至千万。
-        LWA将它们整合在一起，并移除了它们各自的广告，以清爽的方式呈现给大家。很大程度上提升了用户体验。
-        同时LWA对很多壁纸做了优化，提升了它们的性能和兼容性，并降低了一些动态壁纸的电量消耗。<br><br>
+        八音壁纸（ETW）包含很多市场上火爆的动态壁纸，在谷歌应用市场上下载量超过百万甚至千万。
+        八音壁纸将它们整合在一起，并移除了它们各自的广告，以清爽的方式呈现给大家。很大程度上提升了用户体验。
+        同时八音壁纸对很多壁纸做了优化，提升了它们的性能和兼容性，并降低了一些动态壁纸的电量消耗。<br><br>
 
-        除动态壁纸外，LWA也包含各种艺术画作（艺术壁纸），你也可以使用艺术作品来美化你的手机桌面。<br><br>
+        除动态壁纸外，八音壁纸也包含各种艺术画作（艺术壁纸），你也可以使用艺术作品来美化你的手机桌面。<br><br>
 
-        LWA提供开发者SDK，支持有兴趣的壁纸开发者为LWA开发动态壁纸。
-        LWA开放源代码，供开发者学习交流。<br><br>
+        八音壁纸提供开发者SDK，支持有兴趣的壁纸开发者为八音壁纸开发动态壁纸。
+        八音壁纸开放源代码，供开发者学习交流。<br><br>
 
-        在有新壁纸发布时，LWA会在24小时之内更新。<br><br>
+        在有新壁纸发布时，八音壁纸会在24小时之内更新。<br><br>
 
-        如果你有什么意见或建议，或者你需要LWA的源代码，请发邮件给开发者邮箱：
+        如果你有什么意见或建议，或者你需要八音壁纸的源代码，请发邮件给开发者邮箱：
         <b><a href="mailto:jinkg@live.cn">jinkg@live.cn</a></b><br><br>
 
         你还可以<b><a href="http://www.kinglloy.com/">访问官方网站</a></b>

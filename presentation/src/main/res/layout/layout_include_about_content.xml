@@ -8,7 +8,6 @@
     android:fadingEdgeLength="32dp"
     android:fitsSystemWindows="true"
     android:overScrollMode="never"
-    android:paddingBottom="32dp"
     android:paddingEnd="32dp"
     android:paddingStart="32dp"
     android:requiresFadingEdge="vertical"
@@ -24,7 +23,6 @@
             android:id="@+id/appVersion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-condensed"
             android:textColor="#afff"
             android:textSize="@dimen/text_size_large" />
