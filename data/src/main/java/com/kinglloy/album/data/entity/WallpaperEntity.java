@@ -4,12 +4,9 @@ import android.database.Cursor;
 import android.text.TextUtils;
 
 
-import com.kinglloy.album.data.log.LogUtil;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract;
 import com.kinglloy.album.domain.WallpaperType;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,16 +48,8 @@ public class WallpaperEntity {
         List<WallpaperEntity> validWallpapers = new ArrayList<>();
         while (cursor != null && cursor.moveToNext()) {
             WallpaperEntity wallpaperEntity = liveWallpaperValue(cursor);
-            try {
-                if (!wallpaperEntity.lazyDownload
-                        && !new File(wallpaperEntity.storePath).exists()) {
-                    throw new FileNotFoundException("Component not found.");
-                }
-                validWallpapers.add(wallpaperEntity);
-            } catch (Exception e) {
-                LogUtil.D(TAG, "File not found with wallpaper wallpaperId : "
-                        + wallpaperEntity.wallpaperId);
-            }
+
+            validWallpapers.add(wallpaperEntity);
         }
         return validWallpapers;
     }
@@ -109,12 +98,7 @@ public class WallpaperEntity {
         List<WallpaperEntity> validWallpapers = new ArrayList<>();
         while (cursor != null && cursor.moveToNext()) {
             WallpaperEntity wallpaperEntity = styleWallpaperValue(cursor);
-            try {
-                validWallpapers.add(wallpaperEntity);
-            } catch (Exception e) {
-                LogUtil.D(TAG, "File not found with wallpaper wallpaperId : "
-                        + wallpaperEntity.wallpaperId);
-            }
+            validWallpapers.add(wallpaperEntity);
         }
         return validWallpapers;
     }
@@ -153,12 +137,7 @@ public class WallpaperEntity {
         List<WallpaperEntity> validWallpapers = new ArrayList<>();
         while (cursor != null && cursor.moveToNext()) {
             WallpaperEntity wallpaperEntity = videoWallpaperValue(cursor);
-            try {
-                validWallpapers.add(wallpaperEntity);
-            } catch (Exception e) {
-                LogUtil.D(TAG, "File not found with wallpaper wallpaperId : "
-                        + wallpaperEntity.wallpaperId);
-            }
+            validWallpapers.add(wallpaperEntity);
         }
         return validWallpapers;
     }

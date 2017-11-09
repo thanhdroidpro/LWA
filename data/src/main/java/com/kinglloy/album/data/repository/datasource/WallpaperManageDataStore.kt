@@ -89,15 +89,15 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
 
             val downloadedWallpapers = ArrayList<WallpaperEntity>()
             try {
-                if (videoWallpaperCursor != null && videoWallpaperCursor.moveToFirst()) {
+                if (videoWallpaperCursor != null) {
                     val videoWallpapers = WallpaperEntity.videoWallpaperValues(videoWallpaperCursor)
                     downloadedWallpapers.addAll(filterDownloadedWallpapers(videoWallpapers))
                 }
-                if (liveWallpaperCursor != null && liveWallpaperCursor.moveToFirst()) {
+                if (liveWallpaperCursor != null) {
                     val liveWallpapers = WallpaperEntity.liveWallpaperValues(liveWallpaperCursor)
                     downloadedWallpapers.addAll(filterDownloadedWallpapers(liveWallpapers))
                 }
-                if (styleWallpaperCursor != null && styleWallpaperCursor.moveToFirst()) {
+                if (styleWallpaperCursor != null) {
                     val styleWallpapers = WallpaperEntity.styleWallpaperValues(styleWallpaperCursor)
                     downloadedWallpapers.addAll(filterDownloadedWallpapers(styleWallpapers))
                 }

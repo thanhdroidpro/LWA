@@ -6,6 +6,7 @@
 
     <string name="advance_empty_load">Load videoWallpapers</string>
     <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the wallpapers from server.</string>
+    <string name="downloaded_empty_description">You have not download any wallpaper.\nYou can download the wallpapers from home page.</string>
 
     <string name="advance_retry">Retry</string>
     <string name="advance_review">Watch again and click</string>

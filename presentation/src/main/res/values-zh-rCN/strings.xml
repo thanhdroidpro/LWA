@@ -7,6 +7,7 @@
 
     <string name="advance_empty_load">获取壁纸</string>
     <string name="advance_empty_description">这里还没有壁纸，你可以点击按钮从服务器获取。</string>
+    <string name="downloaded_empty_description">你还没有下载过壁纸。\n你可以从主页下载喜欢的壁纸。</string>
 
     <string name="advance_retry">重试获取</string>
     <string name="advance_review">再次观看并点击</string>

@@ -52,7 +52,7 @@
             android:layout_margin="@dimen/global_prompt_margin"
             android:drawableTop="@drawable/ic_launcher"
             android:gravity="center_horizontal"
-            android:text="@string/advance_empty_description" />
+            android:text="@string/downloaded_empty_description" />
     </LinearLayout>
 
     <LinearLayout
