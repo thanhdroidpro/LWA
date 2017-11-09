@@ -1,11 +1,13 @@
 package com.kinglloy.album.domain.interactor;
 
 
+import com.kinglloy.album.domain.Wallpaper;
 import com.kinglloy.album.domain.executor.PostExecutionThread;
 import com.kinglloy.album.domain.executor.ThreadExecutor;
 import com.kinglloy.album.domain.repository.WallpaperRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,18 +34,18 @@ public class DeleteDownloadedWallpapers extends
 
     @Override
     public Observable<Boolean> buildUseCaseObservable(Params params) {
-        return repository.deleteDownloadedWallpapers(params.wallpapersPath);
+        return repository.deleteDownloadedWallpapers(params.wallpapers);
     }
 
     public static final class Params {
-        private final ArrayList<String> wallpapersPath;
+        private final List<Wallpaper> wallpapers;
 
-        private Params(ArrayList<String> wallpapersPath) {
-            this.wallpapersPath = wallpapersPath;
+        private Params(List<Wallpaper> wallpapers) {
+            this.wallpapers = wallpapers;
         }
 
-        public static Params withPaths(ArrayList<String> wallpaperPaths) {
-            return new Params(wallpaperPaths);
+        public static Params withWallpapers(List<Wallpaper> wallpapers) {
+            return new Params(wallpapers);
         }
     }
 }

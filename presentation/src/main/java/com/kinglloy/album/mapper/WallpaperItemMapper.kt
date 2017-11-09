@@ -33,6 +33,27 @@ class WallpaperItemMapper @Inject constructor() {
         return wallpaperItem
     }
 
+    fun transformToWallpaper(wallpaperItem: WallpaperItem): Wallpaper {
+        Preconditions.checkNotNull(wallpaperItem, "Wallpaper can not be null.")
+        val wallpaper = Wallpaper()
+        wallpaper.id = wallpaperItem.id
+        wallpaper.wallpaperId = wallpaperItem.wallpaperId
+        wallpaper.link = wallpaperItem.link
+        wallpaper.name = wallpaperItem.name
+        wallpaper.author = wallpaperItem.author
+        wallpaper.iconUrl = wallpaperItem.iconUrl
+        wallpaper.downloadUrl = wallpaperItem.downloadUrl
+        wallpaper.providerName = wallpaperItem.providerName
+        wallpaper.storePath = wallpaperItem.storePath
+        wallpaper.isSelected = wallpaperItem.isSelected
+        wallpaper.lazyDownload = wallpaperItem.lazyDownload
+        wallpaper.wallpaperType = wallpaperItem.wallpaperType
+        wallpaper.size = wallpaperItem.size
+        wallpaper.price = wallpaperItem.price
+        wallpaper.pro = wallpaperItem.pro
+        return wallpaper
+    }
+
     fun transformList(wallpaperEntities: List<Wallpaper>): List<WallpaperItem> {
         Preconditions.checkNotNull(wallpaperEntities, "SourceEntity can not be null.")
         val sources = ArrayList<WallpaperItem>()

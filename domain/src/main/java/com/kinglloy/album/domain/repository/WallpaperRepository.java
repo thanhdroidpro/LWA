@@ -28,7 +28,7 @@ public interface WallpaperRepository {
 
     Observable<List<Wallpaper>> getDownloadedWallpapers();
 
-    Observable<Boolean> deleteDownloadedWallpapers(List<String> filePaths);
+    Observable<Boolean> deleteDownloadedWallpapers(List<Wallpaper> wallpapers);
 
     Observable<Boolean> selectPreviewingWallpaper();
 

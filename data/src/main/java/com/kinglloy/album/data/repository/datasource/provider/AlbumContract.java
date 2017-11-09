@@ -250,6 +250,14 @@ public class AlbumContract {
             return CONTENT_URI.buildUpon().appendPath(wallpaperId).build();
         }
 
+        public static Uri buildDeletedWallpaperUri(String wallpaperId) {
+            return CONTENT_DOWNLOAD_ITEM_DELETED_URI.buildUpon().appendPath(wallpaperId).build();
+        }
+
+        public static String getDeletedWallpaperId(Uri uri) {
+            return uri.getPathSegments().get(2);
+        }
+
         public static String getWallpaperId(Uri uri) {
             return uri.getPathSegments().get(1);
         }
@@ -284,6 +292,14 @@ public class AlbumContract {
 
         public static Uri buildWallpaperUri(String wallpaperId) {
             return CONTENT_URI.buildUpon().appendPath(wallpaperId).build();
+        }
+
+        public static Uri buildDeletedWallpaperUri(String wallpaperId) {
+            return CONTENT_DOWNLOAD_ITEM_DELETED_URI.buildUpon().appendPath(wallpaperId).build();
+        }
+
+        public static String getDeletedWallpaperId(Uri uri) {
+            return uri.getPathSegments().get(2);
         }
 
         public static String getWallpaperId(Uri uri) {
@@ -321,6 +337,14 @@ public class AlbumContract {
 
         public static Uri buildWallpaperUri(String wallpaperId) {
             return CONTENT_URI.buildUpon().appendPath(wallpaperId).build();
+        }
+
+        public static Uri buildDeletedWallpaperUri(String wallpaperId) {
+            return CONTENT_DOWNLOAD_ITEM_DELETED_URI.buildUpon().appendPath(wallpaperId).build();
+        }
+
+        public static String getDeletedWallpaperId(Uri uri) {
+            return uri.getPathSegments().get(2);
         }
 
         public static String getWallpaperId(Uri uri) {

@@ -45,8 +45,6 @@ class MyWallpapersPresenter
     private val deleteRunnable = Runnable {
         view.closeUndoDelete()
         if (currentDeleting != null && currentDeleting!!.size > 0) {
-            val filesPath = ArrayList<String>()
-            currentDeleting!!.mapTo(filesPath) { it.storePath }
             deleteDownloadedWallpapers.execute(object : DefaultObserver<Boolean>() {
                 override fun onNext(success: Boolean) {
                     if (success) {
@@ -54,7 +52,8 @@ class MyWallpapersPresenter
                         currentDeleting!!.clear()
                     }
                 }
-            }, DeleteDownloadedWallpapers.Params.withPaths(filesPath))
+            }, DeleteDownloadedWallpapers.Params.withWallpapers(
+                    currentDeleting!!.map(wallpaperItemMapper::transformToWallpaper)))
         }
     }
 

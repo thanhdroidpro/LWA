@@ -15,7 +15,7 @@ interface WallpaperDataStore {
     fun getWallpaperEntities(): Observable<List<WallpaperEntity>>
     fun getDownloadedWallpaperEntities(): Observable<List<WallpaperEntity>>
 
-    fun deleteDownloadedWallpapers(filePaths: List<String>): Observable<Boolean>
+    fun deleteDownloadedWallpapers(wallpapers: List<WallpaperEntity>): Observable<Boolean>
 
     fun selectPreviewingWallpaper(): Observable<Boolean>
     fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean>

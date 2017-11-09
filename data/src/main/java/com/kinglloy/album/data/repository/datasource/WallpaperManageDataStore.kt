@@ -112,14 +112,21 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
         }
     }
 
-    override fun deleteDownloadedWallpapers(filePaths: List<String>): Observable<Boolean> {
+    override fun deleteDownloadedWallpapers(wallpapers: List<WallpaperEntity>): Observable<Boolean> {
         return Observable.create { emitter ->
-            for (path in filePaths) {
-                File(path).delete()
+
+            for (wallpaper in wallpapers) {
+                File(wallpaper.storePath).delete()
+                val notifyUri: Uri = when (wallpaper.type) {
+                    WallpaperType.VIDEO ->
+                        AlbumContract.VideoWallpaper.buildDeletedWallpaperUri(wallpaper.wallpaperId)
+                    WallpaperType.LIVE ->
+                        AlbumContract.LiveWallpaper.buildDeletedWallpaperUri(wallpaper.wallpaperId)
+                    else ->
+                        AlbumContract.StyleWallpaper.buildDeletedWallpaperUri(wallpaper.wallpaperId)
+                }
+                notifyChange(context, notifyUri)
             }
-            notifyChange(context, AlbumContract.LiveWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI)
-            notifyChange(context, AlbumContract.StyleWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI)
-            notifyChange(context, AlbumContract.VideoWallpaper.CONTENT_DOWNLOAD_ITEM_DELETED_URI)
             emitter.onNext(true)
             emitter.onComplete()
         }

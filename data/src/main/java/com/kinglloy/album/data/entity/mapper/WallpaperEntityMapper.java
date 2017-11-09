@@ -47,6 +47,29 @@ public class WallpaperEntityMapper {
         return wallpaper;
     }
 
+    public WallpaperEntity transformToEntity(Wallpaper wallpaper) {
+        Preconditions.checkNotNull(wallpaper, "Wallpaper can not be null.");
+        WallpaperEntity wallpaperEntity = new WallpaperEntity();
+        wallpaperEntity.id = wallpaper.id;
+        wallpaperEntity.wallpaperId = wallpaper.wallpaperId;
+        wallpaperEntity.link = wallpaper.link;
+        wallpaperEntity.name = wallpaper.name;
+        wallpaperEntity.author = wallpaper.author;
+        wallpaperEntity.iconUrl = wallpaper.iconUrl;
+        wallpaperEntity.downloadUrl = wallpaper.downloadUrl;
+        wallpaperEntity.providerName = wallpaper.providerName;
+        wallpaperEntity.storePath = wallpaper.storePath;
+        wallpaperEntity.isDefault = wallpaper.isDefault;
+        wallpaperEntity.isSelected = wallpaper.isSelected;
+        wallpaperEntity.lazyDownload = wallpaper.lazyDownload;
+        wallpaperEntity.type = wallpaper.wallpaperType;
+        wallpaperEntity.size = wallpaper.size;
+        wallpaperEntity.price = wallpaper.price;
+        wallpaperEntity.pro = wallpaper.pro;
+
+        return wallpaperEntity;
+    }
+
     public List<Wallpaper> transformList(List<WallpaperEntity> wallpaperEntities) {
         Preconditions.checkNotNull(wallpaperEntities, "SourceEntity can not be null.");
         List<Wallpaper> sources = new ArrayList<>();

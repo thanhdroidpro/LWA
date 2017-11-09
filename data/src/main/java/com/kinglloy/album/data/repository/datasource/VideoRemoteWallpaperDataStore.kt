@@ -100,7 +100,7 @@ class VideoRemoteWallpaperDataStore(val context: Context,
         throw UnsupportedOperationException("Remote video wallpaper data store not support get downloaded wallpaper.")
     }
 
-    override fun deleteDownloadedWallpapers(filePaths: List<String>): Observable<Boolean> {
+    override fun deleteDownloadedWallpapers(wallpapers: List<WallpaperEntity>): Observable<Boolean> {
         throw UnsupportedOperationException("Remote video data store not support delete downloaded wallpaper.")
     }
 

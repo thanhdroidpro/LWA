@@ -97,7 +97,7 @@ class LiveRemoteWallpaperDataStore(val context: Context,
         throw UnsupportedOperationException("Remote data store not support get downloaded wallpaper.")
     }
 
-    override fun deleteDownloadedWallpapers(filePaths: List<String>): Observable<Boolean> {
+    override fun deleteDownloadedWallpapers(wallpapers: List<WallpaperEntity>): Observable<Boolean> {
         throw UnsupportedOperationException("Remote data store not support delete downloaded wallpaper.")
     }
 

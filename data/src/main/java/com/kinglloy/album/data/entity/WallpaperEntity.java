@@ -21,7 +21,7 @@ import java.util.List;
 public class WallpaperEntity {
     private static final String TAG = "AdvanceWallpaperEntity";
 
-    public int id;
+    public long id;
     public String wallpaperId;
     public String link;
     public String name;

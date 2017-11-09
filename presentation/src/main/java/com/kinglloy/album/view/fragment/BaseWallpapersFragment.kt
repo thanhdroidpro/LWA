@@ -326,6 +326,19 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
         showError(ErrorMessageFactory.create(activity, e))
     }
 
+    override fun deletedDownloadWallpaper(wallpaperId: String) {
+        var deleteIndex = -1
+        wallpapers.forEachIndexed { index, wallpaperItem ->
+            if (TextUtils.equals(wallpaperItem.wallpaperId, wallpaperId)) {
+                deleteIndex = index
+                return@forEachIndexed
+            }
+        }
+        if (deleteIndex >= 0) {
+            wallpapersAdapter.notifyItemChanged(deleteIndex)
+        }
+    }
+
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var checkedOverlayView: View = itemView.findViewById(R.id.current_select_overlay)
         var downloadOverlayView: View = itemView.findViewById(R.id.download_overlay)

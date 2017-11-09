@@ -56,8 +56,8 @@ class WallpaperDataRepository
             factory.createManageDataStore().getDownloadedWallpaperEntities()
                     .map(wallpaperMapper::transformList)
 
-    override fun deleteDownloadedWallpapers(filePaths: MutableList<String>) =
-            factory.createManageDataStore().deleteDownloadedWallpapers(filePaths)
+    override fun deleteDownloadedWallpapers(wallpapers: MutableList<Wallpaper>) =
+            factory.createManageDataStore().deleteDownloadedWallpapers(wallpapers.map(wallpaperMapper::transformToEntity))
 
     override fun previewWallpaper(wallpaperId: String, type: WallpaperType): Observable<Boolean> =
             factory.createManageDataStore().previewWallpaper(wallpaperId, type)

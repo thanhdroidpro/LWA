@@ -29,4 +29,6 @@ interface WallpaperListView : LoadingDataView {
     fun showDownloadError(item: WallpaperItem, e: Exception)
 
     fun getWallpaperType(): WallpaperType
+
+    fun deletedDownloadWallpaper(wallpaperId: String)
 }

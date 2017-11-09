@@ -64,7 +64,18 @@ class WallpaperListPresenter
 
     private val mDownloadItemDeletedObserver = object : ContentObserver(Handler()) {
         override fun onChange(selfChange: Boolean, uri: Uri) {
-            initialize(view!!.getWallpaperType())
+            val wallpaperId: String = when (view!!.getWallpaperType()) {
+                WallpaperType.VIDEO -> {
+                    AlbumContract.VideoWallpaper.getDeletedWallpaperId(uri)
+                }
+                WallpaperType.LIVE -> {
+                    AlbumContract.LiveWallpaper.getDeletedWallpaperId(uri)
+                }
+                else -> {
+                    AlbumContract.StyleWallpaper.getDeletedWallpaperId(uri)
+                }
+            }
+            view?.deletedDownloadWallpaper(wallpaperId)
         }
     }
 

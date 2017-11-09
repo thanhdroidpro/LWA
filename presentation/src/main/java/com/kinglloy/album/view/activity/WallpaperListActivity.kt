@@ -327,6 +327,10 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         showError(ErrorMessageFactory.create(this, e))
     }
 
+    override fun deletedDownloadWallpaper(wallpaperId: String) {
+
+    }
+
     override fun getWallpaperType() = WallpaperType.LIVE
 
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
