@@ -53,7 +53,6 @@ public class ETWClassLoader extends DexClassLoader {
 
     @Override
     public String findLibrary(String name) {
-        System.out.println(super.findLibrary(name));
         if (!name.contains(LIB_PREFIX)) {
             name = LIB_PREFIX + name;
         }
