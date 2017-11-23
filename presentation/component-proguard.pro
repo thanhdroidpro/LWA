@@ -46,7 +46,3 @@
 -keep class com.badlogic.gdx.**{
     *;
 }
-
--keep class com.ist.lwp.koipond.natives.**{
-    *;
-}
