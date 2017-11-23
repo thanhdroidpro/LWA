@@ -60,28 +60,52 @@
       android:name=".view.activity.MyWallpapersActivity"
       android:theme="@style/Theme.MyWallpapers" />
 
+    <!--<service-->
+      <!--android:name=".AlbumWallpaperService"-->
+      <!--android:permission="android.permission.BIND_WALLPAPER"-->
+      <!--android:process=":album">-->
+      <!--<intent-filter>-->
+        <!--<action android:name="android.service.wallpaper.WallpaperService" />-->
+      <!--</intent-filter>-->
+      <!--<meta-data-->
+        <!--android:name="android.service.wallpaper"-->
+        <!--android:resource="@xml/wallpaper" />-->
+    <!--</service>-->
+
+    <!--<service-->
+      <!--android:name=".AlbumWallpaperServiceMirror"-->
+      <!--android:permission="android.permission.BIND_WALLPAPER"-->
+      <!--android:process=":album_mirror">-->
+      <!--<intent-filter>-->
+        <!--<action android:name="android.service.wallpaper.WallpaperService" />-->
+      <!--</intent-filter>-->
+      <!--<meta-data-->
+        <!--android:name="android.service.wallpaper"-->
+        <!--android:resource="@xml/wallpaper" />-->
+    <!--</service>-->
+
     <service
-      android:name=".AlbumWallpaperService"
-      android:permission="android.permission.BIND_WALLPAPER"
-      android:process=":album">
+        android:name=".AlbumWallpaperService"
+        android:permission="android.permission.BIND_WALLPAPER"
+        >
       <intent-filter>
         <action android:name="android.service.wallpaper.WallpaperService" />
       </intent-filter>
       <meta-data
-        android:name="android.service.wallpaper"
-        android:resource="@xml/wallpaper" />
+          android:name="android.service.wallpaper"
+          android:resource="@xml/wallpaper" />
     </service>
 
     <service
-      android:name=".AlbumWallpaperServiceMirror"
-      android:permission="android.permission.BIND_WALLPAPER"
-      android:process=":album_mirror">
+        android:name=".AlbumWallpaperServiceMirror"
+        android:permission="android.permission.BIND_WALLPAPER"
+        >
       <intent-filter>
         <action android:name="android.service.wallpaper.WallpaperService" />
       </intent-filter>
       <meta-data
-        android:name="android.service.wallpaper"
-        android:resource="@xml/wallpaper" />
+          android:name="android.service.wallpaper"
+          android:resource="@xml/wallpaper" />
     </service>
 
     <meta-data

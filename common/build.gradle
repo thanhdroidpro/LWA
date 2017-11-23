@@ -34,10 +34,6 @@ dependencies {
     })
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
-    implementation "com.badlogicgames.gdx:gdx-backend-android:$GDX_VERSION"
-
-    implementation project(':common')
-    implementation project(':domain')
 
     testImplementation 'junit:junit:4.12'
 }

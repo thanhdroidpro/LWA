@@ -4,6 +4,8 @@ import android.content.Context;
 import android.text.TextUtils;
 
 
+import com.kinglloy.common.utils.NativeFileHelper;
+
 import java.io.File;
 import java.util.Set;
 
@@ -41,7 +43,7 @@ public class WallpaperFileHelper {
         for (File file : files) {
             //noinspection ResultOfMethodCallIgnored
             file.delete();
-            NativeFileHelperKt.clearNativeFiles(context, file.getAbsolutePath());
+            NativeFileHelper.INSTANCE.clearNativeFiles(context, file.getAbsolutePath());
         }
     }
 

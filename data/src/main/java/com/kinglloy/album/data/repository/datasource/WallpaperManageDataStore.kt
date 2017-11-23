@@ -11,6 +11,7 @@ import com.kinglloy.album.data.repository.datasource.provider.AlbumContract.Prev
 import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.data.utils.notifyChange
 import com.kinglloy.album.domain.WallpaperType
+import com.kinglloy.common.utils.NativeFileHelper
 import io.reactivex.Observable
 import java.io.File
 
@@ -118,12 +119,16 @@ class WallpaperManageDataStore(val context: Context, private val caches: ArrayLi
             for (wallpaper in wallpapers) {
                 File(wallpaper.storePath).delete()
                 val notifyUri: Uri = when (wallpaper.type) {
-                    WallpaperType.VIDEO ->
+                    WallpaperType.VIDEO -> {
                         AlbumContract.VideoWallpaper.buildDeletedWallpaperUri(wallpaper.wallpaperId)
-                    WallpaperType.LIVE ->
+                    }
+                    WallpaperType.LIVE -> {
+                        NativeFileHelper.clearNativeFiles(context, wallpaper.storePath)
                         AlbumContract.LiveWallpaper.buildDeletedWallpaperUri(wallpaper.wallpaperId)
-                    else ->
+                    }
+                    else -> {
                         AlbumContract.StyleWallpaper.buildDeletedWallpaperUri(wallpaper.wallpaperId)
+                    }
                 }
                 notifyChange(context, notifyUri)
             }
