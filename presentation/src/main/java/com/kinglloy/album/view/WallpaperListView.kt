@@ -1,15 +1,16 @@
 package com.kinglloy.album.view
 
-import com.kinglloy.album.model.AdvanceWallpaperItem
+import com.kinglloy.album.domain.WallpaperType
+import com.kinglloy.album.model.WallpaperItem
 
 /**
  * @author jinyalin
  * @since 2017/7/28.
  */
 interface WallpaperListView : LoadingDataView {
-    fun renderWallpapers(wallpapers: List<AdvanceWallpaperItem>)
+    fun renderWallpapers(wallpapers: List<WallpaperItem>)
 
-    fun selectWallpaper(wallpaper: AdvanceWallpaperItem)
+    fun selectWallpaper(wallpaper: WallpaperItem)
 
     fun showEmpty()
 
@@ -17,13 +18,17 @@ interface WallpaperListView : LoadingDataView {
 
     fun wallpaperSelected(wallpaperId: String)
 
-    fun showDownloadHintDialog(item: AdvanceWallpaperItem)
+    fun showDownloadHintDialog(item: WallpaperItem)
 
-    fun showDownloadingDialog(item: AdvanceWallpaperItem)
+    fun showDownloadingDialog(item: WallpaperItem)
 
     fun updateDownloadingProgress(downloaded: Long)
 
-    fun downloadComplete(item: AdvanceWallpaperItem)
+    fun downloadComplete(item: WallpaperItem)
 
-    fun showDownloadError(item: AdvanceWallpaperItem, e: Exception)
+    fun showDownloadError(item: WallpaperItem, e: Exception)
+
+    fun getWallpaperType(): WallpaperType
+
+    fun deletedDownloadWallpaper(wallpaperId: String)
 }

@@ -18,14 +18,14 @@ public class GetActiveService extends UseCase<Integer, Void> {
 
     @Inject
     public GetActiveService(ThreadExecutor threadExecutor,
-                                PostExecutionThread postExecutionThread,
-                                WallpaperRepository repository) {
+                            PostExecutionThread postExecutionThread,
+                            WallpaperRepository repository) {
         super(threadExecutor, postExecutionThread);
         this.repository = repository;
     }
 
     @Override
-    Observable<Integer> buildUseCaseObservable(Void aVoid) {
+    public Observable<Integer> buildUseCaseObservable(Void aVoid) {
         return repository.getActiveService();
     }
 }

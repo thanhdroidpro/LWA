@@ -1,14 +1,15 @@
 <resources>
-    <string name="app_name">Live Wallpaper Album</string>
+    <string name="app_name">Eight Tone Wallpaper</string>
 
     <string name="app_author">Yalin</string>
     <string name="app_description">@string/app_name</string>
 
-    <string name="advance_empty_load">Load wallpapers</string>
+    <string name="advance_empty_load">Load videoWallpapers</string>
     <string name="advance_empty_description">There has no wallpaper loaded.\nYou can load the wallpapers from server.</string>
+    <string name="downloaded_empty_description">You have not download any wallpaper.\nYou can download the wallpapers from home page.</string>
 
     <string name="advance_retry">Retry</string>
-    <string name="advance_review">Watch again</string>
+    <string name="advance_review">Watch again and click</string>
     <string name="advance_retry_description">There has some problem.\nYou can reload the wallpaper,\nOr you can contact the developer.</string>
 
     <string name="advance_action_msg">Hint</string>
@@ -20,11 +21,45 @@
     <string name="confirm">Confirm</string>
     <string name="hint">Hint</string>
     <string name="downloading">Downloading</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="undo">Undo</string>
+
+    <string name="delete_count">%1$s downloaded wallpaper deleted.</string>
 
     <string name="not_show_today">Not show this today</string>
 
     <string name="watch_ad">Watch AD</string>
+    <string name="about">About</string>
     <string name="use_wallpaper">Wallpaper List</string>
+    <string name="my_wallpaper">Downloaded Wallpapers</string>
+
+    <string name="video_type_title">Video</string>
+    <string name="live_type_title">Live</string>
+    <string name="style_type_title">Style</string>
+
+    <string name="string_cancel">Cancel</string>
+
+    <string name="drawer_item_video_wallpaper">Video Wallpaper</string>
+    <string name="drawer_item_video_need_help">Need Help</string>
+    <string name="drawer_item_video_need_help_dsc">Download too slowly?</string>
+    <string name="drawer_item_live_wallpaper">Live Wallpaper</string>
+    <string name="drawer_item_need_help">Need Help</string>
+    <string name="drawer_item_need_help_dsc">Encountered some problems?</string>
+    <string name="drawer_item_style_wallpaper_settings">Style Wallpaper Settings</string>
+    <string name="drawer_item_apply_style_effect">Apply Style Effect</string>
+    <string name="drawer_item_style_blur">Blur</string>
+    <string name="drawer_item_style_dim">Dim</string>
+    <string name="drawer_item_style_grey">Grey</string>
+    <string name="drawer_item_make_me_better">Make Me Better</string>
+    <string name="drawer_item_see_ad">See AD.(Make sure click the AD.)</string>
+    <string name="drawer_item_see_ad_dsc">Help us earn some tips.</string>
+    <string name="drawer_item_donate">Donate</string>
+    <string name="drawer_item_donate_dsc">Give us some money.</string>
+    <string name="drawer_item_my_wallpapers">My Wallpapers</string>
+    <string name="drawer_item_my_wallpapers_dsc">Manage downloaded wallpapers</string>
+    <string name="drawer_item_about">About</string>
+    <string name="drawer_item_about_dsc">About eight tone wallpaper(ETW)</string>
 
     <string name="exception_message_device_unsupported">Your device unsupported live wallpaper.</string>
     <string name="exception_message_generic">There was some error.</string>
@@ -33,11 +68,45 @@
     <string name="exception_message_remote_service">Remote service not available</string>
     <string name="exception_message_download">Download error</string>
 
-    <string name="app_context_description">A album with a lot of living wallpapers.</string>
+    <string name="app_context_description">A album with a lot of living videoWallpapers.</string>
     <string name="app_context_uri">http://www.kinglloy.com/</string>
 
+    <string name="string_donate">Donate</string>
+    <string name="pay_with_alipay">Pay with Alipay</string>
+    <string name="pay_with_google">Pay with Google</string>
+    <string name="google_pay_not_support">Your device not support google pay, Please switch to other payment method.</string>
+
+    <string name="about_version_template">V%1$s</string>
+
+    <string name="donate_hint"><![CDATA[
+        If you like the wallpaper application and hope it will be more stable after the service, you can choose to donate for developer.<br><br>
+
+        <b><a href="http://www.kinglloy.com/donate/">Click to donate</a></b>
+    ]]></string>
+
+    <string name="about_body"><![CDATA[
+        Eight Tone Wallpaper(ETW) contains many popular live wallpaper on the market.
+        Most of it downloaded over one million or even tens of millions in the Google Play store.
+        ETW brings them together and removes their ads and presents them in a refreshing way, greatly enhance the user experience.
+        At the same time, ETW has optimized many wallpapers to improve their performance and compatibility and reduce the power consumption of some live wallpapers.
+        <br><br>
+
+        In addition to live wallpaper, ETW also contains a variety of art paintings(Style wallpaper), and you can also use art to beautify your mobile phone desktop.
+        <br><br>
+
+        ETW provides a developer SDK to support interested wallpaper developers to develop live wallpaper.
+        ETW also open source for developers to learn to communicate.<br><br>
+
+        When new wallpapers are released, ETW will be updated within 24 hours.<br><br>
+
+        If you have any comments or suggestions, or you need ETW\'s source code, please e-mail to the developer:
+        <b><a href="mailto:jinkg@live.cn">jinkg@live.cn</a></b><br><br>
+
+        <b><a href="http://www.kinglloy.com/">Visit home page</a></b>
+    ]]></string>
+
     <string name="advance_hint"><![CDATA[
-        The wallpapers are developed by different developers.<br><br>
+        Live wallpapers are developed by different developers.<br><br>
         Use them may give you the equipment to bring different power consumption, performance consumption, even crash.<br><br>
         If you find such a problem, you can switch to other wallpaper, or contact App developers.
 
@@ -51,15 +120,30 @@
         Press download button if you are ready to download.
     ]]></string>
 
+    <string name="advance_download_size_hint"><![CDATA[
+        The total size of this wallpaper is %s, You must take a minute to download it.<br><br>
+        Press download button if you are ready to download.
+    ]]></string>
+
+    <string name="video_hint"><![CDATA[
+        Video wallpaper resources are generally arger(tens of MB), are on the server rental ETW。
+        ETW developed by individual developer, there is no source of income, and personal money is limited, so the bandwidth for renting a smaller server.<br><br>
+
+        If you like the wallpaper application and hope it will be more stable after the service, you can choose to donate for developer.<br><br>
+
+        <b><a href="http://www.kinglloy.com/donate/">Click to donate</a></b>
+    ]]></string>
+
     <string name="welcome">To help developer release new features, and if you like this wallpaper application, you can watch the ad to support.</string>
 
-    <string name="ad_prompt">Thank you for your support, we will try to make the application better. Click button to see again.</string>
+    <string name="ad_prompt">Thank you for your support, we will try to make the application better. Click button to click again.</string>
     <string name="ad_retry">AD load failed press button to reload.</string>
 
     <string name="app_ad_id" translatable="false">ca-app-pub-8153753100171943~1504125034</string>
     <string name="advance_banner_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/6618696822</string>
     <string name="advance_inter_ad_unit_id" translatable="false"> ca-app-pub-8153753100171943/6486178348</string>
     <string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-8153753100171943/3858825636</string>
+
     <!--for test-->
     <!--<string name="advance_video_ad_unit_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>-->
 </resources>

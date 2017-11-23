@@ -35,6 +35,11 @@
             android:exported="false"
             android:syncable="true" />
 
+        <provider
+            android:name=".repository.datasource.provider.settings.SettingsProvider"
+            android:authorities="@string/settings_authority"
+            android:exported="false" />
+
     </application>
 
 </manifest>

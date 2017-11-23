@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingEnd="40dp"
+    android:paddingStart="40dp">
+
+    <Button
+        android:id="@+id/alipay"
+        style="@style/Widget.Album.Button.Pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_alipay"
+        android:text="@string/pay_with_alipay"
+        android:theme="@style/Widget.Album.Button.Pay" />
+
+    <Button
+        android:id="@+id/google_pay"
+        style="@style/Widget.Album.Button.Pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_google"
+        android:text="@string/pay_with_google"
+        android:theme="@style/Widget.Album.Button.Pay" />
+
+</LinearLayout>

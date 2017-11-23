@@ -2,12 +2,14 @@ package com.kinglloy.album.injection.modules
 
 import android.content.Context
 import com.kinglloy.album.UIThread
-import com.kinglloy.album.data.cache.AdvanceWallpaperCache
-import com.kinglloy.album.data.cache.AdvanceWallpaperCacheImpl
+import com.kinglloy.album.data.cache.WallpaperCache
+import com.kinglloy.album.data.cache.LiveWallpaperCacheImpl
 import com.kinglloy.album.data.executor.JobExecutor
-import com.kinglloy.album.data.repository.AdvanceWallpaperDataRepository
+import com.kinglloy.album.data.repository.SettingsDataRepository
+import com.kinglloy.album.data.repository.WallpaperDataRepository
 import com.kinglloy.album.domain.executor.PostExecutionThread
 import com.kinglloy.album.domain.executor.ThreadExecutor
+import com.kinglloy.album.domain.repository.SettingsRepository
 import com.kinglloy.album.domain.repository.WallpaperRepository
 
 import javax.inject.Singleton
@@ -45,16 +47,16 @@ class ApplicationModule(context: Context) {
 
     @Provides
     @Singleton
-    internal fun provideWallpaperRepository(repository: AdvanceWallpaperDataRepository):
+    internal fun provideWallpaperRepository(repository: WallpaperDataRepository):
             WallpaperRepository {
         return repository
     }
 
     @Provides
     @Singleton
-    internal fun provideAdvanceWallpaperCache(cache: AdvanceWallpaperCacheImpl):
-            AdvanceWallpaperCache {
-        return cache
+    internal fun provideSettingsRepository(repository: SettingsDataRepository):
+            SettingsRepository {
+        return repository
     }
 
 }

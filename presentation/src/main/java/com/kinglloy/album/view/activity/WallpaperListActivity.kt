@@ -23,9 +23,10 @@ import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.analytics.Event
 import com.kinglloy.album.data.log.LogUtil
 import com.kinglloy.album.data.utils.WallpaperFileHelper
+import com.kinglloy.album.domain.WallpaperType
 import com.kinglloy.album.exception.ErrorMessageFactory
-import com.kinglloy.album.model.AdvanceWallpaperItem
-import com.kinglloy.album.presenter.WallpaperListPresenter
+import com.kinglloy.album.model.WallpaperItem
+import com.kinglloy.album.presenter.MainWallpaperListPresenter
 import com.kinglloy.album.view.WallpaperListView
 import com.kinglloy.album.view.component.DownloadingDialog
 import kotlinx.android.synthetic.main.activity_wallpaper_list.*
@@ -34,6 +35,7 @@ import java.util.ArrayList
 import javax.inject.Inject
 
 class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
+
     companion object {
         val TAG = "AdvanceSettingActivity"
         val LOAD_STATE = "load_state"
@@ -44,9 +46,9 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
     }
 
     @Inject
-    lateinit internal var presenter: WallpaperListPresenter
+    lateinit internal var presenter: MainWallpaperListPresenter
 
-    val wallpapers = ArrayList<AdvanceWallpaperItem>()
+    val wallpapers = ArrayList<WallpaperItem>()
 
     private var loadState = LOAD_STATE_NORMAL
 
@@ -149,7 +151,10 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             insets
         }
 
-        downloadDialog = DownloadingDialog(this)
+        downloadDialog = DownloadingDialog(this,
+                MaterialDialog.SingleButtonCallback { _, _ ->
+
+                })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -193,7 +198,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun renderWallpapers(wallpapers: List<AdvanceWallpaperItem>) {
+    override fun renderWallpapers(wallpapers: List<WallpaperItem>) {
         loadState = LOAD_STATE_NORMAL
 
         this.wallpapers.clear()
@@ -209,7 +214,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         advanceWallpaperAdapter.notifyDataSetChanged()
     }
 
-    override fun selectWallpaper(wallpaper: AdvanceWallpaperItem) {
+    override fun selectWallpaper(wallpaper: WallpaperItem) {
         var oldSelectedIndex = -1
         var newSelectedIndex = -1
         for ((index, value) in wallpapers.withIndex()) {
@@ -280,7 +285,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         advanceWallpaperAdapter.notifyDataSetChanged()
     }
 
-    override fun showDownloadHintDialog(item: AdvanceWallpaperItem) {
+    override fun showDownloadHintDialog(item: WallpaperItem) {
         val downloadCallback =
                 MaterialDialog.SingleButtonCallback { _, _ ->
                     presenter.requestDownload(item)
@@ -297,7 +302,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         dialogBuilder.build().show()
     }
 
-    override fun showDownloadingDialog(item: AdvanceWallpaperItem) {
+    override fun showDownloadingDialog(item: WallpaperItem) {
         LogUtil.D(TAG, "showDownloadingDialog ${item.name}")
         downloadDialog!!.show()
     }
@@ -307,7 +312,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         downloadDialog!!.updateProgress(downloaded)
     }
 
-    override fun downloadComplete(item: AdvanceWallpaperItem) {
+    override fun downloadComplete(item: WallpaperItem) {
         val position = wallpapers.indices.firstOrNull {
             TextUtils.equals(wallpapers[it].wallpaperId, item.wallpaperId)
         } ?: -1
@@ -317,13 +322,19 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
         downloadDialog!!.dismiss()
     }
 
-    override fun showDownloadError(item: AdvanceWallpaperItem, e: Exception) {
+    override fun showDownloadError(item: WallpaperItem, e: Exception) {
         downloadDialog!!.dismiss()
         showError(ErrorMessageFactory.create(this, e))
     }
 
+    override fun deletedDownloadWallpaper(wallpaperId: String) {
+
+    }
+
+    override fun getWallpaperType() = WallpaperType.LIVE
+
     class AdvanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var checkedOverlayView: View = itemView.findViewById(R.id.checked_overlay)
+        var checkedOverlayView: View = itemView.findViewById(R.id.current_select_overlay)
         var downloadOverlayView: View = itemView.findViewById(R.id.download_overlay)
         var thumbnailView: View = itemView.findViewById(R.id.thumbnail)
         var thumbnail: ImageView = thumbnailView as ImageView
@@ -348,7 +359,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
                 holder.checkedOverlayView.visibility = View.GONE
             }
             val downloadingItem = presenter.getDownloadingItem()
-            if (WallpaperFileHelper.isNeedDownloadAdvanceComponent(item.lazyDownload,
+            if (WallpaperFileHelper.isNeedDownloadWallpaper(item.lazyDownload,
                     item.storePath) || (downloadingItem != null
                     && TextUtils.equals(downloadingItem.wallpaperId, item.wallpaperId))) {
                 holder.downloadOverlayView.visibility = View.VISIBLE
@@ -370,7 +381,7 @@ class WallpaperListActivity : AppCompatActivity(), WallpaperListView {
             val vh = AdvanceViewHolder(view)
             view.setOnClickListener {
                 val item = wallpapers[vh.adapterPosition]
-                presenter.previewAdvanceWallpaper(item)
+                presenter.previewWallpaper(item, WallpaperType.LIVE)
             }
 
             return vh

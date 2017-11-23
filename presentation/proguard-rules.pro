@@ -59,6 +59,12 @@
     @android.webkit.JavascriptInterface <methods>;
 }
 
+-keepclassmembers class * extends java.lang.Enum {
+    <fields>;
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
 #Gson
 -keepattributes Signature
 # For using GSON @Expose annotation
@@ -88,3 +94,5 @@
 -dontwarn java.lang.invoke**
 
 -dontwarn kotlin.**
+
+-dontwarn com.mikepenz.fastadapter.**

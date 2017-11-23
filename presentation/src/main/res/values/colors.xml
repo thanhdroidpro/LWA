@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#00796B</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="shadow_color">#8000</color>
     <color name="attribution_text_color">#cfff</color>
-    <color name="wallpaper_detail_text_color">#fff</color>
+    <color name="wallpaper_detail_text_color">#fff</color>'
 
     <color name="gallery_theme_dark">@color/colorPrimaryDark</color>
     <color name="gallery_theme">@color/colorPrimary</color>
@@ -17,4 +17,6 @@
     <color name="gallery_chosen_photo_placeholder">#5666</color>
 
     <color name="advance_window_background">#EEE</color>
+    <color name="color_name_bg">#8666</color>
+    <color name="color_wallpaper_item_tint">#009688</color>
 </resources>

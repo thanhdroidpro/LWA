@@ -53,14 +53,18 @@ android {
         }
     }
 
+    flavorDimensions "default"
     productFlavors {
         demo {
+            dimension "default"
             buildConfigField("boolean", "DEMO_MODE", "true")
         }
         production {
+            dimension "default"
             buildConfigField("boolean", "DEMO_MODE", "false")
         }
         ultimate {
+            dimension "default"
             applicationId "com.kinglloy.album.ultimate"
             buildConfigField("boolean", "DEMO_MODE", "false")
         }
@@ -68,56 +72,61 @@ android {
     dexOptions {
         javaMaxHeapSize "4g"
     }
-
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
-    compile "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
-    compile "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "com.android.support:appcompat-v7:${SUPPORT_LIBRARY_VERSION}"
+    implementation "com.android.support:design:${SUPPORT_LIBRARY_VERSION}"
+    implementation "com.android.support:recyclerview-v7:${SUPPORT_LIBRARY_VERSION}"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
-    compile "com.google.code.gson:gson:${GSON_VERSION}"
-    compile "com.squareup.okhttp3:okhttp:${OK_HTTP_VERSION}"
-    compile "com.google.dagger:dagger:${DAGGER_VERSION}"
-    compile "io.reactivex.rxjava2:rxjava:${RXJAVA_VERSION}"
-    compile "io.reactivex.rxjava2:rxandroid:${RXANDROID_VERSION}"
-    compile "com.github.bumptech.glide:glide:${GLIDE_VERSION}"
+    implementation("com.mikepenz:materialdrawer:6.0.0@aar") {
+        transitive = true
+    }
 
-    compile "com.google.firebase:firebase-core:${FIRE_BASE_VERSION}"
-    compile "com.google.firebase:firebase-crash:${FIRE_BASE_VERSION}"
-    compile "com.google.firebase:firebase-ads:${FIRE_BASE_VERSION}"
+    implementation "com.google.code.gson:gson:${GSON_VERSION}"
+    implementation "com.squareup.okhttp3:okhttp:${OK_HTTP_VERSION}"
+    implementation "com.google.dagger:dagger:${DAGGER_VERSION}"
+    implementation "io.reactivex.rxjava2:rxjava:${RXJAVA_VERSION}"
+    implementation "io.reactivex.rxjava2:rxandroid:${RXANDROID_VERSION}"
+    implementation "com.github.bumptech.glide:glide:${GLIDE_VERSION}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:${KOTLIN_VERSION}"
+    implementation "org.jetbrains.anko:anko-common:${ANKO_VESION}"
 
-    compile 'com.afollestad.material-dialogs:core:0.9.4.7'
+    implementation "com.google.android.gms:play-services-base:${FIRE_BASE_VERSION}"
+    implementation "com.google.firebase:firebase-core:${FIRE_BASE_VERSION}"
+    implementation "com.google.firebase:firebase-crash:${FIRE_BASE_VERSION}"
+    implementation "com.google.firebase:firebase-ads:${FIRE_BASE_VERSION}"
+
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.7@aar'
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.1@aar'
 
     kapt "com.google.dagger:dagger-compiler:${DAGGER_VERSION}"
 
-    compile 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:multidex:1.0.2'
 
-//    demoCompile 'com.facebook.stetho:stetho:1.5.0'
+//    demoImplementation 'com.facebook.stetho:stetho:1.5.0'
 
-    compile project(':engine')
-    demoCompile project(path: ':data', configuration: 'demoDebug')
-    productionCompile project(path: ':data', configuration: 'productionRelease')
-    ultimateCompile project(path: ':data', configuration: 'ultimateRelease')
+    implementation project(':download')
+    implementation project(':engine')
+    implementation project(':data')
 
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
-
+    testImplementation 'junit:junit:4.12'
 }
 
-project.afterEvaluate {
-    android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            def flavor = variant.productFlavors[0].name
-            def oldFile = output.outputFile
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        def flavor = variant.productFlavors[0].name
 
-            output.outputFile = new File(oldFile.parent,
-                    "${flavor}-LWA-${CHANNEL}.apk")
-        }
+        outputFileName = "${flavor}-LWA-${CHANNEL}-${APP_VERSION_NAME}.apk"
     }
 }
 
@@ -130,3 +139,6 @@ buildscript {
     }
 }
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

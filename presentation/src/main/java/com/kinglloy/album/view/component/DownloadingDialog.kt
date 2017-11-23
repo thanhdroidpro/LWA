@@ -1,10 +1,13 @@
 package com.kinglloy.album.view.component
 
 import android.content.Context
+import android.text.TextUtils
 import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.kinglloy.album.R
-import com.kinglloy.album.model.AdvanceWallpaperItem
+import com.kinglloy.album.model.WallpaperItem
+import com.kinglloy.album.util.formatSizeToString
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 
 /**
  * @author jinyalin
@@ -12,14 +15,27 @@ import com.kinglloy.album.model.AdvanceWallpaperItem
  * @since 2017/8/11.
  */
 
-class DownloadingDialog constructor(context: Context) {
+class DownloadingDialog constructor(context: Context, onCancel: MaterialDialog.SingleButtonCallback) {
+    private var totalSizeString: String? = null
+    private var totalSize = 0L
+
     private val dialog = MaterialDialog.Builder(context)
             .iconRes(R.drawable.advance_downloading)
             .title(R.string.downloading)
             .cancelable(false)
+            .positiveText(R.string.string_cancel)
+            .onPositive(onCancel)
             .customView(R.layout.dialog_downloading, false).build()
 
     private val progressView = dialog.findViewById(R.id.downloadProgress) as TextView
+    private val progressBar = dialog.findViewById(R.id.downloadProgressBar) as MaterialProgressBar
+
+    fun setTotalSize(totalSize: Long) {
+        this.totalSize = totalSize
+        totalSizeString = if (totalSize > 0) formatSizeToString(totalSize) else null
+
+        updateProgress(0)
+    }
 
     fun show() {
         dialog.show()
@@ -30,24 +46,17 @@ class DownloadingDialog constructor(context: Context) {
     }
 
     fun updateProgress(progress: Long) {
-        progressView.text = formatSize(progress)
+        val showString =
+                if (TextUtils.isEmpty(totalSizeString)) formatSizeToString(progress)
+                else "${formatSizeToString(progress)} / $totalSizeString"
+        progressView.text = showString
+
+        val percent = ((progress / totalSize.toFloat()) * 100).toInt()
+        progressBar.progress = percent
     }
 
-    fun showError(item: AdvanceWallpaperItem, e: Exception) {
+    fun showError(item: WallpaperItem, e: Exception) {
 
     }
 
-    companion object {
-        val C = 1024
-    }
-
-    private fun formatSize(progress: Long): String {
-        if (progress < C) {
-            return "$progress B"
-        }
-        if (progress < C * C) {
-            return "${progress / C} KB"
-        }
-        return "%.2f MB".format(progress / (C * C).toFloat())
-    }
 }

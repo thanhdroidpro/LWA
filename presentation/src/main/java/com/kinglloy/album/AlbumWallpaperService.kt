@@ -5,7 +5,7 @@ import com.kinglloy.album.analytics.Analytics
 import com.kinglloy.album.analytics.Event
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract
 import com.kinglloy.album.domain.interactor.DefaultObserver
-import com.kinglloy.album.domain.interactor.SelectPreviewingAdvanceWallpaper
+import com.kinglloy.album.domain.interactor.SelectPreviewingWallpaper
 import com.kinglloy.album.domain.interactor.SetActiveService
 import com.kinglloy.album.engine.ProxyProvider
 import com.kinglloy.album.engine.WallpaperActiveCallback
@@ -19,7 +19,7 @@ import javax.inject.Inject
 open class AlbumWallpaperService :
         WallpaperService(), WallpaperActiveCallback {
     @Inject lateinit var proxyProvider: ProxyProvider
-    @Inject lateinit var selectAdvanceWallpaper: SelectPreviewingAdvanceWallpaper
+    @Inject lateinit var selectedWallpaper: SelectPreviewingWallpaper
     @Inject lateinit var setActiveService: SetActiveService
 
     private var proxy: WallpaperService? = null
@@ -44,7 +44,7 @@ open class AlbumWallpaperService :
     override fun onWallpaperActivate() {
         setActiveService.execute(object : DefaultObserver<Boolean>() {},
                 SetActiveService.Params.setActiveService(getActiveState()))
-        selectAdvanceWallpaper.execute(object : DefaultObserver<Boolean>() {}, null)
+        selectedWallpaper.execute(object : DefaultObserver<Boolean>() {}, null)
         Analytics.logEvent(this, Event.WALLPAPER_CREATED)
     }
 

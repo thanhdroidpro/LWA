@@ -13,12 +13,10 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 
 
-import com.google.gson.JsonParser;
 import com.kinglloy.album.data.BuildConfig;
 import com.kinglloy.album.data.SyncConfig;
 import com.kinglloy.album.data.log.LogUtil;
-import com.kinglloy.album.data.repository.datasource.io.AdvanceWallpaperHandler;
-import com.kinglloy.album.data.repository.datasource.net.RemoteAdvanceWallpaperFetcher;
+import com.kinglloy.album.data.repository.datasource.net.RemoteWallpaperFetcher;
 import com.kinglloy.album.data.repository.datasource.provider.AlbumContract;
 
 import java.io.IOException;
@@ -33,11 +31,11 @@ public class SyncHelper {
     private static final String TAG = "SyncHelper";
     private final Context mContext;
 
-    private AdvanceWallpaperHandler mDataHandler;
+    private DataHandler mDataHandler;
 
     public SyncHelper(Context context) {
         mContext = context;
-        mDataHandler = new AdvanceWallpaperHandler(mContext);
+        mDataHandler = new DataHandler(mContext);
     }
 
     public boolean performSync(SyncResult syncResult, Bundle extras) {
@@ -58,11 +56,9 @@ public class SyncHelper {
 
         LogUtil.D(TAG, "Starting remote sync.");
         ArrayList<ContentProviderOperation> batch = new ArrayList<>();
-        String data = new RemoteAdvanceWallpaperFetcher(mContext).fetchDataIfNewer();
+        String data = new RemoteWallpaperFetcher(mContext).fetchDataIfNewer();
         if (!TextUtils.isEmpty(data)) {
-            JsonParser parser = new JsonParser();
-            mDataHandler.process(parser.parse(data));
-            mDataHandler.makeContentProviderOperations(batch);
+            mDataHandler.applyData(new String[]{data});
         }
 
         try {
