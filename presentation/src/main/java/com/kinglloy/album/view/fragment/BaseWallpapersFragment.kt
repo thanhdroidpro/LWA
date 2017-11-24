@@ -376,7 +376,7 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
             }
 
             holder.tvName.background = if (item.pro) proBackground else normalBackground
-            holder.icPro.visibility = if (item.pro) View.VISIBLE else View.GONE
+//            holder.icPro.visibility = if (item.pro) View.VISIBLE else View.GONE
             holder.tvName.text = item.name
         }
 
