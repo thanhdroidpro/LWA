@@ -3,6 +3,7 @@ package com.kinglloy.album.data.repository.datasource.sync.account;
 import android.accounts.AccountManager;
 import android.content.Context;
 
+import com.kinglloy.album.data.BuildConfig;
 import com.kinglloy.album.data.log.LogUtil;
 
 
@@ -12,7 +13,7 @@ import com.kinglloy.album.data.log.LogUtil;
 
 public class Account {
 
-    public static final String ACCOUNT_TYPE = "com.kinglloy.album";
+    public static final String ACCOUNT_TYPE = BuildConfig.AUTHORITY;
 
     public static final String ACCOUNT_NAME = "Sync Account";
 
