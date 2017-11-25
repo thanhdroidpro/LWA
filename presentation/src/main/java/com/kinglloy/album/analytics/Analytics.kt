@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.kinglloy.album.BuildConfig
+import com.kinglloy.album.analytics.Event.CHANNEL_KEY
 
 /**
  * @author jinyalin
@@ -13,6 +15,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 
 object Analytics : IAnalytics {
     override fun init(context: Context) {
+        setUserProperty(context, CHANNEL_KEY, BuildConfig.CHANNEL)
     }
 
 

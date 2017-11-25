@@ -23,4 +23,6 @@ object Event {
     val LOAD_VIDEO_AD_FAILED = "load_video_ad_failed"
     val OPEN_INTER_AD = "open_inter_ad"
     val OPEN_VIDEO_AD = "open_video_ad"
+
+    val CHANNEL_KEY = "channel"
 }
