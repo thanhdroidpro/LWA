@@ -54,6 +54,8 @@
     <string name="drawer_item_make_me_better">Make Me Better</string>
     <string name="drawer_item_see_ad">See AD.(Make sure click the AD.)</string>
     <string name="drawer_item_see_ad_dsc">Help us earn some tips.</string>
+    <string name="drawer_item_remove_ad">Remove AD.</string>
+    <string name="drawer_item_remove_ad_dsc">Remove app AD when download.</string>
     <string name="drawer_item_donate">Donate</string>
     <string name="drawer_item_donate_dsc">Give us some money.</string>
     <string name="drawer_item_my_wallpapers">My Wallpapers</string>
@@ -123,6 +125,20 @@
     <string name="advance_download_size_hint"><![CDATA[
         The total size of this wallpaper is %s, You must take a minute to download it.<br><br>
         Press download button if you are ready to download.
+    ]]></string>
+
+    <string name="advance_download_hint_ad"><![CDATA[
+        You must take a minute to download this wallpaper(several hundred KB or several MB).<br><br>
+        At the same time, This wallpaper contain a little ad, you must view a minute ad before use it.<br><br>
+        Thank you for your support for the developer.<br><br>
+        Press download button if you are ready to download and see ad.
+    ]]></string>
+
+    <string name="advance_download_size_hint_ad"><![CDATA[
+        The total size of this wallpaper is %s, You must take a minute to download it.<br><br>
+        At the same time, This wallpaper contain a little ad, you must view a minute ad before use it.<br><br>
+        Thank you for your support for the developer.<br><br>
+        Press download button if you are ready to download and see ad.
     ]]></string>
 
     <string name="video_hint"><![CDATA[

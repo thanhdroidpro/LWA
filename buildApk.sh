@@ -11,6 +11,7 @@ echo "Start Build Apk"
 ./gradlew assembleProductionRelease -Dchannel=baidu
 ./gradlew assembleProductionRelease -Dchannel=google
 ./gradlew assembleProductionRelease -Dchannel=huawei
+./gradlew assembleProductionRelease -Dchannel=coolapk
 
 ./gradlew assembleUltimateRelease -Dchannel=google
 

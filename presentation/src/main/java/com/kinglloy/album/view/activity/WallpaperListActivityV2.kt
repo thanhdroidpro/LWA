@@ -2,6 +2,7 @@ package com.kinglloy.album.view.activity
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.design.widget.TabLayout
@@ -23,6 +24,7 @@ import com.kinglloy.album.data.utils.STYLE_SETTINGS_MAX_DIM
 import com.kinglloy.album.data.utils.STYLE_SETTINGS_MAX_GREY
 import com.kinglloy.album.model.StyleSettingsItem
 import com.kinglloy.album.presenter.SettingsPresenter
+import com.kinglloy.album.util.PackageUtil
 import com.kinglloy.album.view.SettingsView
 import com.kinglloy.album.view.component.MySecondarySwitchDrawerItem
 import com.kinglloy.album.view.component.OnProgressChangedListener
@@ -69,6 +71,8 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
         val ID_ABOUT = 4000L
 
         val ID_MY_WALLPAPERS = 5000L
+
+        val ID_REMOVE_AD = 6000L
     }
 
     @Inject
@@ -103,170 +107,6 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
             .withSelectable(false)
             .withOnCheckedChangeListener(onCheckedChangeListener)
 
-    private val styleSettingsSeekBars =
-            arrayOf(
-                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_blur)
-                            .withLevel(3)
-                            .withMax(STYLE_SETTINGS_MAX_BLUR)
-                            .withSelectable(false)
-                            .withOnSeekBarChangeListener(onProgressChangedListener),
-                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_dim)
-                            .withLevel(3)
-                            .withMax(STYLE_SETTINGS_MAX_DIM)
-                            .withSelectable(false)
-                            .withOnSeekBarChangeListener(onProgressChangedListener),
-                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_grey)
-                            .withLevel(3)
-                            .withMax(STYLE_SETTINGS_MAX_GREY)
-                            .withSelectable(false)
-                            .withOnSeekBarChangeListener(onProgressChangedListener))
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wallpaper_list2)
-        AlbumApplication.instance.applicationComponent.inject(this)
-
-        presenter.setView(this)
-
-        initDrawer(savedInstanceState)
-
-        val tabLayout = findViewById<TabLayout>(R.id.wallpaper_types_tab)
-        viewPager = findViewById(R.id.wallpaper_types)
-
-        tabLayout.setupWithViewPager(viewPager)
-        viewPager.adapter = WallpaperTypesAdapter(supportFragmentManager)
-        if (savedInstanceState == null) {
-            viewPager.currentItem = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
-                    .getInt(SELECT_INDEX_KEY, 0)
-        } else {
-            viewPager.currentItem = savedInstanceState.getInt(SELECT_INDEX_KEY, 0)
-        }
-
-        presenter.initialize()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit()
-                .putInt(SELECT_INDEX_KEY, viewPager.currentItem).apply()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle?) {
-        val newOutState = drawer.saveInstanceState(outState)
-        newOutState.putInt(SELECT_INDEX_KEY, viewPager.currentItem)
-        super.onSaveInstanceState(newOutState, outPersistentState)
-    }
-
-    override fun onBackPressed() {
-        if (drawer.isDrawerOpen) {
-            drawer.closeDrawer()
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    private fun initDrawer(savedInstanceState: Bundle?) {
-        val toolBar = findViewById<Toolbar>(R.id.appBar)
-        drawer = DrawerBuilder()
-                .withActivity(this)
-                .withToolbar(toolBar)
-                .withHasStableIds(true)
-                .withHeader(R.layout.layout_drawer_header)
-                .withSelectedItem(-1)
-                .addDrawerItems(
-                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_video_wallpaper)
-                                .withIcon(R.drawable.ic_drawer_video).withIdentifier(1)
-                                .withIconTintingEnabled(true)
-                                .withIconColorRes(R.color.colorPrimary)
-                                .withSelectable(false).withSubItems(
-                                SecondaryDrawerItem().withName(R.string.drawer_item_video_need_help)
-                                        .withDescription(R.string.drawer_item_video_need_help_dsc)
-                                        .withSelectable(false)
-                                        .withIdentifier(ID_VIDEO_PROBLEM)
-                                        .withLevel(2)
-                                        .withOnDrawerItemClickListener(drawerItemClick)
-                        ),
-                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_live_wallpaper)
-                                .withIcon(R.drawable.ic_drawer_live).withIdentifier(1)
-                                .withIconTintingEnabled(true)
-                                .withIconColorRes(R.color.colorPrimary)
-                                .withSelectable(false).withSubItems(
-                                SecondaryDrawerItem().withName(R.string.drawer_item_need_help)
-                                        .withDescription(R.string.drawer_item_need_help_dsc)
-                                        .withSelectable(false)
-                                        .withIdentifier(ID_LIVE_PROBLEM)
-                                        .withLevel(2)
-                                        .withOnDrawerItemClickListener(drawerItemClick)
-                        ),
-                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_style_wallpaper_settings)
-                                .withIcon(R.drawable.ic_drawer_style).withIdentifier(2)
-                                .withIconTintingEnabled(true)
-                                .withIconColorRes(R.color.colorPrimary)
-                                .withSelectable(false).withSubItems(
-                                styleSettingsSwitch.withIdentifier(ID_SWITCH),
-                                styleSettingsSeekBars[0].withIdentifier(ID_BLUR),
-                                styleSettingsSeekBars[1].withIdentifier(ID_DIM),
-                                styleSettingsSeekBars[2].withIdentifier(ID_GREY)
-                        ),
-                        DividerDrawerItem(),
-                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_make_me_better)
-                                .withIcon(R.drawable.ic_drawer_money).withIdentifier(3)
-                                .withIconTintingEnabled(true)
-                                .withIconColorRes(R.color.colorPrimary)
-                                .withSelectable(false).withSubItems(
-                                SecondaryDrawerItem().withName(R.string.drawer_item_see_ad)
-                                        .withDescription(R.string.drawer_item_see_ad_dsc)
-                                        .withSelectable(false)
-                                        .withIdentifier(ID_SEE_AD)
-                                        .withLevel(2)
-                                        .withOnDrawerItemClickListener(drawerItemClick)
-                                , SecondaryDrawerItem().withName(R.string.drawer_item_donate)
-                                .withDescription(R.string.drawer_item_donate_dsc)
-                                .withSelectable(false)
-                                .withIdentifier(ID_DONATE)
-                                .withLevel(2)
-                                .withOnDrawerItemClickListener(drawerItemClick)
-                        ),
-                        DividerDrawerItem(),
-                        PrimaryDrawerItem().withName(R.string.drawer_item_my_wallpapers)
-                                .withDescription(R.string.drawer_item_my_wallpapers_dsc)
-                                .withIcon(R.drawable.ic_drawer_my_wallpapers)
-                                .withIdentifier(ID_MY_WALLPAPERS)
-                                .withSelectable(false)
-                                .withIconTintingEnabled(true)
-                                .withIconColorRes(R.color.colorPrimary)
-                                .withOnDrawerItemClickListener(drawerItemClick),
-                        DividerDrawerItem(),
-                        PrimaryDrawerItem().withName(R.string.drawer_item_about)
-                                .withDescription(R.string.drawer_item_about_dsc)
-                                .withIcon(R.drawable.ic_drawer_about)
-                                .withIdentifier(ID_ABOUT)
-                                .withSelectable(false)
-                                .withIconTintingEnabled(true)
-                                .withIconColorRes(R.color.colorPrimary)
-                                .withOnDrawerItemClickListener(drawerItemClick))
-                .withSavedInstance(savedInstanceState)
-                .withShowDrawerOnFirstLaunch(true)
-                .build()
-
-
-    }
-
-
-    override fun renderStyleSettings(styleSettingsItem: StyleSettingsItem) {
-        styleSettingsSwitch.withChecked(styleSettingsItem.enableEffect)
-        drawer.updateItem(styleSettingsSwitch)
-        styleSettingsSeekBars[0].withProgress(styleSettingsItem.blur)
-                .withSeekEnable(styleSettingsItem.enableEffect)
-        styleSettingsSeekBars[1].withProgress(styleSettingsItem.dim)
-                .withSeekEnable(styleSettingsItem.enableEffect)
-        styleSettingsSeekBars[2].withProgress(styleSettingsItem.grey)
-                .withSeekEnable(styleSettingsItem.enableEffect)
-        styleSettingsSeekBars.forEach {
-            drawer.updateItem(it)
-        }
-    }
 
     private val drawerItemClick = Drawer.OnDrawerItemClickListener { _, _, drawerItem ->
         when (drawerItem.identifier) {
@@ -310,10 +150,241 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                 startActivity(Intent(this,
                         MyWallpapersActivity::class.java))
             }
+            ID_REMOVE_AD -> {
+                val appPackageName = "com.kinglloy.album.ultimate"
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=" + appPackageName)))
+                } catch (anfe: android.content.ActivityNotFoundException) {
+                    startActivity(Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)))
+                }
 
+            }
         }
         return@OnDrawerItemClickListener true
     }
+    private val styleSettingsSeekBars =
+            arrayOf(
+                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_blur)
+                            .withLevel(3)
+                            .withMax(STYLE_SETTINGS_MAX_BLUR)
+                            .withSelectable(false)
+                            .withOnSeekBarChangeListener(onProgressChangedListener),
+                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_dim)
+                            .withLevel(3)
+                            .withMax(STYLE_SETTINGS_MAX_DIM)
+                            .withSelectable(false)
+                            .withOnSeekBarChangeListener(onProgressChangedListener),
+                    SecondarySeekDrawerItem().withName(R.string.drawer_item_style_grey)
+                            .withLevel(3)
+                            .withMax(STYLE_SETTINGS_MAX_GREY)
+                            .withSelectable(false)
+                            .withOnSeekBarChangeListener(onProgressChangedListener))
+
+    private val liveWallpaperDrawer = ExpandableBadgeDrawerItem()
+            .withName(R.string.drawer_item_live_wallpaper)
+            .withIcon(R.drawable.ic_drawer_live).withIdentifier(1)
+            .withIconTintingEnabled(true)
+            .withIconColorRes(R.color.colorPrimary)
+            .withSelectable(false).withSubItems(
+            SecondaryDrawerItem().withName(R.string.drawer_item_need_help)
+                    .withDescription(R.string.drawer_item_need_help_dsc)
+                    .withSelectable(false)
+                    .withIdentifier(ID_LIVE_PROBLEM)
+                    .withLevel(2)
+                    .withOnDrawerItemClickListener(drawerItemClick))
+
+    private val styleWallpaperDrawer = ExpandableBadgeDrawerItem()
+            .withName(R.string.drawer_item_style_wallpaper_settings)
+            .withIcon(R.drawable.ic_drawer_style).withIdentifier(2)
+            .withIconTintingEnabled(true)
+            .withIconColorRes(R.color.colorPrimary)
+            .withSelectable(false).withSubItems(
+            styleSettingsSwitch.withIdentifier(ID_SWITCH),
+            styleSettingsSeekBars[0].withIdentifier(ID_BLUR),
+            styleSettingsSeekBars[1].withIdentifier(ID_DIM),
+            styleSettingsSeekBars[2].withIdentifier(ID_GREY))
+
+    private val makeMeBetterAD = ExpandableBadgeDrawerItem().withName(R.string.drawer_item_make_me_better)
+            .withIcon(R.drawable.ic_drawer_money).withIdentifier(3)
+            .withIconTintingEnabled(true)
+            .withIconColorRes(R.color.colorPrimary)
+            .withSelectable(false).withSubItems(
+            SecondaryDrawerItem().withName(R.string.drawer_item_see_ad)
+                    .withDescription(R.string.drawer_item_see_ad_dsc)
+                    .withSelectable(false)
+                    .withIdentifier(ID_SEE_AD)
+                    .withLevel(2)
+                    .withOnDrawerItemClickListener(drawerItemClick),
+            SecondaryDrawerItem().withName(R.string.drawer_item_donate)
+                    .withDescription(R.string.drawer_item_donate_dsc)
+                    .withSelectable(false)
+                    .withIdentifier(ID_DONATE)
+                    .withLevel(2)
+                    .withOnDrawerItemClickListener(drawerItemClick))
+
+    private val makeMeBetter = ExpandableBadgeDrawerItem().withName(R.string.drawer_item_make_me_better)
+            .withIcon(R.drawable.ic_drawer_money).withIdentifier(3)
+            .withIconTintingEnabled(true)
+            .withIconColorRes(R.color.colorPrimary)
+            .withSelectable(false).withSubItems(
+            SecondaryDrawerItem().withName(R.string.drawer_item_see_ad)
+                    .withDescription(R.string.drawer_item_see_ad_dsc)
+                    .withSelectable(false)
+                    .withIdentifier(ID_SEE_AD)
+                    .withLevel(2)
+                    .withOnDrawerItemClickListener(drawerItemClick))
+
+    private val removeAd = PrimaryDrawerItem().withName(R.string.drawer_item_remove_ad)
+            .withDescription(R.string.drawer_item_remove_ad_dsc)
+            .withIcon(R.drawable.ic_drawer_ad)
+            .withIdentifier(ID_REMOVE_AD)
+            .withSelectable(false)
+            .withIconTintingEnabled(true)
+            .withIconColorRes(R.color.colorPrimary)
+            .withOnDrawerItemClickListener(drawerItemClick)
+
+    private val myWallpapers = PrimaryDrawerItem().withName(R.string.drawer_item_my_wallpapers)
+            .withDescription(R.string.drawer_item_my_wallpapers_dsc)
+            .withIcon(R.drawable.ic_drawer_my_wallpapers)
+            .withIdentifier(ID_MY_WALLPAPERS)
+            .withSelectable(false)
+            .withIconTintingEnabled(true)
+            .withIconColorRes(R.color.colorPrimary)
+            .withOnDrawerItemClickListener(drawerItemClick)
+
+    private val aboutDrawer = PrimaryDrawerItem().withName(R.string.drawer_item_about)
+            .withDescription(R.string.drawer_item_about_dsc)
+            .withIcon(R.drawable.ic_drawer_about)
+            .withIdentifier(ID_ABOUT)
+            .withSelectable(false)
+            .withIconTintingEnabled(true)
+            .withIconColorRes(R.color.colorPrimary)
+            .withOnDrawerItemClickListener(drawerItemClick)
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_wallpaper_list2)
+        AlbumApplication.instance.applicationComponent.inject(this)
+
+        presenter.setView(this)
+
+        if (PackageUtil.isUltimate(this)) {
+            initDrawerUltimate(savedInstanceState)
+        } else {
+            initDrawerWithAd(savedInstanceState)
+        }
+
+        val tabLayout = findViewById<TabLayout>(R.id.wallpaper_types_tab)
+        viewPager = findViewById(R.id.wallpaper_types)
+
+        tabLayout.setupWithViewPager(viewPager)
+        viewPager.adapter = WallpaperTypesAdapter(supportFragmentManager)
+        if (savedInstanceState == null) {
+            viewPager.currentItem = getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
+                    .getInt(SELECT_INDEX_KEY, 0)
+        } else {
+            viewPager.currentItem = savedInstanceState.getInt(SELECT_INDEX_KEY, 0)
+        }
+
+        presenter.initialize()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        getSharedPreferences(SP_NAME, Context.MODE_PRIVATE).edit()
+                .putInt(SELECT_INDEX_KEY, viewPager.currentItem).apply()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle?) {
+        val newOutState = drawer.saveInstanceState(outState)
+        newOutState.putInt(SELECT_INDEX_KEY, viewPager.currentItem)
+        super.onSaveInstanceState(newOutState, outPersistentState)
+    }
+
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen) {
+            drawer.closeDrawer()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun initDrawerWithAd(savedInstanceState: Bundle?) {
+        val toolBar = findViewById<Toolbar>(R.id.appBar)
+        drawer = DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolBar)
+                .withHasStableIds(true)
+                .withHeader(R.layout.layout_drawer_header)
+                .withSelectedItem(-1)
+                .addDrawerItems(
+                        ExpandableBadgeDrawerItem().withName(R.string.drawer_item_video_wallpaper)
+                                .withIcon(R.drawable.ic_drawer_video).withIdentifier(1)
+                                .withIconTintingEnabled(true)
+                                .withIconColorRes(R.color.colorPrimary)
+                                .withSelectable(false).withSubItems(
+                                SecondaryDrawerItem().withName(R.string.drawer_item_video_need_help)
+                                        .withDescription(R.string.drawer_item_video_need_help_dsc)
+                                        .withSelectable(false)
+                                        .withIdentifier(ID_VIDEO_PROBLEM)
+                                        .withLevel(2)
+                                        .withOnDrawerItemClickListener(drawerItemClick)
+                        ),
+                        liveWallpaperDrawer,
+                        styleWallpaperDrawer,
+                        DividerDrawerItem(),
+                        makeMeBetterAD,
+                        removeAd,
+                        DividerDrawerItem(),
+                        myWallpapers,
+                        DividerDrawerItem(),
+                        aboutDrawer)
+                .withSavedInstance(savedInstanceState)
+                .withShowDrawerOnFirstLaunch(true)
+                .build()
+
+
+    }
+
+    private fun initDrawerUltimate(savedInstanceState: Bundle?) {
+        val toolBar = findViewById<Toolbar>(R.id.appBar)
+        drawer = DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolBar)
+                .withHasStableIds(true)
+                .withHeader(R.layout.layout_drawer_header)
+                .withSelectedItem(-1)
+                .addDrawerItems(
+                        liveWallpaperDrawer,
+                        styleWallpaperDrawer,
+                        DividerDrawerItem(),
+                        makeMeBetter,
+                        DividerDrawerItem(),
+                        myWallpapers,
+                        DividerDrawerItem(),
+                        aboutDrawer)
+                .withSavedInstance(savedInstanceState)
+                .withShowDrawerOnFirstLaunch(true)
+                .build()
+    }
+
+    override fun renderStyleSettings(styleSettingsItem: StyleSettingsItem) {
+        styleSettingsSwitch.withChecked(styleSettingsItem.enableEffect)
+        drawer.updateItem(styleSettingsSwitch)
+        styleSettingsSeekBars[0].withProgress(styleSettingsItem.blur)
+                .withSeekEnable(styleSettingsItem.enableEffect)
+        styleSettingsSeekBars[1].withProgress(styleSettingsItem.dim)
+                .withSeekEnable(styleSettingsItem.enableEffect)
+        styleSettingsSeekBars[2].withProgress(styleSettingsItem.grey)
+                .withSeekEnable(styleSettingsItem.enableEffect)
+        styleSettingsSeekBars.forEach {
+            drawer.updateItem(it)
+        }
+    }
+
 
     private val onPayClick = View.OnClickListener { view ->
         when (view.id) {

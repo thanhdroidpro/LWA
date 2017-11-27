@@ -55,6 +55,8 @@
     <string name="drawer_item_make_me_better">让我做得更好</string>
     <string name="drawer_item_see_ad">观看广告(记得点击进入广告详情噢)</string>
     <string name="drawer_item_see_ad_dsc">帮助我赚取一些小费</string>
+    <string name="drawer_item_remove_ad">移除广告</string>
+    <string name="drawer_item_remove_ad_dsc">移除下载时的广告展示</string>
     <string name="drawer_item_donate">捐赠</string>
     <string name="drawer_item_donate_dsc">给我一点钱</string>
     <string name="drawer_item_my_wallpapers">我的壁纸</string>
@@ -122,6 +124,20 @@
     <string name="advance_download_size_hint"><![CDATA[
         这款壁纸大小为 %s，使用之前需要先下载。<br><br>
         如果你已经链接上WI-FI，准备好下载，请点击下面的下载按钮
+    ]]></string>
+
+    <string name="advance_download_hint_ad"><![CDATA[
+        使用这款壁纸之前需要先下载（几百KB或几MB）<br><br>
+        与此同时，这款壁纸包含一则小广告，在使用之前，你必须观看广告<br><br>
+        非常感谢你对开发者的支持<br><br>
+        点击下面的按钮开始下载，同时播放广告
+    ]]></string>
+
+    <string name="advance_download_size_hint_ad"><![CDATA[
+        这款壁纸大小为 %s，使用之前需要先下载。<br><br>
+        与此同时，这款壁纸包含一则小广告，在使用之前，你必须观看广告<br><br>
+        非常感谢你对开发者的支持<br><br>
+        点击下面的按钮开始下载，同时播放广告
     ]]></string>
 
     <string name="video_hint"><![CDATA[

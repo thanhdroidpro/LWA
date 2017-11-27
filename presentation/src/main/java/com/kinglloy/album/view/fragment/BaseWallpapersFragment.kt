@@ -1,6 +1,7 @@
 package com.kinglloy.album.view.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -29,8 +30,10 @@ import com.kinglloy.album.data.utils.WallpaperFileHelper
 import com.kinglloy.album.exception.ErrorMessageFactory
 import com.kinglloy.album.model.WallpaperItem
 import com.kinglloy.album.presenter.WallpaperListPresenter
+import com.kinglloy.album.util.PackageUtil
 import com.kinglloy.album.util.formatSizeToString
 import com.kinglloy.album.view.WallpaperListView
+import com.kinglloy.album.view.activity.ADActivity
 import com.kinglloy.album.view.activity.WallpaperListActivity
 import com.kinglloy.album.view.component.DownloadingDialog
 import kotlinx.android.synthetic.main.activity_wallpaper_list.*
@@ -277,18 +280,34 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     }
 
     override fun showDownloadHintDialog(item: WallpaperItem) {
+        val showAd = showAd()
         val downloadCallback =
                 MaterialDialog.SingleButtonCallback { _, _ ->
                     presenter.requestDownload(item)
                     Analytics.logEvent(activity!!,
                             Event.DOWNLOAD_COMPONENT, item.name)
+                    if (showAd) {
+                        Analytics.logEvent(activity!!, Event.OPEN_AD_ACTIVITY)
+                        startActivity(Intent(activity,
+                                ADActivity::class.java))
+                    }
                 }
         val content =
-                if (item.size > 0)
-                    Html.fromHtml(getString(R.string.advance_download_size_hint,
-                            formatSizeToString(item.size)))
-                else
-                    Html.fromHtml(getString(R.string.advance_download_hint))
+                if (item.size > 0) {
+                    if (showAd) {
+                        Html.fromHtml(getString(R.string.advance_download_size_hint_ad,
+                                formatSizeToString(item.size)))
+                    } else {
+                        Html.fromHtml(getString(R.string.advance_download_size_hint,
+                                formatSizeToString(item.size)))
+                    }
+                } else {
+                    if (showAd) {
+                        Html.fromHtml(getString(R.string.advance_download_hint))
+                    } else {
+                        Html.fromHtml(getString(R.string.advance_download_hint_ad))
+                    }
+                }
 
         val dialogBuilder = MaterialDialog.Builder(activity!!)
                 .iconRes(R.drawable.advance_wallpaper_msg)
@@ -299,6 +318,11 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
 
         dialogBuilder.build().show()
     }
+
+    private fun showAd(): Boolean {
+        return !PackageUtil.isUltimate(activity!!)
+    }
+
 
     override fun showDownloadingDialog(item: WallpaperItem) {
         LogUtil.D(TAG, "showDownloadingDialog ${item.name}")
