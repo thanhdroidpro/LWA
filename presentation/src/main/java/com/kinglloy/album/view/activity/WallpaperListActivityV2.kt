@@ -72,7 +72,7 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
 
         val ID_MY_WALLPAPERS = 5000L
 
-        val ID_REMOVE_AD = 6000L
+        val ID_GET_PRO = 6000L
     }
 
     @Inject
@@ -150,7 +150,7 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                 startActivity(Intent(this,
                         MyWallpapersActivity::class.java))
             }
-            ID_REMOVE_AD -> {
+            ID_GET_PRO -> {
                 val appPackageName = "com.kinglloy.album.ultimate"
                 try {
                     startActivity(Intent(Intent.ACTION_VIEW,
@@ -236,10 +236,10 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                     .withLevel(2)
                     .withOnDrawerItemClickListener(drawerItemClick))
 
-    private val removeAd = PrimaryDrawerItem().withName(R.string.drawer_item_remove_ad)
+    private val getPro = PrimaryDrawerItem().withName(R.string.drawer_item_remove_ad)
             .withDescription(R.string.drawer_item_remove_ad_dsc)
             .withIcon(R.drawable.ic_drawer_ad)
-            .withIdentifier(ID_REMOVE_AD)
+            .withIdentifier(ID_GET_PRO)
             .withSelectable(false)
             .withIconTintingEnabled(true)
             .withIconColorRes(R.color.colorPrimary)
@@ -337,7 +337,7 @@ class WallpaperListActivityV2 : AppCompatActivity(), SettingsView {
                         styleWallpaperDrawer,
                         DividerDrawerItem(),
                         makeMeBetterAD,
-                        removeAd,
+                        getPro,
                         DividerDrawerItem(),
                         myWallpapers,
                         DividerDrawerItem(),

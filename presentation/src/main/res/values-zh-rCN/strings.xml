@@ -55,8 +55,8 @@
     <string name="drawer_item_make_me_better">让我做得更好</string>
     <string name="drawer_item_see_ad">观看广告(记得点击进入广告详情噢)</string>
     <string name="drawer_item_see_ad_dsc">帮助我赚取一些小费</string>
-    <string name="drawer_item_remove_ad">移除广告</string>
-    <string name="drawer_item_remove_ad_dsc">移除下载时的广告展示</string>
+    <string name="drawer_item_remove_ad">获取旗舰版</string>
+    <string name="drawer_item_remove_ad_dsc">得到更多壁纸和支持</string>
     <string name="drawer_item_donate">捐赠</string>
     <string name="drawer_item_donate_dsc">给我一点钱</string>
     <string name="drawer_item_my_wallpapers">我的壁纸</string>

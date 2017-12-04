@@ -320,7 +320,8 @@ abstract class BaseWallpapersFragment : Fragment(), WallpaperListView {
     }
 
     private fun showAd(): Boolean {
-        return !PackageUtil.isUltimate(activity!!)
+//        return !PackageUtil.isUltimate(activity!!)
+        return false
     }
 
 
